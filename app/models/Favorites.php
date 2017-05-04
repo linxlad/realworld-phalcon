@@ -1,8 +1,11 @@
 <?php
 
-class Favorites extends \Phalcon\Mvc\Model
-{
+namespace RealWorld\Models;
 
+use Phalcon\Mvc\Model;
+
+class Favorites extends Model
+{
     /**
      *
      * @var integer

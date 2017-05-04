@@ -1,8 +1,10 @@
 <?php
+namespace RealWorld\Models;
 
-class Articles extends \Phalcon\Mvc\Model
+use Phalcon\Mvc\Model;
+
+class Articles extends Model
 {
-
     /**
      *
      * @var integer

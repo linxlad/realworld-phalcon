@@ -1,8 +1,11 @@
 <?php
 
-class Follows extends \Phalcon\Mvc\Model
-{
+namespace RealWorld\Models;
 
+use Phalcon\Mvc\Model;
+
+class Follows extends Model
+{
     /**
      *
      * @var integer

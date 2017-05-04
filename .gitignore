@@ -17,3 +17,5 @@ Thumbs.db
 /cache/
 /config/development/
 
+
+/vendor/

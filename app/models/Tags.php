@@ -1,8 +1,11 @@
 <?php
 
-class Tags extends \Phalcon\Mvc\Model
-{
+namespace RealWorld\Models;
 
+use Phalcon\Mvc\Model;
+
+class Tags extends Model
+{
     /**
      *
      * @var integer

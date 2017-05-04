@@ -1,0 +1,38 @@
+{
+    "name": "realworld/phalcon",
+    "description": "Realworld backend implemented in Phalcon",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nathan Daly",
+            "email": "justlikephp@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4"
+    },
+    "require-dev": {
+        "phalcon/devtools": "dev-master",
+        "fzaninotto/faker": "~1.4",
+        "phpunit/phpunit": "~5.7"
+    },
+    "autoload": {
+        "classmap": [
+            "app/migrations"
+        ],
+        "psr-4": {
+            "RealWorld\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    }
+}

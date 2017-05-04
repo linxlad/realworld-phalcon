@@ -1,8 +1,11 @@
 <?php
 
-class Comments extends \Phalcon\Mvc\Model
-{
+namespace RealWorld\Models;
 
+use Phalcon\Mvc\Model;
+
+class Comments extends Model
+{
     /**
      *
      * @var integer
