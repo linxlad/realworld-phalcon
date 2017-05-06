@@ -1,5 +1,6 @@
 <?php
 use Phalcon\Di\FactoryDefault;
+use Phalcon\Mvc\Application;
 
 error_reporting(E_ALL);
 
@@ -35,12 +36,16 @@ try {
     include APP_PATH . '/config/loader.php';
 
     /**
+     * Include composer autoloader
+     */
+    require APP_PATH . "/../vendor/autoload.php";
+
+    /**
      * Handle the request
      */
-    $application = new \Phalcon\Mvc\Application($di);
-
-    echo str_replace(["\n","\r","\t"], '', $application->handle()->getContent());
-
+    $application = new Application($di);
+    $request = $application->handle();
+    $request->send();
 } catch (\Exception $e) {
     echo $e->getMessage() . '<br>';
     echo '<pre>' . $e->getTraceAsString() . '</pre>';

@@ -8,8 +8,5 @@ namespace RealWorld\Controllers\Api;
  */
 class UserController extends ApiController
 {
-    public function initialize()
-    {
 
-    }
 }
