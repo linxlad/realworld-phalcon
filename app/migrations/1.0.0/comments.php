@@ -85,7 +85,7 @@ class CommentsMigration_100 extends Migration
                     new Reference(
                         'comments_ibfk_1',
                         [
-                            'referencedTable' => 'user',
+                            'referencedTable' => 'users',
                             'columns' => ['user_id'],
                             'referencedColumns' => ['id'],
                             'onUpdate' => 'RESTRICT',

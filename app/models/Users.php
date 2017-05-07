@@ -6,7 +6,11 @@ use Phalcon\Mvc\Model;
 use Phalcon\Validation;
 use Phalcon\Mvc\Model\Validator\Email as EmailValidator;
 
-class User extends Model
+/**
+ * Class Users
+ * @package RealWorld\Models
+ */
+class Users extends Model
 {
     /**
      *
@@ -122,14 +126,14 @@ class User extends Model
      */
     public function getSource()
     {
-        return 'user';
+        return 'users';
     }
 
     /**
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return User[]|User
+     * @return Users[]|Users
      */
     public static function find($parameters = null)
     {
@@ -140,7 +144,7 @@ class User extends Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return User
+     * @return Users
      */
     public static function findFirst($parameters = null)
     {

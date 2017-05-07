@@ -64,7 +64,7 @@ class FollowsMigration_100 extends Migration
                     new Reference(
                         'follows_ibfk_1',
                         [
-                            'referencedTable' => 'user',
+                            'referencedTable' => 'users',
                             'columns' => ['follower_id'],
                             'referencedColumns' => ['id'],
                             'onUpdate' => 'RESTRICT',
@@ -74,7 +74,7 @@ class FollowsMigration_100 extends Migration
                     new Reference(
                         'follows_ibfk_2',
                         [
-                            'referencedTable' => 'user',
+                            'referencedTable' => 'users',
                             'columns' => ['followed_id'],
                             'referencedColumns' => ['id'],
                             'onUpdate' => 'RESTRICT',

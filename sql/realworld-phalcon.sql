@@ -1,5 +1,5 @@
 CREATE TABLE
-IF NOT EXISTS `user` (
+IF NOT EXISTS `users` (
 	`id` BIGINT (20) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`username` VARCHAR (64) COLLATE utf8_bin DEFAULT NULL,
 	`email` VARCHAR (48) COLLATE utf8_bin NOT NULL,
@@ -15,15 +15,15 @@ IF NOT EXISTS `user` (
 	KEY `email` (`email`)
 ) ENGINE = INNODB DEFAULT CHARSET = utf8 COLLATE = utf8_bin;
 
-ALTER TABLE `user` ADD UNIQUE `unique_uername_email` (`username`, `email`);
+ALTER TABLE `users` ADD UNIQUE `unique_uername_email` (`username`, `email`);
 
-CREATE TRIGGER `user_created` BEFORE INSERT ON `user` FOR EACH ROW
-SET NEW.created = IFNULL(NEW.created, NOW()),
- NEW.created = NOW();
+CREATE TRIGGER `users_created` BEFORE INSERT ON `users` FOR EACH ROW
+	SET NEW.created = IFNULL(NEW.created, NOW()),
+	NEW.created = NOW();
 
-CREATE TRIGGER `user_modified` BEFORE UPDATE ON `user` FOR EACH ROW
-SET NEW.modified = IFNULL(NEW.modified, NOW()),
- NEW.modified = NOW();
+CREATE TRIGGER `users_modified` BEFORE UPDATE ON `users` FOR EACH ROW
+	SET NEW.modified = IFNULL(NEW.modified, NOW()),
+	NEW.modified = NOW();
 
 CREATE TABLE
 IF NOT EXISTS `articles` (
@@ -36,16 +36,16 @@ IF NOT EXISTS `articles` (
 	`created` datetime DEFAULT NULL,
 	`modified` datetime DEFAULT NULL,
 	PRIMARY KEY (`id`),
-	CONSTRAINT `articles_ibfk_1` FOREIGN KEY fk_user_id (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+	CONSTRAINT `articles_ibfk_1` FOREIGN KEY fk_user_id (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE = INNODB DEFAULT CHARSET = utf8 COLLATE = utf8_bin;
 
 CREATE TRIGGER `articles_created` BEFORE INSERT ON `articles` FOR EACH ROW
-SET NEW.created = IFNULL(NEW.created, NOW()),
- NEW.created = NOW();
+	SET NEW.created = IFNULL(NEW.created, NOW()),
+	NEW.created = NOW();
 
 CREATE TRIGGER `articles_modified` BEFORE UPDATE ON `articles` FOR EACH ROW
-SET NEW.modified = IFNULL(NEW.modified, NOW()),
- NEW.modified = NOW();
+	SET NEW.modified = IFNULL(NEW.modified, NOW()),
+	NEW.modified = NOW();
 
 CREATE TABLE
 IF NOT EXISTS `comments` (
@@ -56,17 +56,17 @@ IF NOT EXISTS `comments` (
 	`created` datetime DEFAULT NULL,
 	`modified` datetime DEFAULT NULL,
 	PRIMARY KEY (`id`),
-	CONSTRAINT `comments_ibfk_1` FOREIGN KEY fk_user_id (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+	CONSTRAINT `comments_ibfk_1` FOREIGN KEY fk_user_id (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
 	CONSTRAINT `comments_ibfk_2` FOREIGN KEY fk_article_id (`article_id`) REFERENCES `articles` (`id`) ON DELETE CASCADE
 ) ENGINE = INNODB DEFAULT CHARSET = utf8 COLLATE = utf8_bin;
 
 CREATE TRIGGER `comments_created` BEFORE INSERT ON `comments` FOR EACH ROW
-SET NEW.created = IFNULL(NEW.created, NOW()),
- NEW.created = NOW();
+	SET NEW.created = IFNULL(NEW.created, NOW()),
+	NEW.created = NOW();
 
 CREATE TRIGGER `comments_modified` BEFORE UPDATE ON `comments` FOR EACH ROW
-SET NEW.modified = IFNULL(NEW.modified, NOW()),
- NEW.modified = NOW();
+	SET NEW.modified = IFNULL(NEW.modified, NOW()),
+	NEW.modified = NOW();
 
 CREATE TABLE
 IF NOT EXISTS `tags` (
@@ -91,17 +91,17 @@ IF NOT EXISTS `favorites` (
 	`created` datetime DEFAULT NULL,
 	`modified` datetime DEFAULT NULL,
 	PRIMARY KEY (`user_id`, `article_id`),
-	CONSTRAINT `favorites_ibfk_1` FOREIGN KEY fk_user_id (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+	CONSTRAINT `favorites_ibfk_1` FOREIGN KEY fk_user_id (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
 	CONSTRAINT `favorites_ibfk_2` FOREIGN KEY fk_article_id (`article_id`) REFERENCES `articles` (`id`) ON DELETE CASCADE
 ) ENGINE = INNODB DEFAULT CHARSET = utf8 COLLATE = utf8_bin;
 
 CREATE TRIGGER `favorites_created` BEFORE INSERT ON `favorites` FOR EACH ROW
-SET NEW.created = IFNULL(NEW.created, NOW()),
- NEW.created = NOW();
+	SET NEW.created = IFNULL(NEW.created, NOW()),
+	NEW.created = NOW();
 
 CREATE TRIGGER `favorites_modified` BEFORE UPDATE ON `favorites` FOR EACH ROW
-SET NEW.modified = IFNULL(NEW.modified, NOW()),
- NEW.modified = NOW();
+	SET NEW.modified = IFNULL(NEW.modified, NOW()),
+	NEW.modified = NOW();
 
 CREATE TABLE
 IF NOT EXISTS `follows` (
@@ -113,14 +113,14 @@ IF NOT EXISTS `follows` (
 		`follower_id`,
 		`followed_id`
 	),
-	CONSTRAINT `follows_ibfk_1` FOREIGN KEY fk_follower_id (`follower_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-	CONSTRAINT `follows_ibfk_2` FOREIGN KEY fk_followed_id (`followed_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+	CONSTRAINT `follows_ibfk_1` FOREIGN KEY fk_follower_id (`follower_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+	CONSTRAINT `follows_ibfk_2` FOREIGN KEY fk_followed_id (`followed_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE = INNODB DEFAULT CHARSET = utf8 COLLATE = utf8_bin;
 
 CREATE TRIGGER `follows_created` BEFORE INSERT ON `follows` FOR EACH ROW
-SET NEW.created = IFNULL(NEW.created, NOW()),
- NEW.created = NOW();
+	SET NEW.created = IFNULL(NEW.created, NOW()),
+	NEW.created = NOW();
 
 CREATE TRIGGER `follows_modified` BEFORE UPDATE ON `follows` FOR EACH ROW
-SET NEW.modified = IFNULL(NEW.modified, NOW()),
- NEW.modified = NOW();
+	SET NEW.modified = IFNULL(NEW.modified, NOW()),
+	NEW.modified = NOW();

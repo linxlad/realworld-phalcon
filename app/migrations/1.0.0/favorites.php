@@ -64,7 +64,7 @@ class FavoritesMigration_100 extends Migration
                     new Reference(
                         'favorites_ibfk_1',
                         [
-                            'referencedTable' => 'user',
+                            'referencedTable' => 'users',
                             'columns' => ['user_id'],
                             'referencedColumns' => ['id'],
                             'onUpdate' => 'RESTRICT',

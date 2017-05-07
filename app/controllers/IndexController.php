@@ -2,13 +2,18 @@
 
 namespace RealWorld\Controllers;
 
-class IndexController extends ControllerBase
+use Phalcon\Mvc\Controller;
+use RealWorld\Models\Users;
+
+class IndexController extends Controller
 {
     public function indexAction()
     {
-        return [
-            'message' => 'You are now flying with Phalcon.',
-        ];
+        $this->response->setJsonContent([
+           'message' => 'You are now flying with Phalcon.'
+        ]);
+
+        return $this->response;
     }
 }
 

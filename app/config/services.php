@@ -117,42 +117,8 @@ $di->setShared('session', function () {
 $di->setShared(
     "dispatcher",
     function () {
-        $eventsManager = $this->getShared('eventsManager');
-        $eventsManager->attach('dispatch:afterExecuteRoute', function($event, $dispatcher, $exception) {
-                $this->get('view')->disableLevel(array(
-                    View::LEVEL_ACTION_VIEW => true,
-                    View::LEVEL_LAYOUT => true,
-                    View::LEVEL_MAIN_LAYOUT => true,
-                    View::LEVEL_AFTER_TEMPLATE => true,
-                    View::LEVEL_BEFORE_TEMPLATE => true
-                ));
-
-                $this->get('response')->setContentType('application/json', 'UTF-8');
-
-                // Hook to afterRender event.
-                if (null == $this->get('view')->getEventsManager()) {
-                    $eventManager = new Manager();
-                    $this->get('view')->setEventsManager($eventManager);
-                } else {
-                    $eventManager = $this->get('view')->getEventsManager();
-                }
-
-                $eventManager->attach("view:afterRender", function ($event, $view) use($dispatcher) {
-                    $data = $dispatcher->getReturnedValue();
-
-                    if (is_array($data)) {
-                        $data['success'] = $data['success'] ?? true;
-                        $data['message'] = $data['message'] ?? '';
-                        $data = json_encode($data);
-                    }
-
-                    $view->setContent($data);
-                });
-        });
-
         $dispatcher = new Dispatcher();
         $dispatcher->setDefaultNamespace("RealWorld\\Controllers");
-        $dispatcher->setEventsManager($eventsManager);
 
         return $dispatcher;
     }

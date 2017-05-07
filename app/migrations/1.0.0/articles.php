@@ -102,7 +102,7 @@ class ArticlesMigration_100 extends Migration
                     new Reference(
                         'articles_ibfk_1',
                         [
-                            'referencedTable' => 'user',
+                            'referencedTable' => 'users',
                             'columns' => ['user_id'],
                             'referencedColumns' => ['id'],
                             'onUpdate' => 'RESTRICT',
