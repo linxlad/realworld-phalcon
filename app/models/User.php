@@ -7,10 +7,10 @@ use Phalcon\Validation;
 use Phalcon\Mvc\Model\Validator\Email as EmailValidator;
 
 /**
- * Class Users
+ * Class User
  * @package RealWorld\Models
  */
-class Users extends Model
+class User extends Model implements \JsonSerializable
 {
     /**
      *
@@ -133,7 +133,7 @@ class Users extends Model
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Users[]|Users
+     * @return User[]|User
      */
     public static function find($parameters = null)
     {
@@ -144,11 +144,31 @@ class Users extends Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Users
+     * @return User
      */
     public static function findFirst($parameters = null)
     {
         return parent::findFirst($parameters);
     }
 
+    /**
+     * Build JSON object.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'user' => [
+                'id' => $this->id,
+                'email' => $this->email,
+                'username' => $this->username,
+                'bio' => $this->bio,
+                'image' => $this->image,
+                'token' => $this->token,
+                'createdAt' => $this->created,
+                'updatedAt' => $this->modified,
+            ]
+        ];
+    }
 }

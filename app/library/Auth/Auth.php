@@ -3,19 +3,29 @@
 namespace RealWorld\Auth;
 
 use Phalcon\Mvc\User\Component;
-use RealWorld\Models\Users;
+use RealWorld\Models\User;
 
+/**
+ * Class Auth
+ * @package RealWorld\Auth
+ * @property User user
+ */
 class Auth extends Component
 {
     /**
      * @param array $credentials
-     * @return bool
+     * @return User
      * @throws \Exception
      */
     public function check(array $credentials)
     {
         // First check if the user exists.
-        $user = Users::findFirstByEmail($credentials['email']);
+        $user = User::findFirst([
+            "conditions" => "email = ?1",
+            "bind"       => [
+                1 => $credentials['email'],
+            ]
+        ]);
 
         if (!$user) {
             throw new \Exception('Wrong email/password combination');
@@ -26,6 +36,6 @@ class Auth extends Component
             throw new \Exception('Wrong email/password combination');
         }
 
-        return true;
+        return $user;
     }
 }

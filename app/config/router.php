@@ -21,13 +21,12 @@ $apiGroup = new RouterGroup([
 $apiGroup->setPrefix('/api');
 
 // Authentication routes.
-$apiGroup->addPost('/users/login', 'Auth::login');
-$apiGroup->addPost('/users', 'Auth::register');
+$apiGroup->add('/users/login', 'Session::login', ['POST']);
+$apiGroup->addPost('/users', 'Session::register');
 
 // User routes.
-$apiGroup->addGet('/user', 'User::index');
-$apiGroup->addPut('/user', 'User::update');
-$apiGroup->addPatch('/user', 'User::index');
+$apiGroup->add('/user', 'User::index', ['GET']);
+$apiGroup->add('/user', 'User::update', ['PUT', 'PATCH']);
 
 // Profile routes.
 $apiGroup->addGet('/profiles/{user}', 'Profile::show');

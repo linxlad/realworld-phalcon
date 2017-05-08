@@ -92,6 +92,20 @@ class ApiController extends Controller
     }
 
     /**
+     * Send a failed login response.
+     *
+     * @return Response
+     */
+    protected function respondFailedLogin()
+    {
+        return $this->respond([
+            'errors' => [
+                'email or password' => 'is invalid',
+            ]
+        ], 422);
+    }
+
+    /**
      * Send a unauthorized response.
      *
      * @param string $message

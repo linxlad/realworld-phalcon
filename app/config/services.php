@@ -1,5 +1,6 @@
 <?php
 
+use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
@@ -9,6 +10,8 @@ use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Flash\Direct as Flash;
+use RealWorld\Auth\Auth;
+use RealWorld\Plugin\CORSPlugin;
 
 /**
  * Shared configuration service
@@ -116,10 +119,30 @@ $di->setShared('session', function () {
 // Register the default dispatcher's namespace for controllers
 $di->setShared(
     "dispatcher",
-    function () {
+    function () use ($di) {
+        $eventsManager = new Manager();
+
+        // Attach a listener
+        $eventsManager->attach("dispatch:beforeExecuteRoute", $di->get('cors'));
+
         $dispatcher = new Dispatcher();
+        $dispatcher->setEventsManager($eventsManager);
         $dispatcher->setDefaultNamespace("RealWorld\\Controllers");
 
         return $dispatcher;
     }
 );
+
+/**
+ * Custom authentication component.
+ */
+$di->set(
+    'auth',
+    function () {
+        return new Auth();
+    }
+);
+
+$di->set('cors', function() {
+    return new CORSPlugin();
+}, true);
