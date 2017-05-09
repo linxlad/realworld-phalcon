@@ -1,6 +1,5 @@
 <?php
 
-use Phalcon\Events\Event;
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\View;
@@ -11,7 +10,7 @@ use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Flash\Direct as Flash;
 use RealWorld\Auth\Auth;
-use RealWorld\Plugin\CORSPlugin;
+use RealWorld\Listener\PreFlightListener;
 
 /**
  * Shared configuration service
@@ -123,7 +122,7 @@ $di->setShared(
         $eventsManager = new Manager();
 
         // Attach a listener
-        $eventsManager->attach("dispatch:beforeExecuteRoute", $di->get('cors'));
+        $eventsManager->attach("dispatch:beforeExecuteRoute", $di->get('preflight'));
 
         $dispatcher = new Dispatcher();
         $dispatcher->setEventsManager($eventsManager);
@@ -143,6 +142,6 @@ $di->set(
     }
 );
 
-$di->set('cors', function() {
-    return new CORSPlugin();
+$di->set('preflight', function() {
+    return new PreFlightListener();
 }, true);

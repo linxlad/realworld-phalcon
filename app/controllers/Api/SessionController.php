@@ -14,7 +14,10 @@ class SessionController extends ApiController
     public function loginAction()
     {
         try {
-            $credentials = $this->request->getJsonRawBody(true)['user'];
+            if (!$credentials = $this->request->getJsonRawBody(true)['user']) {
+                throw new \Exception('No credentials');
+            }
+
             $user = $this->auth->check($credentials);
         } catch (\Exception $e) {
             return $this->respondFailedLogin();

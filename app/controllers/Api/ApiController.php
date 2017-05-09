@@ -28,7 +28,8 @@ class ApiController extends Controller
         $this->response->setJsonContent($data);
         $this->response->setStatusCode($statusCode);
 
-        $headers = new Headers();
+        $headers = $this->response->getHeaders();
+        $headers->set('Content-Type', 'application/json; charset=utf-8');
 
         foreach ($headersArray as $name => $value) {
             $headers->set($name, $value);
@@ -68,7 +69,7 @@ class ApiController extends Controller
      */
     protected function respondNoContent($data)
     {
-        return $this->respond($data, 201);
+        return $this->respond($data, 503);
     }
 
     /**
@@ -100,7 +101,9 @@ class ApiController extends Controller
     {
         return $this->respond([
             'errors' => [
-                'email or password' => 'is invalid',
+                'email or password' => [
+                    'is invalid'
+                ],
             ]
         ], 422);
     }

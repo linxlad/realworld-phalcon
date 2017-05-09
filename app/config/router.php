@@ -21,27 +21,27 @@ $apiGroup = new RouterGroup([
 $apiGroup->setPrefix('/api');
 
 // Authentication routes.
-$apiGroup->add('/users/login', 'Session::login', ['POST']);
-$apiGroup->addPost('/users', 'Session::register');
+$apiGroup->add('/users/login', 'Session::login', ['POST', 'OPTIONS']);
+$apiGroup->add('/users', 'Session::register', ['POST', 'OPTIONS']);
 
 // User routes.
-$apiGroup->add('/user', 'User::index', ['GET']);
-$apiGroup->add('/user', 'User::update', ['PUT', 'PATCH']);
+$apiGroup->add('/user', 'User::index', ['GET', 'OPTIONS']);
+$apiGroup->add('/user', 'User::update', ['PUT', 'PATCH', 'OPTIONS']);
 
 // Profile routes.
-$apiGroup->addGet('/profiles/{user}', 'Profile::show');
-$apiGroup->addPost('/profiles/{user}/follow', 'Profile::follow');
-$apiGroup->addDelete('/profiles/{user}/follow', 'Profile::unFollow');
+$apiGroup->add('/profiles/{user}', 'Profile::show', ['GET', 'OPTIONS']);
+$apiGroup->add('/profiles/{user}/follow', 'Profile::follow', ['POST', 'OPTIONS']);
+$apiGroup->add('/profiles/{user}/follow', 'Profile::unFollow', ['DELETE', 'OPTIONS']);
 
 // Article routes.
-$apiGroup->addGet('/articles/feed', 'Feed::index');
-$apiGroup->addPost('/articles/{article}/favorite', 'Favorite::add');
-$apiGroup->addDelete('/articles/{article}/favorite', 'Favorite::remove');
+$apiGroup->add('/articles/feed', 'Feed::index', ['GET', 'OPTIONS']);
+$apiGroup->add('/articles/{article}/favorite', 'Favorite::add', ['POST', 'OPTIONS']);
+$apiGroup->add('/articles/{article}/favorite', 'Favorite::remove', ['DELETE', 'OPTIONS']);
 
 // Comment routes.
 
 // Tag routes.
-$apiGroup->addGet('/tags', 'Tag::index');
+$apiGroup->add('/tags', 'Tag::index', ['GET', 'OPTIONS']);
 
 $router->mount($apiGroup);
 $router->handle();
