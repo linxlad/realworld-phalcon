@@ -2,6 +2,7 @@
 
 namespace RealWorld\Models;
 
+use Firebase\JWT\JWT;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 use Phalcon\Security;
@@ -178,50 +179,18 @@ class User extends Model implements \JsonSerializable
         return $this;
     }
 
-    private function
-    {
-        return 'users';
-    }
-
     /**
-     * Allows to query a set of records that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return User[]|User
+     * @return string
      */
-    public static function find($parameters = null)
-    {
-        return parent::find($parameters);
-    }
-
-    /**
-     * Allows to query the first record that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return User
-     */
-    public static function findFirst($parameters = null)
-    {
-        return parent::findFirst($parameters);
-    }
-
-    /**
-     * @param mixed $data
-     * @param mixed $whiteList
-     * @return User|bool
-     */
-    public function create($data = null, $whiteList = null)
-    {
-        if (!parent::create($data, $whiteList)) {
-            return false;
-        }
-
-        return $this;
-    }
-
     private function generateJWT()
     {
+        $token = [
+            'id' => $this->getId(),
+            'exp' => time() + 60 * DAY
+        ];
+        $salt = $this->getDI()->get('config')->secruity->salt;
 
+        return JWT::encode($token, $salt);
     }
 
     /**
@@ -238,7 +207,7 @@ class User extends Model implements \JsonSerializable
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail()
     {
         return $this->email;
     }
@@ -269,7 +238,7 @@ class User extends Model implements \JsonSerializable
     /**
      * @return string
      */
-    public function getUsername(): string
+    public function getUsername()
     {
         return $this->username;
     }
@@ -288,7 +257,7 @@ class User extends Model implements \JsonSerializable
     /**
      * @return string
      */
-    public function getBio(): string
+    public function getBio()
     {
         return $this->bio;
     }
@@ -307,34 +276,23 @@ class User extends Model implements \JsonSerializable
     /**
      * @return string
      */
-    public function getImage(): string
+    public function getImage()
     {
         return $this->image;
     }
 
     /**
-     * @param string $token
-     * @return User
-     */
-    public function setToken(string $token)
-    {
-        $this->token = $this->generateJWT();
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
-    public function getToken(): string
+    public function getToken()
     {
-        return $this->token;
+        return $this->generateJWT();
     }
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -348,12 +306,12 @@ class User extends Model implements \JsonSerializable
     {
         return [
             'user' => [
-                'id' => $this->id,
-                'email' => $this->email,
-                'username' => $this->username,
-                'bio' => $this->bio,
-                'image' => $this->image,
-                'token' => $this->token,
+                'id' => $this->getId(),
+                'email' => $this->getEmail(),
+                'username' => $this->getUsername(),
+                'bio' => $this->getBio(),
+                'image' => $this->getImage(),
+                'token' => $this->getToken(),
                 'createdAt' => $this->created,
                 'updatedAt' => $this->modified,
             ]
