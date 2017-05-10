@@ -225,6 +225,14 @@ class User extends Model implements \JsonSerializable
     }
 
     /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
      * @param string $username
      * @return User
      */
