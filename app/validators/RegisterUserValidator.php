@@ -18,54 +18,42 @@ class RegisterUserValidator extends Validation
     {
         $this
             ->add(
-                "username",
-                new PresenceOf(
-                    [
-                        "message" => "can't be blank",
-                    ]
-                )
+                'username',
+                new PresenceOf([
+                    "message" => "can't be blank",
+                ])
             )
             ->add(
                 'username',
-                new Uniqueness(
-                    [
-                        "model"   => new User(),
-                        "message" => "has already been taken",
-                    ]
-                )
+                new Uniqueness([
+                    "model"   => new User(),
+                    "message" => "has already been taken",
+                ])
             )
             ->add(
                 "email",
-                new PresenceOf(
-                    [
-                        "message" => "can't be blank",
-                    ]
-                )
+                new PresenceOf([
+                    "message" => "can't be blank",
+                ])
             )
             ->add(
                 'email',
-                new Uniqueness(
-                    [
-                        "model"   => new User(),
-                        "message" => "has already been taken",
-                    ]
-                )
+                new Uniqueness([
+                    "model"   => new User(),
+                    "message" => "has already been taken",
+                ])
             )
             ->add(
                 "email",
-                new Email(
-                    [
-                        "message" => "is invalid",
-                    ]
-                )
+                new Email([
+                    "message" => "is invalid",
+                ])
             )
             ->add(
                 "password",
-                new PresenceOf(
-                    [
-                        "message" => "can't be blank",
-                    ]
-                )
+                new PresenceOf([
+                    "message" => "can't be blank",
+                ])
             );
     }
 }
