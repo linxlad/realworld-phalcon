@@ -9,10 +9,10 @@ use Phalcon\Validation\Validator\Uniqueness;
 use RealWorld\Models\User;
 
 /**
- * Class RegisterUserValidator
+ * Class RegisterUser
  * @package RealWorld\Validators
  */
-class RegisterUserValidator extends Validation
+class RegisterUser extends Validation
 {
     public function initialize()
     {

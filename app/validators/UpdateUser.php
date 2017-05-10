@@ -4,17 +4,16 @@ namespace RealWorld\Validators;
 
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\Email;
-use Phalcon\Validation\Validator\PresenceOf;
 use Phalcon\Validation\Validator\Uniqueness;
 use Phalcon\Validation\Validator\StringLength;
 use Phalcon\Validation\Validator\Url;
 use RealWorld\Models\User;
 
 /**
- * Class UpdateUserValidator
+ * Class UpdateUser
  * @package RealWorld\Validators
  */
-class UpdateUserValidator extends Validation
+class UpdateUser extends Validation
 {
     public function initialize()
     {

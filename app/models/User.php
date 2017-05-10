@@ -6,7 +6,7 @@ use Firebase\JWT\JWT;
 use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 use Phalcon\Security;
-use RealWorld\Validators\RegisterUserValidator;
+use RealWorld\Validators\RegisterUser;
 
 /**
  * Class User
@@ -93,7 +93,7 @@ class User extends Model implements \JsonSerializable
      */
     public function validation()
     {
-        $validator = new RegisterUserValidator();
+        $validator = new RegisterUser();
 
         return $this->validate($validator);
     }
