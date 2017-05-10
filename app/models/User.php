@@ -3,8 +3,9 @@
 namespace RealWorld\Models;
 
 use Phalcon\Mvc\Model;
-use Phalcon\Validation;
-use Phalcon\Mvc\Model\Validator\Email as EmailValidator;
+use Phalcon\Mvc\Model\Behavior\Timestampable;
+use Phalcon\Security;
+use RealWorld\Validators\RegisterUserValidator;
 
 /**
  * Class User
@@ -19,70 +20,70 @@ class User extends Model implements \JsonSerializable
      * @Identity
      * @Column(type="integer", length=20, nullable=false)
      */
-    public $id;
+    protected $id;
 
     /**
      *
      * @var string
      * @Column(type="string", length=64, nullable=true)
      */
-    public $username;
+    protected $username;
 
     /**
      *
      * @var string
      * @Column(type="string", length=48, nullable=false)
      */
-    public $email;
+    protected $email;
 
     /**
      *
      * @var string
      * @Column(type="string", length=128, nullable=false)
      */
-    public $password;
+    protected $password;
 
     /**
      *
      * @var string
      * @Column(type="string", nullable=true)
      */
-    public $bio;
+    protected $bio;
 
     /**
      *
      * @var string
      * @Column(type="string", nullable=true)
      */
-    public $image;
+    protected $image;
 
     /**
      *
      * @var string
      * @Column(type="string", nullable=true)
      */
-    public $token;
+    protected $token;
 
     /**
      *
      * @var string
      * @Column(type="string", nullable=true)
      */
-    public $token_expires;
+    protected $token_expires;
 
     /**
      *
      * @var string
-     * @Column(type="string", nullable=true)
+     * @Column(type="datetime", nullable=true)
      */
-    public $created;
+    protected $created;
 
     /**
      *
      * @var string
-     * @Column(type="string", nullable=true)
+     * @Column(type="datetime", nullable=true)
      */
-    public $modified;
+    protected $modified;
 
     /**
      * Validations and business logic
@@ -91,17 +92,7 @@ class User extends Model implements \JsonSerializable
      */
     public function validation()
     {
-        $validator = new Validation();
-
-        $validator->add(
-            'email',
-            new EmailValidator(
-                [
-                    'model'   => $this,
-                    'message' => 'Please enter a correct email address',
-                ]
-            )
-        );
+        $validator = new RegisterUserValidator();
 
         return $this->validate($validator);
     }
@@ -111,6 +102,28 @@ class User extends Model implements \JsonSerializable
      */
     public function initialize()
     {
+        $this->addBehavior(
+            new Timestampable(
+                [
+                    "beforeCreate" => [
+                        "field"  => "created",
+                        "format" => 'Y-m-d H:i:s'
+                    ],
+                ]
+            )
+        );
+
+        $this->addBehavior(
+            new Timestampable(
+                [
+                    "beforeCreate" => [
+                        "field"  => "modified",
+                        "format" => 'Y-m-d H:i:s'
+                    ],
+                ]
+            )
+        );
+
         $this->setSchema("realworlddb");
         $this->hasMany('id', 'Articles', 'user_id', ['alias' => 'Articles']);
         $this->hasMany('id', 'Comments', 'user_id', ['alias' => 'Comments']);
@@ -149,6 +162,181 @@ class User extends Model implements \JsonSerializable
     public static function findFirst($parameters = null)
     {
         return parent::findFirst($parameters);
+    }
+
+    /**
+     * @param mixed $data
+     * @param mixed $whiteList
+     * @return User|bool
+     */
+    public function create($data = null, $whiteList = null)
+    {
+        if (!parent::create($data, $whiteList)) {
+            return false;
+        }
+
+        return $this;
+    }
+
+    private function
+    {
+        return 'users';
+    }
+
+    /**
+     * Allows to query a set of records that match the specified conditions
+     *
+     * @param mixed $parameters
+     * @return User[]|User
+     */
+    public static function find($parameters = null)
+    {
+        return parent::find($parameters);
+    }
+
+    /**
+     * Allows to query the first record that match the specified conditions
+     *
+     * @param mixed $parameters
+     * @return User
+     */
+    public static function findFirst($parameters = null)
+    {
+        return parent::findFirst($parameters);
+    }
+
+    /**
+     * @param mixed $data
+     * @param mixed $whiteList
+     * @return User|bool
+     */
+    public function create($data = null, $whiteList = null)
+    {
+        if (!parent::create($data, $whiteList)) {
+            return false;
+        }
+
+        return $this;
+    }
+
+    private function generateJWT()
+    {
+
+    }
+
+    /**
+     * @param string $email
+     * @return User
+     */
+    public function setEmail(string $email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $password
+     * @return User
+     */
+    public function setPassword(string $password)
+    {
+        $security = new Security();
+        $this->password = $security->hash($password);
+
+        return $this;
+    }
+
+    /**
+     * @param string $username
+     * @return User
+     */
+    public function setUsername(string $username)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param string $bio
+     * @return User
+     */
+    public function setBio(string $bio)
+    {
+        $this->bio = $bio;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBio(): string
+    {
+        return $this->bio;
+    }
+
+    /**
+     * @param string $image
+     * @return User
+     */
+    public function setImage(string $image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $token
+     * @return User
+     */
+    public function setToken(string $token)
+    {
+        $this->token = $this->generateJWT();
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getToken(): string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     /**

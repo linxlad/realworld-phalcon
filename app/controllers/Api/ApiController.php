@@ -5,6 +5,7 @@ namespace RealWorld\Controllers\Api;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Headers;
 use Phalcon\Mvc\Controller;
+use Phalcon\Mvc\Model\Message;
 
 /**
  * Following the standards set by gothinkster.
@@ -75,17 +76,28 @@ class ApiController extends Controller
     /**
      * Send a no content response.
      *
-     * @param $message
+     * @param array|string $messages
      * @param $statusCode
      * @return Response;
      */
-    protected function respondError($message, $statusCode)
+    protected function respondError($messages, $statusCode = 422)
     {
+        $errors = null;
+
+        if (is_array($messages)) {
+            foreach ($messages as $field => $message) {
+                if ($message instanceof Message) {
+                    $errors[$message->getField()] = [$message->getMessage()];
+                } else {
+                    $errors[$field] = [$message];
+                }
+            }
+        }
+
         return $this->respond(
             [
                 'errors' => [
-                    'message' => $message,
-                    'status_code' => $statusCode
+                    $errors ?? $messages
                 ]
             ],
             $statusCode
