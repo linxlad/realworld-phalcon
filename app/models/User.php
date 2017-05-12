@@ -188,9 +188,9 @@ class User extends Model implements \JsonSerializable
             'id' => $this->getId(),
             'exp' => time() + 60 * DAY
         ];
-        $salt = $this->getDI()->get('config')->secruity->salt;
+        $key = $this->getDI()->get('config')->secruity->salt;
 
-        return JWT::encode($token, $salt);
+        return JWT::encode($token, $key);
     }
 
     /**

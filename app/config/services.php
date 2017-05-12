@@ -10,7 +10,8 @@ use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
 use Phalcon\Flash\Direct as Flash;
 use RealWorld\Auth\Auth;
-use RealWorld\Listener\CorsListener;
+use RealWorld\Listeners\CorsListener;
+use RealWorld\Listeners\JWTAuthenticationListener;
 
 /**
  * Shared configuration service
@@ -123,6 +124,7 @@ $di->setShared(
 
         // Attach a listener
         $eventsManager->attach("dispatch:beforeExecuteRoute", $di->get('cors'));
+        $eventsManager->attach("dispatch:beforeExecuteRoute", $di->get('jwt'));
 
         $dispatcher = new Dispatcher();
         $dispatcher->setEventsManager($eventsManager);
@@ -142,6 +144,10 @@ $di->set(
     }
 );
 
-$di->set('cors', function() {
+$di->setShared('cors', function() {
     return new CorsListener();
-}, true);
+});
+
+$di->setShared('jwt', function() {
+    return new JWTAuthenticationListener();
+});
