@@ -42,6 +42,5 @@ $apiGroup->add('/articles/{article}/favorite', 'Favorite::remove', ['DELETE', 'O
 
 // Tag routes.
 $apiGroup->add('/tags', 'Tag::index', ['GET', 'OPTIONS']);
-
 $router->mount($apiGroup);
 $router->handle();

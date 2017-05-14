@@ -122,7 +122,7 @@ $di->setShared(
     function () use ($di) {
         $eventsManager = new Manager();
 
-        // Attach a listener
+        // Attach listeners.
         $eventsManager->attach("dispatch:beforeExecuteRoute", $di->get('cors'));
         $eventsManager->attach("dispatch:beforeExecuteRoute", $di->get('jwt'));
 

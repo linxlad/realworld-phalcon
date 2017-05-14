@@ -180,17 +180,28 @@ class User extends Model implements \JsonSerializable
     }
 
     /**
+     *
+     */
+    public function beforeSave()
+    {
+        // Convert the array into a string
+        $this->token = $this->generateJWT();
+    }
+
+    /**
      * @return string
      */
     private function generateJWT()
     {
+        // Encode the token which will expire 60 days from yesterday.
+        $timestamp = time()-86400;
         $token = [
-            'id' => $this->getId(),
-            'exp' => time() + 60 * DAY
+            'id' => $this->getUsername(),
+            'exp' => strtotime("+7 day", $timestamp)
         ];
-        $key = $this->getDI()->get('config')->secruity->salt;
+        $key = $this->getDI()->get('config')->application->security->salt;
 
-        return JWT::encode($token, $key);
+        return JWT::encode($token, $key, ['HS256']);
     }
 
     /**
@@ -294,7 +305,7 @@ class User extends Model implements \JsonSerializable
      */
     public function getToken()
     {
-        return $this->generateJWT();
+        return $this->token;
     }
 
     /**

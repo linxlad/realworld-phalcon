@@ -23,11 +23,12 @@ class JWTAuthenticationListener extends Injectable
             if ($token = $this->getAuthorization()) {
                 $key = $this->getDI()->get('config')->application->security->salt;
                 $decoded = JWT::decode($token, $key, ['HS256']);
-                var_dump($decoded); exit;
             }
         } catch (\Exception $e) {
-            var_dump($e); exit;
+            //echo $e->getMessage(); exit;
         }
+
+        return;
     }
 
     /**
