@@ -27,17 +27,18 @@ class UserController extends ApiController
             }
 
             $user = $this->request->user;
-            $user = User::findFirst(4)->validation();
 
             foreach ($userInput as $field=>$value) {
                 $user->$field = $value;
             }
 
-            if (!$result = $user->save()) {
+            if (!$result = $user->update()) {
                 return $this->respondError($user->getMessages());
             }
         } catch (\Exception $e) {
             return $this->respondError($e->getMessage());
         }
+
+        return $this->respond($user);
     }
 }

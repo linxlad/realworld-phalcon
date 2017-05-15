@@ -35,25 +35,26 @@ class JWTAuthenticationListener extends Injectable
                 $user = $this->auth->loginWithJWT($decodedToken);
                 $this->request->user = $user;
             }
-        } catch (\Phalcon\Security\Exception $e) {
-            return $this->respondError('JWT error: User not found.');
-        } catch (\Firebase\JWT\ExpiredException $e) {
-            return $this->respondError('JWT error: Token has expired.');
         } catch (\Exception $e) {
-            var_dump($e->getMessage()); exit;
+            $message = '';
+
+            switch (get_class($e)) {
+                case 'Phalcon\Security\Exception':
+                    $message = 'JWT error: User not found.';
+                    break;
+                case 'Firebase\JWT\ExpiredException':
+                    $message = 'JWT error: Token has expired.';
+                    break;
+                case 'Firebase\JWT\BeforeValidException':
+                    break;
+                default:
+                    $message = 'JWT error: ' . $e->getMessage() . '.';
+            }
+
+            return $this->respondError($message);
         }
 
         return $this->response;
-    }
-
-    /**
-     * @return bool|string
-     */
-    public function getAuthorization()
-    {
-        return $this->request->getHeader('Authorization') ?
-            $this->request->getHeader('Authorization') :
-            false;
     }
 
     /**

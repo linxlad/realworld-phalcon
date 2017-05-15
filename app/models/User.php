@@ -7,6 +7,7 @@ use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 use Phalcon\Security;
 use RealWorld\Validators\RegisterUser;
+use RealWorld\Validators\UpdateUser;
 
 /**
  * Class User
@@ -87,18 +88,6 @@ class User extends Model implements \JsonSerializable
     protected $modified;
 
     /**
-     * Validations and business logic
-     *
-     * @return boolean
-     */
-    public function validation()
-    {
-        $validator = new RegisterUser();
-
-        return $this->validate($validator);
-    }
-
-    /**
      * Initialize method for model.
      */
     public function initialize()
@@ -177,6 +166,14 @@ class User extends Model implements \JsonSerializable
         }
 
         return $this;
+    }
+
+    public function beforeUpdate()
+    {
+        $validator = new UpdateUser();
+        $validator->setEntity($this);
+
+        return $this->validate($validator);
     }
 
     /**

@@ -7,7 +7,6 @@ use Phalcon\Validation\Validator\Email;
 use Phalcon\Validation\Validator\Uniqueness;
 use Phalcon\Validation\Validator\StringLength;
 use Phalcon\Validation\Validator\Url;
-use RealWorld\Models\User;
 
 /**
  * Class UpdateUser
@@ -19,6 +18,21 @@ class UpdateUser extends Validation
     {
         $this
             ->add(
+                'username',
+                new Uniqueness([
+                    "model"   => $this->getEntity(),
+                    "message" => "has already been taken",
+                ])
+            )
+
+            ->add(
+                'email',
+                new Uniqueness([
+                    "model"   => $this->getEntity(),
+                    "message" => "has already been taken",
+                ])
+            )
+            ->add(
                 "email",
                 new Email([
                     "message" => "is invalid",
@@ -28,13 +42,15 @@ class UpdateUser extends Validation
                 'bio',
                 new StringLength([
                     'max' => 255,
-                    'message' => 'is too long'
+                    'message' => 'is too long',
+                    'allowEmpty' => true
                 ])
             )
             ->add('image',
                 new Url([
                     'max' => 255,
-                    'message' => 'is not a url'
+                    'message' => 'is not a url',
+                    'allowEmpty' => true
                 ])
             )
         ;
