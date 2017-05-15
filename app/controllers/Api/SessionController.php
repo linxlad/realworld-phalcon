@@ -19,6 +19,10 @@ class SessionController extends ApiController
     public function loginAction()
     {
         try {
+            if ($this->hasRememberMe()) {
+                return $this->loginWithRememberMe();
+            }
+
             if (!$credentials = $this->request->getJsonRawBody(true)['user']) {
                 throw new \Exception('No credentials');
             }
@@ -29,6 +33,59 @@ class SessionController extends ApiController
         }
 
         return $this->respond($user);
+    }
+
+    /**
+     * Logs on using the information in the coookies.
+     *
+     * @return Response
+     */
+    public function loginWithRememberMe()
+    {
+        $userId = $this->cookies->get('RMU')->getValue();
+        $cookieToken = $this->cookies->get('RMT')->getValue();
+
+        $user = User::findFirst($userId);
+
+        if ($user) {
+            $token = $user->getToken();
+
+            if ($cookieToken == $token) {
+                $remember = User::findFirst([
+                    'id = ?0 AND token = ?1',
+                    'bind' => [$user->getId(), $token],
+                ]);
+
+                if ($remember) {
+                      // TODO: Implement expiry time on token
+//                    if ((time() - (86400 * 30)) < $remember->getCreatedAt()) {
+//
+//                        if (true === $redirect) {
+//                            return $this->response->redirect($pupRedirect->success);
+//                        }
+//
+//                        return;
+//                    }
+
+                    return $this->respond($user);
+                }
+            }
+        }
+
+        $this->cookies->get('RMU')->delete();
+        $this->cookies->get('RMT')->delete();
+
+        return $this->respondFailedLogin();
+    }
+
+    /**
+     * Check if the session has a remember me cookie.
+     *
+     * @return bool
+     */
+    public function hasRememberMe()
+    {
+        return $this->cookies->has('RMU');
     }
 
     /**
