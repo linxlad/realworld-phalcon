@@ -37,7 +37,37 @@ class Auth extends Component
             throw new \Exception('Wrong email/password combination');
         }
 
+        if (isset($credentials['remember'])) {
+            $this->createRememberMe($user);
+        }
+
         return $user;
+    }
+
+
+    /**
+     * Creates the remember me environment settings the related cookies and generating tokens.
+     *
+     * @param User $user
+     */
+    public function createRememberMe($user)
+    {
+        $token = $this->security->getToken();
+        $expire = time() + 86400 * 30;
+        $this->cookies->set('RMU', $user->getId(), $expire);
+        $this->cookies->set('RMT', $token, $expire);
+
+//        $remember = new UserRememberTokens();
+//        $remember->setUserId($user->getId());
+//        $remember->setToken($token);
+//        $remember->setUserAgent($user_agent);
+//        $remember->setCreatedAt(time());
+//
+//        if ($remember->save() != false) {
+//            $expire = time() + 86400 * 30;
+//            $this->cookies->set('RMU', $user->getId(), $expire);
+//            $this->cookies->set('RMT', $token, $expire);
+//         }
     }
 
     /**

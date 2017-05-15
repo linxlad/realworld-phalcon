@@ -29,23 +29,19 @@ class JWTAuthenticationListener extends Injectable
     public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher)
     {
         try {
-            if ($token = $this->parseToken()) {
+            if ($this->hasAuthorizationHeader() && $token = $this->parseToken()) {
                 $key = $this->config->application->security->salt;
                 $decodedToken = JWT::decode($token, $key, ['HS256']);
                 $user = $this->auth->loginWithJWT($decodedToken);
                 $this->request->user = $user;
             }
         } catch (\Exception $e) {
-            $message = '';
-
             switch (get_class($e)) {
                 case 'Phalcon\Security\Exception':
                     $message = 'JWT error: User not found.';
                     break;
                 case 'Firebase\JWT\ExpiredException':
                     $message = 'JWT error: Token has expired.';
-                    break;
-                case 'Firebase\JWT\BeforeValidException':
                     break;
                 default:
                     $message = 'JWT error: ' . $e->getMessage() . '.';
@@ -55,6 +51,16 @@ class JWTAuthenticationListener extends Injectable
         }
 
         return $this->response;
+    }
+
+    /**
+     * @return bool|string
+     */
+    public function hasAuthorizationHeader()
+    {
+        return $this->request->getHeader('authorization') ?
+            $this->request->getHeader('authorization') :
+            false;
     }
 
     /**
@@ -132,6 +138,6 @@ class JWTAuthenticationListener extends Injectable
 
         $this->response->setStatusCode(401);
 
-        return $this->response->send();
+        return $this->response->send(); exit;
     }
 }

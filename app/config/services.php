@@ -151,3 +151,11 @@ $di->setShared('cors', function() {
 $di->setShared('jwt', function() {
     return new JWTAuthenticationListener();
 });
+
+$di->set('crypt', function() {
+    $crypt = new Phalcon\Crypt();
+    $key = $this->getConfig()->application->security->salt;
+    $crypt->setKey($key);
+
+    return $crypt;
+});

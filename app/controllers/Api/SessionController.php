@@ -44,31 +44,22 @@ class SessionController extends ApiController
     {
         $userId = $this->cookies->get('RMU')->getValue();
         $cookieToken = $this->cookies->get('RMT')->getValue();
-
         $user = User::findFirst($userId);
 
         if ($user) {
-            $token = $user->getToken();
+            $token = $this->security->getSessionToken();
 
             if ($cookieToken == $token) {
-                $remember = User::findFirst([
-                    'id = ?0 AND token = ?1',
-                    'bind' => [$user->getId(), $token],
-                ]);
+                // TODO: Implement expiry time on token
+                // if ((time() - (86400 * 30)) < $remember->getCreatedAt()) {
+                //     if (true === $redirect) {
+                //         return $this->response->redirect($pupRedirect->success);
+                //     }
+                //
+                    // return;
+                // }
 
-                if ($remember) {
-                      // TODO: Implement expiry time on token
-//                    if ((time() - (86400 * 30)) < $remember->getCreatedAt()) {
-//
-//                        if (true === $redirect) {
-//                            return $this->response->redirect($pupRedirect->success);
-//                        }
-//
-//                        return;
-//                    }
-
-                    return $this->respond($user);
-                }
+                return $this->respond($user);
             }
         }
 

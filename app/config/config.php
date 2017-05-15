@@ -31,7 +31,7 @@ return new \Phalcon\Config([
         'baseUri'        => preg_replace('/public([\/\\\\])index.php$/', '', $_SERVER["PHP_SELF"]),
 
         'security' => [
-            'salt' => '21932302859125c16db30f4.76012023'
+            'salt' => '21932302859125c16db30f4.76012023',
         ]
     ]
 ]);
