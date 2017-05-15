@@ -2,7 +2,6 @@
 
 namespace RealWorld\Auth;
 
-use Phalcon\Http\Response;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Security\Exception;
 use RealWorld\Models\User;
@@ -99,8 +98,7 @@ class Auth extends Component
             }
         }
 
-        $this->cookies->get('RMU')->delete();
-        $this->cookies->get('RMT')->delete();
+        $this->removeRememberCookies();
 
         return false;
     }
@@ -120,5 +118,14 @@ class Auth extends Component
         ]);
 
         return $user;
+    }
+
+    /**
+     *
+     */
+    private function removeRememberCookies()
+    {
+        $this->cookies->get('RMU')->delete();
+        $this->cookies->get('RMT')->delete();
     }
 }

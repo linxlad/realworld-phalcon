@@ -9,7 +9,7 @@ use RealWorld\Models\User;
 /**
  * Class SessionController
  * @package RealWorld\Controllers\Auth
- * @property Auth auth;
+ * @property Auth auth
  */
 class SessionController extends ApiController
 {
@@ -36,16 +36,6 @@ class SessionController extends ApiController
     }
 
     /**
-     * Check if the session has a remember me cookie.
-     *
-     * @return bool
-     */
-    public function hasRememberMe()
-    {
-        return $this->cookies->has('RMU');
-    }
-
-    /**
      * @return Response
      */
     public function registerAction()
@@ -65,6 +55,16 @@ class SessionController extends ApiController
         } catch (\Exception $e) {
             return $this->respondError($e->getMessage());
         }
+    }
+
+    /**
+     * Check if the session has a remember me cookie.
+     *
+     * @return bool
+     */
+    private function hasRememberMe()
+    {
+        return $this->cookies->has('RMU');
     }
 }
 
