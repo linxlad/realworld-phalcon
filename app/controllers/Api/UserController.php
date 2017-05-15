@@ -7,6 +7,7 @@ use RealWorld\Models\User;
 /**
  * Class UserController
  * @package RealWorld\Controllers\Api
+ * @property User user
  */
 class UserController extends ApiController
 {
@@ -25,13 +26,16 @@ class UserController extends ApiController
                 throw new \Exception('No user');
             }
 
-            $user = new User();
+            $user = $this->request->user;
+            $user = User::findFirst(4)->validation();
 
-            if (!$result = $user->create($userInput, array_keys($userInput))) {
-                return $this->respondError($user->getMessages());
+            foreach ($userInput as $field=>$value) {
+                $user->$field = $value;
             }
 
-            return $this->respond($result);
+            if (!$result = $user->save()) {
+                return $this->respondError($user->getMessages());
+            }
         } catch (\Exception $e) {
             return $this->respondError($e->getMessage());
         }

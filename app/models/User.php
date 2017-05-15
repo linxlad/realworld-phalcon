@@ -201,7 +201,7 @@ class User extends Model implements \JsonSerializable
         ];
         $key = $this->getDI()->get('config')->application->security->salt;
 
-        return JWT::encode($token, $key, ['HS256']);
+        return JWT::encode($token, $key);
     }
 
     /**

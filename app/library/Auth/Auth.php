@@ -3,6 +3,7 @@
 namespace RealWorld\Auth;
 
 use Phalcon\Mvc\User\Component;
+use Phalcon\Security\Exception;
 use RealWorld\Models\User;
 
 /**
@@ -35,6 +36,23 @@ class Auth extends Component
         if (!$this->security->checkHash($credentials['password'], $user->getPassword())) {
             throw new \Exception('Wrong email/password combination');
         }
+
+        return $user;
+    }
+
+    /**
+     * @param $token
+     * @return User
+     * @throws Exception
+     */
+    public function loginWithJWT($token)
+    {
+        $user = User::findFirst([
+            "conditions" => "username = ?1",
+            "bind"       => [
+                1 => $token->id,
+            ]
+        ]);
 
         return $user;
     }

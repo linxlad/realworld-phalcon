@@ -19,20 +19,6 @@ class UpdateUser extends Validation
     {
         $this
             ->add(
-                'username',
-                new Uniqueness([
-                    "model"   => new User(),
-                    "message" => "has already been taken",
-                ])
-            )
-            ->add(
-                'email',
-                new Uniqueness([
-                    "model"   => new User(),
-                    "message" => "has already been taken",
-                ])
-            )
-            ->add(
                 "email",
                 new Email([
                     "message" => "is invalid",
