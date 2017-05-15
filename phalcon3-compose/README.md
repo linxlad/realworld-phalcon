@@ -1,4 +1,4 @@
-# Docker Drupal 8 development environment
+# Docker Phalcon 3 development environment
 
 ## Dependencies
 
