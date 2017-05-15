@@ -2,6 +2,7 @@
 
 namespace RealWorld\Listeners;
 
+use Firebase\JWT\BeforeValidException;
 use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Firebase\JWT\SignatureInvalidException;
@@ -28,7 +29,7 @@ class JWTAuthenticationListener extends Injectable
     public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher)
     {
         try {
-            if ($token = $this->getAuthorization()) {
+            if ($token = $this->parseToken()) {
                 $key = $this->config->application->security->salt;
                 $decodedToken = JWT::decode($token, $key, ['HS256']);
                 $user = $this->auth->loginWithJWT($decodedToken);
@@ -53,6 +54,60 @@ class JWTAuthenticationListener extends Injectable
         return $this->request->getHeader('Authorization') ?
             $this->request->getHeader('Authorization') :
             false;
+    }
+
+    /**
+     * @param string $header
+     * @param string $query
+     * @return string
+     * @throws BeforeValidException
+     */
+    public function parseToken($header = 'authorization', $query = 'token')
+    {
+        if (!$token = $this->parseAuthHeader($header, $query)) {
+            if (!$token = $this->request->get($query)) {
+                throw new BeforeValidException('The token could not be parsed from the request', 400);
+            }
+        }
+
+        return $token;
+    }
+
+    /**
+     * Parse token from the authorization header.
+     *
+     * @param string $header
+     * @param string $query
+     *
+     * @return false|string
+     */
+    protected function parseAuthHeader($header = 'authorization', $query = 'token')
+    {
+        $header = $this->request->getHeader($header);
+
+        if (!$this->startsWith(strtolower($header), $query)) {
+            return false;
+        }
+
+        return trim(str_ireplace($query, '', $header));
+    }
+
+    /**
+     * Determine if a given string starts with a given substring.
+     *
+     * @param  string  $haystack
+     * @param  string|array  $needles
+     * @return bool
+     */
+    public function startsWith($haystack, $needles)
+    {
+        foreach ((array) $needles as $needle) {
+            if ($needle != '' && substr($haystack, 0, strlen($needle)) === (string) $needle) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
