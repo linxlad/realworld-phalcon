@@ -19,8 +19,8 @@ class SessionController extends ApiController
     public function loginAction()
     {
         try {
-            if ($this->hasRememberMe()) {
-                return $this->loginWithRememberMe();
+            if ($this->hasRememberMe() && ($user = $this->auth->loginWithRememberMe())) {
+                return $this->respond($user);
             }
 
             if (!$credentials = $this->request->getJsonRawBody(true)['user']) {
@@ -33,40 +33,6 @@ class SessionController extends ApiController
         }
 
         return $this->respond($user);
-    }
-
-    /**
-     * Logs on using the information in the coookies.
-     *
-     * @return Response
-     */
-    public function loginWithRememberMe()
-    {
-        $userId = $this->cookies->get('RMU')->getValue();
-        $cookieToken = $this->cookies->get('RMT')->getValue();
-        $user = User::findFirst($userId);
-
-        if ($user) {
-            $token = $this->security->getSessionToken();
-
-            if ($cookieToken == $token) {
-                // TODO: Implement expiry time on token
-                // if ((time() - (86400 * 30)) < $remember->getCreatedAt()) {
-                //     if (true === $redirect) {
-                //         return $this->response->redirect($pupRedirect->success);
-                //     }
-                //
-                    // return;
-                // }
-
-                return $this->respond($user);
-            }
-        }
-
-        $this->cookies->get('RMU')->delete();
-        $this->cookies->get('RMT')->delete();
-
-        return $this->respondFailedLogin();
     }
 
     /**

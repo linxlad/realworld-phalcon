@@ -2,6 +2,7 @@
 
 namespace RealWorld\Auth;
 
+use Phalcon\Http\Response;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Security\Exception;
 use RealWorld\Models\User;
@@ -68,6 +69,40 @@ class Auth extends Component
 //            $this->cookies->set('RMU', $user->getId(), $expire);
 //            $this->cookies->set('RMT', $token, $expire);
 //         }
+    }
+
+    /**
+     * Logs on using the information in the coookies.
+     *
+     * @return User|bool
+     */
+    public function loginWithRememberMe()
+    {
+        $userId = $this->cookies->get('RMU')->getValue();
+        $cookieToken = $this->cookies->get('RMT')->getValue();
+        $user = User::findFirst($userId);
+
+        if ($user) {
+            $token = $this->security->getSessionToken();
+
+            if ($cookieToken == $token) {
+                // TODO: Implement expiry time on token
+                // if ((time() - (86400 * 30)) < $remember->getCreatedAt()) {
+                //     if (true === $redirect) {
+                //         return $this->response->redirect($pupRedirect->success);
+                //     }
+                //
+                // return;
+                // }
+
+                return $user;
+            }
+        }
+
+        $this->cookies->get('RMU')->delete();
+        $this->cookies->get('RMT')->delete();
+
+        return false;
     }
 
     /**
