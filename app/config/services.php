@@ -2,6 +2,7 @@
 
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\Model\Binder;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\Url as UrlResolver;
@@ -129,6 +130,7 @@ $di->setShared(
         $dispatcher = new Dispatcher();
         $dispatcher->setEventsManager($eventsManager);
         $dispatcher->setDefaultNamespace("RealWorld\\Controllers");
+        //$dispatcher->setModelBinder(new Binder());
 
         return $dispatcher;
     }
