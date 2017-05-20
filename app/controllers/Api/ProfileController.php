@@ -3,8 +3,6 @@
 namespace RealWorld\Controllers\Api;
 
 use Phalcon\Http\Response;
-use Phalcon\Mvc\Collection;
-use Phalcon\Mvc\Model\Resultset;
 use RealWorld\Models\User;
 use RealWorld\Transformers\ProfileTransformer;
 

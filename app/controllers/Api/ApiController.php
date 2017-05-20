@@ -6,13 +6,13 @@ use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use Phalcon\Http\Response;
-use Phalcon\Http\Response\Headers;
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Model\Message;
 use Phalcon\Mvc\Model\Resultset;
+use RealWorld\Transformers\Transformer;
 
 /**
- * Following the standards set by gothinkster.
+ * Following the standards set by gothinkster/laravel-realworld-example-app.
  * @link https://github.com/gothinkster/laravel-realworld-example-app/blob/master/app/Http/Controllers/Api/ApiController.php
  *
  * Class ApiController
@@ -55,10 +55,7 @@ class ApiController extends Controller
      */
     public function respondWithTransformer($data, $transformer, $statusCode = 200, $headerArray = [])
     {
-        if (!is_object($transformer)) {
-            $transformer = new $transformer();
-        }
-
+        $this->validateTransformer($transformer);
         $key = $transformer->getResourceKey();
 
         if ($data instanceof Resultset) {
@@ -183,5 +180,16 @@ class ApiController extends Controller
     protected function respondNotFound($message = 'Not Found')
     {
         return $this->respondError($message, 404);
+    }
+
+    /**
+     * @param $transformer
+     * @throws \Exception
+     */
+    private function validateTransformer($transformer)
+    {
+        if (!$transformer instanceof Transformer) {
+            throw new \Exception('Not instance of Transformer.');
+        }
     }
 }
