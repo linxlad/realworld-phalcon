@@ -2,19 +2,18 @@
 
 namespace RealWorld\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use RealWorld\Models\User;
 
 /**
- * Class ProfileTransformer
+ * Class UserTransformer
  * @package RealWorld\Transformers
  */
-class ProfileTransformer extends Transformer
+class UserTransformer extends Transformer
 {
     /**
      * @var string
      */
-    protected $resourceKey = 'profile';
+    protected $resourceKey = 'user';
 
     /**
      * @param User $data
@@ -23,10 +22,11 @@ class ProfileTransformer extends Transformer
     public function transform(User $data)
     {
         return $data->toArray([
+            'email',
             'username',
             'bio',
             'image',
-            'following'
+            'token',
         ]);
     }
 }

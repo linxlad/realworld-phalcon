@@ -33,7 +33,7 @@ class Auth extends Component
         }
 
         // Check the password matches the one saves to the user.
-        if (!$this->security->checkHash($credentials['password'], $user->getPassword())) {
+        if (!$this->security->checkHash($credentials['password'], $user->password)) {
             throw new \Exception('Wrong email/password combination');
         }
 

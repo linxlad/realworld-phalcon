@@ -3,6 +3,7 @@
 namespace RealWorld\Controllers\Api;
 
 use Phalcon\Http\Response;
+use Phalcon\Mvc\Model;
 use RealWorld\Models\User;
 use RealWorld\Transformers\ProfileTransformer;
 
@@ -10,6 +11,7 @@ use RealWorld\Transformers\ProfileTransformer;
  * Class ProfileController
  * @package RealWorld\Controllers\Api
  * @property User user
+ * @property User $authenticatedUser
  */
 class ProfileController extends ApiController
 {
@@ -21,36 +23,48 @@ class ProfileController extends ApiController
      */
     public function showAction($user)
     {
-        $user = User::findFirst([
-            "conditions" => "username = ?1",
-            "bind"       => [
-                1 => trim($user),
-            ]
-        ]);
+        $user = $this->findByUserName($user);
 
         return $this->respondWithTransformer($user, new ProfileTransformer);
     }
 
-    public function updateAction()
+    /**
+     * @param $user
+     * @return Response
+     */
+    public function followAction($user)
     {
-        try {
-            if (!$userInput = $this->request->getJsonRawBody(true)['user']) {
-                throw new \Exception('No user');
-            }
+        $authenticatedUser = $this->request->user;
+        $user = $this->findByUserName($user);
+        $authenticatedUser->follow($user);
 
-            $user = $this->request->user;
+        return $this->respondWithTransformer($user, new ProfileTransformer);
+    }
 
-            foreach ($userInput as $field=>$value) {
-                $user->$field = $value;
-            }
+    /**
+     * @param $user
+     * @return Response
+     */
+    public function unFollowAction($user)
+    {
+        $authenticatedUser = $this->request->user;
+        $user = $this->findByUserName($user);
+        $authenticatedUser->unFollow($user);
 
-            if (!$result = $user->update()) {
-                return $this->respondError($user->getMessages());
-            }
-        } catch (\Exception $e) {
-            return $this->respondError($e->getMessage());
-        }
+        return $this->respondWithTransformer($user, new ProfileTransformer);
+    }
 
-        return $this->respond($user);
+    /**
+     * @param $username
+     * @return Model
+     */
+    private function findByUserName($username)
+    {
+        return User::findFirst([
+            "conditions" => "username = ?1",
+            "bind"       => [
+                1 => trim($username),
+            ]
+        ]);
     }
 }

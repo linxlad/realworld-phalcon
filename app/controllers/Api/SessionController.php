@@ -5,6 +5,7 @@ namespace RealWorld\Controllers\Api;
 use Phalcon\Http\Response;
 use RealWorld\Auth\Auth;
 use RealWorld\Models\User;
+use RealWorld\Transformers\UserTransformer;
 
 /**
  * Class SessionController
@@ -32,7 +33,7 @@ class SessionController extends ApiController
             return $this->respondFailedLogin();
         }
 
-        return $this->respond($user);
+        return $this->respondWithTransformer($user, new UserTransformer);
     }
 
     /**
@@ -51,7 +52,7 @@ class SessionController extends ApiController
                 return $this->respondError($user->getMessages());
             }
 
-            return $this->respond($result);
+            return $this->respondWithTransformer($result, new UserTransformer);
         } catch (\Exception $e) {
             return $this->respondError($e->getMessage());
         }

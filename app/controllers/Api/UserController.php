@@ -2,7 +2,9 @@
 
 namespace RealWorld\Controllers\Api;
 
+use Phalcon\Http\Response;
 use RealWorld\Models\User;
+use RealWorld\Transformers\UserTransformer;
 
 /**
  * Class UserController
@@ -12,13 +14,19 @@ use RealWorld\Models\User;
 class UserController extends ApiController
 {
     /**
-     * @return string
+     * @return Response
      */
     public function indexAction()
     {
-        return '{user: {name: Nathan}}';
+        return $this->respondWithTransformer(
+            $this->request->user,
+            new UserTransformer
+        );
     }
 
+    /**
+     * @return Response
+     */
     public function updateAction()
     {
         try {
@@ -39,6 +47,6 @@ class UserController extends ApiController
             return $this->respondError($e->getMessage());
         }
 
-        return $this->respond($user);
+        return $this->respondWithTransformer($user, new UserTransformer);
     }
 }

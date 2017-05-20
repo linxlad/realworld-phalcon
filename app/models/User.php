@@ -22,70 +22,70 @@ class User extends Model implements \JsonSerializable
      * @Identity
      * @Column(type="integer", length=20, nullable=false)
      */
-    protected $id;
+    public $id;
 
     /**
      *
      * @var string
      * @Column(type="string", length=64, nullable=true)
      */
-    protected $username;
+    public $username;
 
     /**
      *
      * @var string
      * @Column(type="string", length=48, nullable=false)
      */
-    protected $email;
+    public $email;
 
     /**
      *
      * @var string
      * @Column(type="string", length=128, nullable=false)
      */
-    protected $password;
+    public $password;
 
     /**
      *
      * @var string
      * @Column(type="string", nullable=true)
      */
-    protected $bio;
+    public $bio;
 
     /**
      *
      * @var string
      * @Column(type="string", nullable=true)
      */
-    protected $image;
+    public $image;
 
     /**
      *
      * @var string
      * @Column(type="string", nullable=true)
      */
-    protected $token;
+    public $token;
 
     /**
      *
      * @var string
      * @Column(type="string", nullable=true)
      */
-    protected $token_expires;
+    public $token_expires;
 
     /**
      *
      * @var string
      * @Column(type="datetime", nullable=true)
      */
-    protected $created;
+    public $created;
 
     /**
      *
      * @var string
      * @Column(type="datetime", nullable=true)
      */
-    protected $modified;
+    public $modified;
 
     /**
      * Initialize method for model.
@@ -118,8 +118,8 @@ class User extends Model implements \JsonSerializable
         $this->hasMany('id', 'Articles', 'user_id', ['alias' => 'Articles']);
         $this->hasMany('id', 'Comments', 'user_id', ['alias' => 'Comments']);
         $this->hasMany('id', 'Favorites', 'user_id', ['alias' => 'Favorites']);
-        $this->hasMany('id', 'Follows', 'follower_id', ['alias' => 'Follows']);
-        $this->hasMany('id', 'Follows', 'followed_id', ['alias' => 'Follows']);
+        $this->hasMany('id', Follows::class, 'follower_id', ['alias' => 'Follows']);
+        $this->hasMany('id', Follows::class, 'followed_id', ['alias' => 'Follows']);
     }
 
     /**
@@ -171,31 +171,12 @@ class User extends Model implements \JsonSerializable
         // Encode the token which will expire 60 days from yesterday.
         $timestamp = time()-86400;
         $token = [
-            'id' => $this->getUsername(),
+            'id' => $this->username,
             'exp' => strtotime("+7 day", $timestamp)
         ];
         $key = $this->getDI()->get('config')->application->security->salt;
 
         return JWT::encode($token, $key);
-    }
-
-    /**
-     * @param string $email
-     * @return User
-     */
-    public function setEmail(string $email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
     }
 
     /**
@@ -211,104 +192,46 @@ class User extends Model implements \JsonSerializable
     }
 
     /**
-     * @return string
+     * @param User $userToCheck
+     * @return bool
      */
-    public function getPassword()
+    public function isFollowing(User $userToCheck)
     {
-        return $this->password;
-    }
-
-    /**
-     * @param string $username
-     * @return User
-     */
-    public function setUsername(string $username)
-    {
-        $this->username = $username;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUsername()
-    {
-        return $this->username;
-    }
-
-    /**
-     * @param string $bio
-     * @return User
-     */
-    public function setBio(string $bio)
-    {
-        $this->bio = $bio;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBio()
-    {
-        return $this->bio;
-    }
-
-    /**
-     * @param string $image
-     * @return User
-     */
-    public function setImage(string $image)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * @return string
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Build JSON object.
-     *
-     * @return array
-     */
-    public function jsonSerialize()
-    {
-        return [
-            'user' => [
-                'id' => $this->getId(),
-                'email' => $this->getEmail(),
-                'username' => $this->getUsername(),
-                'bio' => $this->getBio(),
-                'image' => $this->getImage(),
-                'token' => $this->getToken(),
-                'createdAt' => $this->created,
-                'updatedAt' => $this->modified,
+        return (bool) Follows::findFirst([
+            "conditions" => "followed_id = ?1",
+            "bind"       => [
+                1 => $userToCheck->id,
             ]
-        ];
+        ]);
+    }
+
+    /**
+     * @param User $userToFollow
+     * @return bool
+     */
+    public function follow(User $userToFollow)
+    {
+        if (!$this->isFollowing($userToFollow)) {
+            $follower = new Follows([
+                'follower_id' => $this->id,
+                'followed_id' => $userToFollow->id,
+            ]);
+
+            return $follower->save();
+        }
+    }
+
+    /**
+     * @param User {
+     * @return bool
+     */
+    public function unFollow(User $userToUnFollow)
+    {
+        return Follows::findFirst([
+            "conditions" => "followed_id = ?1",
+            "bind"       => [
+                1 => $userToUnFollow->id,
+            ]
+        ])->delete();
     }
 }

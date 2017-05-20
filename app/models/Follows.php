@@ -42,8 +42,8 @@ class Follows extends Model
     public function initialize()
     {
         $this->setSchema("realworlddb");
-        $this->belongsTo('follower_id', '\User', 'id', ['alias' => 'User']);
-        $this->belongsTo('followed_id', '\User', 'id', ['alias' => 'User']);
+        $this->belongsTo('follower_id', User::class, 'id', ['alias' => 'User']);
+        $this->belongsTo('followed_id', User::class, 'id', ['alias' => 'User']);
     }
 
     /**
@@ -55,27 +55,4 @@ class Follows extends Model
     {
         return 'follows';
     }
-
-    /**
-     * Allows to query a set of records that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Follows[]|Follows
-     */
-    public static function find($parameters = null)
-    {
-        return parent::find($parameters);
-    }
-
-    /**
-     * Allows to query the first record that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Follows
-     */
-    public static function findFirst($parameters = null)
-    {
-        return parent::findFirst($parameters);
-    }
-
 }
