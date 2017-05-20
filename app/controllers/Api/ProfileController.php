@@ -3,7 +3,10 @@
 namespace RealWorld\Controllers\Api;
 
 use Phalcon\Http\Response;
+use Phalcon\Mvc\Collection;
+use Phalcon\Mvc\Model\Resultset;
 use RealWorld\Models\User;
+use RealWorld\Transformers\ProfileTransformer;
 
 /**
  * Class ProfileController
@@ -27,7 +30,7 @@ class ProfileController extends ApiController
             ]
         ]);
 
-        return $this->respond($user);
+        return $this->respondWithTransformer($user, new ProfileTransformer);
     }
 
     public function updateAction()

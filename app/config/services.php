@@ -1,8 +1,8 @@
 <?php
 
+use League\Fractal\Manager as FractalManager;
 use Phalcon\Events\Manager;
 use Phalcon\Mvc\Dispatcher;
-use Phalcon\Mvc\Model\Binder;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\Url as UrlResolver;
@@ -13,6 +13,7 @@ use Phalcon\Flash\Direct as Flash;
 use RealWorld\Auth\Auth;
 use RealWorld\Listeners\CorsListener;
 use RealWorld\Listeners\JWTAuthenticationListener;
+use RealWorld\Plugins\DataSerializerPlugin;
 
 /**
  * Shared configuration service
@@ -146,18 +147,25 @@ $di->set(
     }
 );
 
-$di->setShared('cors', function() {
+$di->setShared('cors', function () {
     return new CorsListener();
 });
 
-$di->setShared('jwt', function() {
+$di->setShared('jwt', function () {
     return new JWTAuthenticationListener();
 });
 
-$di->set('crypt', function() {
+$di->set('crypt', function () {
     $crypt = new Phalcon\Crypt();
     $key = $this->getConfig()->application->security->salt;
     $crypt->setKey($key);
 
     return $crypt;
+});
+
+$di->setShared('serializer', function () {
+   $manager = new FractalManager();
+   $manager->setSerializer(new DataSerializerPlugin());
+
+   return $manager;
 });

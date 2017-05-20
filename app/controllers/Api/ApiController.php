@@ -2,10 +2,14 @@
 
 namespace RealWorld\Controllers\Api;
 
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
+use League\Fractal\Resource\Item;
 use Phalcon\Http\Response;
 use Phalcon\Http\Response\Headers;
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Model\Message;
+use Phalcon\Mvc\Model\Resultset;
 
 /**
  * Following the standards set by gothinkster.
@@ -13,6 +17,7 @@ use Phalcon\Mvc\Model\Message;
  *
  * Class ApiController
  * @package RealWorld\Controllers\Api
+ * @property Manager serializer
  */
 class ApiController extends Controller
 {
@@ -39,6 +44,33 @@ class ApiController extends Controller
         $this->response->setHeaders($headers);
 
         return $this->response;
+    }
+
+    /**
+     * @param $data
+     * @param $transformer
+     * @param int $statusCode
+     * @param array $headerArray
+     * @return Response
+     */
+    public function respondWithTransformer($data, $transformer, $statusCode = 200, $headerArray = [])
+    {
+        if (!is_object($transformer)) {
+            $transformer = new $transformer();
+        }
+
+        $key = $transformer->getResourceKey();
+
+        if ($data instanceof Resultset) {
+            $data = new Collection($data, $transformer, $key);
+        } else {
+            $data = new Item($data, $transformer, $key);
+        }
+
+        $serializer = $this->getDI()->get('serializer');
+        $out = $serializer->createData($data)->toArray();
+
+        return $this->respond($out, $statusCode, $headerArray);
     }
 
     /**
