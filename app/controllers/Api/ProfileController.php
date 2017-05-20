@@ -5,6 +5,7 @@ namespace RealWorld\Controllers\Api;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Model;
 use RealWorld\Models\User;
+use RealWorld\Repository\UserRepository;
 use RealWorld\Transformers\ProfileTransformer;
 
 /**
@@ -60,11 +61,7 @@ class ProfileController extends ApiController
      */
     private function findByUserName($username)
     {
-        return User::findFirst([
-            "conditions" => "username = ?1",
-            "bind"       => [
-                1 => trim($username),
-            ]
-        ]);
+        $userRepo = new UserRepository();
+        return $userRepo->firstBy(['username' => trim($username)]);
     }
 }

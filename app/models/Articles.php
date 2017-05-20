@@ -1,8 +1,10 @@
 <?php
 namespace RealWorld\Models;
 
-use Phalcon\Mvc\Model;
-
+/**
+ * Class Articles
+ * @package RealWorld\Models
+ */
 class Articles extends Model
 {
     /**

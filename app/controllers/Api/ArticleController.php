@@ -1,6 +1,7 @@
 <?php
 
 namespace RealWorld\Controllers\Api;
+use RealWorld\Models\Articles;
 
 /**
  * Class ArticleController
@@ -18,7 +19,7 @@ class ArticleController extends ApiController
      */
     public function indexAction()
     {
-        // ...
+        $articles = $this->request->getQuery();
     }
 
     /**

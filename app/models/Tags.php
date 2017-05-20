@@ -2,8 +2,10 @@
 
 namespace RealWorld\Models;
 
-use Phalcon\Mvc\Model;
-
+/**
+ * Class Tags
+ * @package RealWorld\Models
+ */
 class Tags extends Model
 {
     /**

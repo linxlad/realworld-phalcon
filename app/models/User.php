@@ -3,10 +3,8 @@
 namespace RealWorld\Models;
 
 use Firebase\JWT\JWT;
-use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 use Phalcon\Security;
-use RealWorld\Validators\RegisterUser;
 use RealWorld\Validators\UpdateUser;
 
 /**
@@ -197,12 +195,7 @@ class User extends Model implements \JsonSerializable
      */
     public function isFollowing(User $userToCheck)
     {
-        return (bool) Follows::findFirst([
-            "conditions" => "followed_id = ?1",
-            "bind"       => [
-                1 => $userToCheck->id,
-            ]
-        ]);
+        return Follows::countByFollowedId($userToCheck->id);
     }
 
     /**
@@ -213,8 +206,8 @@ class User extends Model implements \JsonSerializable
     {
         if (!$this->isFollowing($userToFollow)) {
             $follower = new Follows([
-                'follower_id' => $this->id,
-                'followed_id' => $userToFollow->id,
+                'followerId' => $this->id,
+                'followedId' => $userToFollow->id,
             ]);
 
             return $follower->save();
@@ -222,16 +215,19 @@ class User extends Model implements \JsonSerializable
     }
 
     /**
-     * @param User {
+     * @param User
      * @return bool
      */
     public function unFollow(User $userToUnFollow)
     {
-        return Follows::findFirst([
-            "conditions" => "followed_id = ?1",
+        if ($user = Follows::findFirst([
+            "conditions" => "followerId = :follower: AND followedId = :followed:",
             "bind"       => [
-                1 => $userToUnFollow->id,
+                "follower" => $this->id,
+                "followed" => $userToUnFollow->id,
             ]
-        ])->delete();
+        ])) {
+            return $user->delete();
+        }
     }
 }

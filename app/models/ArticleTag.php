@@ -2,8 +2,10 @@
 
 namespace RealWorld\Models;
 
-use Phalcon\Mvc\Model;
-
+/**
+ * Class ArticleTag
+ * @package RealWorld\Models
+ */
 class ArticleTag extends Model
 {
     /**

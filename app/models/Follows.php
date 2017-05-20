@@ -2,8 +2,10 @@
 
 namespace RealWorld\Models;
 
-use Phalcon\Mvc\Model;
-
+/**
+ * Class Follows
+ * @package RealWorld\Models
+ */
 class Follows extends Model
 {
     /**

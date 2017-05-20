@@ -2,8 +2,10 @@
 
 namespace RealWorld\Models;
 
-use Phalcon\Mvc\Model;
-
+/**
+ * Class Comments
+ * @package RealWorld\Models
+ */
 class Comments extends Model
 {
     /**

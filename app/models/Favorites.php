@@ -2,8 +2,10 @@
 
 namespace RealWorld\Models;
 
-use Phalcon\Mvc\Model;
-
+/**
+ * Class Favorites
+ * @package RealWorld\Models
+ */
 class Favorites extends Model
 {
     /**
