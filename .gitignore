@@ -16,3 +16,4 @@ Thumbs.db
 ### Phalcon template
 /config/development/
 /vendor/
+.gitignore
