@@ -125,9 +125,8 @@ class ApiController extends Controller
 
         return $this->respond(
             [
-                'errors' => [
-                    $errors ?? $messages
-                ]
+                'errors' => $errors ? [ $errors ] : $messages,
+                'status_code' => $statusCode
             ],
             $statusCode
         );

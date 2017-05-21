@@ -74,7 +74,7 @@ class ArticleController extends ApiController
      */
     public function updateAction()
     {
-        // ...
+        var_dump('Update'); exit;
     }
 
     /**
@@ -85,9 +85,12 @@ class ArticleController extends ApiController
      */
     public function deleteAction($slug)
     {
-        echo $slug; exit;
         $articleRepo = new ArticleRepository();
-        $article = $articleRepo->firstBy(['slug' => $slug]);
+
+        if (!$article = $articleRepo->firstBy(['slug' => $slug])) {
+            return $this->respondNotFound();
+        }
+
         $article->delete();
 
         return $this->respondSuccess();

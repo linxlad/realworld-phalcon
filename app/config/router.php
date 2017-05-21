@@ -40,8 +40,8 @@ $apiGroup->add('/articles/{article}/favorite', 'Favorite::remove', ['DELETE', 'O
 
 $apiGroup->add('/articles', 'Article::index', ['GET', 'OPTIONS']);
 $apiGroup->add('/articles', 'Article::create', ['POST', 'OPTIONS']);
-$apiGroup->add('/articles', 'Article::update', ['PUT', 'PATCH', 'OPTIONS']);
-$apiGroup->add('/articles', 'Article::delete', ['DELETE', 'OPTIONS']);
+$apiGroup->add('/articles/{slug}', 'Article::update', ['PUT', 'PATCH', 'OPTIONS']);
+$apiGroup->add('/articles/{slug}', 'Article::delete', ['DELETE', 'OPTIONS']);
 
 // Comment routes.
 
