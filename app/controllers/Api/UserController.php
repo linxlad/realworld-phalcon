@@ -31,12 +31,12 @@ class UserController extends ApiController
     {
         try {
             if (!$userInput = $this->request->getJsonRawBody(true)['user']) {
-                throw new \Exception('No user');
+                throw new \Exception('No user.');
             }
 
             $user = $this->request->user;
 
-            foreach ($userInput as $field=>$value) {
+            foreach ($userInput as $field => $value) {
                 $user->$field = $value;
             }
 

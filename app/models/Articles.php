@@ -1,6 +1,10 @@
 <?php
 namespace RealWorld\Models;
 
+use Phalcon\Mvc\Model\Behavior\Timestampable;
+use RealWorld\Validators\CreateArticle;
+use Phalcon\Utils\Slug;
+
 /**
  * Class Articles
  * @package RealWorld\Models
@@ -21,7 +25,7 @@ class Articles extends Model
      * @var integer
      * @Column(type="integer", length=20, nullable=false)
      */
-    public $user_id;
+    public $userId;
 
     /**
      *
@@ -70,11 +74,33 @@ class Articles extends Model
      */
     public function initialize()
     {
+        $this->addBehavior(
+            new Timestampable(
+                [
+                    "beforeCreate" => [
+                        "field"  => "created",
+                        "format" => 'Y-m-d H:i:s'
+                    ],
+                ]
+            )
+        );
+
+        $this->addBehavior(
+            new Timestampable(
+                [
+                    "beforeCreate" => [
+                        "field"  => "modified",
+                        "format" => 'Y-m-d H:i:s'
+                    ],
+                ]
+            )
+        );
+
         $this->setSchema("realworlddb");
-        $this->hasMany('id', 'ArticleTag', 'article_id', ['alias' => 'ArticleTag']);
-        $this->hasMany('id', 'Comments', 'article_id', ['alias' => 'Comments']);
-        $this->hasMany('id', 'Favorites', 'article_id', ['alias' => 'Favorites']);
-        $this->belongsTo('user_id', '\User', 'id', ['alias' => 'User']);
+        $this->hasMany('id', ArticleTag::class, 'article_id', ['alias' => 'ArticleTag']);
+        $this->hasMany('id', Comments::class, 'article_id', ['alias' => 'Comments']);
+        $this->hasMany('id', Favorites::class, 'article_id', ['alias' => 'Favorites']);
+        $this->belongsTo('userId', User::class, 'id', ['alias' => 'User']);
     }
 
     /**
@@ -88,25 +114,22 @@ class Articles extends Model
     }
 
     /**
-     * Allows to query a set of records that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Articles[]|Articles
+     * @return bool
      */
-    public static function find($parameters = null)
+    public function beforeCreate()
     {
-        return parent::find($parameters);
+        $validator = new CreateArticle();
+        $validator->setEntity($this);
+
+        return $this->validate($validator);
     }
 
     /**
-     * Allows to query the first record that match the specified conditions
      *
-     * @param mixed $parameters
-     * @return Articles
      */
-    public static function findFirst($parameters = null)
+    public function beforeValidationOnCreate()
     {
-        return parent::findFirst($parameters);
+        // Create article slug.
+        $this->slug = Slug::generate($this->title);
     }
-
 }

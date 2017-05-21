@@ -1,7 +1,13 @@
 <?php
 
 namespace RealWorld\Controllers\Api;
+use Phalcon\Exception;
+use Phalcon\Http\Response;
+use RealWorld\Filters\ArticleFilter;
 use RealWorld\Models\Articles;
+use RealWorld\Models\Tags;
+use RealWorld\Repository\ArticleRepository;
+use RealWorld\Transformers\ArticleTransformer;
 
 /**
  * Class ArticleController
@@ -9,6 +15,7 @@ use RealWorld\Models\Articles;
  */
 class ArticleController extends ApiController
 {
+
     public function initialize()
     {
 
@@ -16,35 +23,22 @@ class ArticleController extends ApiController
 
     /**
      * The start action, it returns the "search"
+     *
+     * @param ArticleFilter $filter
      */
     public function indexAction()
     {
-        $articles = $this->request->getQuery();
-    }
-
-    /**
-     * Execute the "search" based on the criteria sent from the "index"
-     * Returning a paginator for the results
-     */
-    public function searchAction()
-    {
-        // ...
-    }
-
-    /**
-     * Shows the view to return a "new" article
-     */
-    public function newAction()
-    {
-        // ...
-    }
-
-    /**
-     * "edit" an existing article
-     */
-    public function editAction()
-    {
-        // ...
+        $filter = new ArticleFilter();
+        $articles = Articles::find()->filter($filter);
+        var_dump($articles); exit;
+        $query = $this->request->getQuery();
+        $articleRepo = new ArticleRepository();
+        $result = $articleRepo->createNamedBuilder('a')
+            ->leftJoin(Tags::class)
+            ->where(Tags::class . '.name = :name:', ['name' => $query['tag']])
+            ->getQuery()
+            ->execute();
+        var_dump($result->toArray()); exit;
     }
 
     /**
@@ -52,13 +46,33 @@ class ArticleController extends ApiController
      */
     public function createAction()
     {
-        // ...
+        try {
+            if (!$userInput = $this->request->getJsonRawBody(true)['article']) {
+                throw new Exception('No article.');
+            }
+
+            $article = new Articles();
+
+            foreach ($userInput as $field => $value) {
+                $article->$field = $value;
+            }
+
+            $article->userId = $this->request->user->id;
+
+            if (!$result = $article->create()) {
+                return $this->respondError($article->getMessages());
+            }
+        } catch (\Exception $e) {
+            return $this->respondError($e->getMessage());
+        }
+
+        return $this->respondWithTransformer($article, new ArticleTransformer);
     }
 
     /**
-     * Updates a article based on the data entered in the "edit" action
+     * Shows the view to return a "new" article
      */
-    public function saveAction()
+    public function updateAction()
     {
         // ...
     }
@@ -66,10 +80,16 @@ class ArticleController extends ApiController
     /**
      * Deletes an existing article
      *
-     * @param $id
+     * @param $slug
+     * @return Response
      */
-    public function deleteAction($id)
+    public function deleteAction($slug)
     {
-        // ...
+        echo $slug; exit;
+        $articleRepo = new ArticleRepository();
+        $article = $articleRepo->firstBy(['slug' => $slug]);
+        $article->delete();
+
+        return $this->respondSuccess();
     }
 }

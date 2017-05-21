@@ -69,7 +69,7 @@ class User extends Model implements \JsonSerializable
      * @var string
      * @Column(type="string", nullable=true)
      */
-    public $token_expires;
+    public $tokenExpires;
 
     /**
      *
@@ -113,9 +113,9 @@ class User extends Model implements \JsonSerializable
         );
 
         $this->setSchema("realworlddb");
-        $this->hasMany('id', 'Articles', 'user_id', ['alias' => 'Articles']);
-        $this->hasMany('id', 'Comments', 'user_id', ['alias' => 'Comments']);
-        $this->hasMany('id', 'Favorites', 'user_id', ['alias' => 'Favorites']);
+        $this->hasMany('id', Articles::class, 'user_id', ['alias' => 'Articles']);
+        $this->hasMany('id', Comments::class, 'user_id', ['alias' => 'Comments']);
+        $this->hasMany('id', Favorites::class, 'user_id', ['alias' => 'Favorites']);
         $this->hasMany('id', Follows::class, 'follower_id', ['alias' => 'Follows']);
         $this->hasMany('id', Follows::class, 'followed_id', ['alias' => 'Follows']);
     }

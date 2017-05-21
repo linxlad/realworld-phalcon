@@ -11,6 +11,7 @@
     ],
     "require": {
         "php": ">=5.6.4",
+        "phalcon/incubator": "^3.1",
         "firebase/php-jwt": "^4.0",
         "league/fractal": "^0.16.0"
     },

@@ -2,7 +2,6 @@
 
 namespace RealWorld\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use RealWorld\Models\User;
 
 /**

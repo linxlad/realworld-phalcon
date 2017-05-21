@@ -8,6 +8,7 @@ $loader->registerNamespaces([
     'RealWorld\\Plugins' => $config->application->pluginsDir,
     'RealWorld\\Transformers' => $config->application->transformersDir,
     'RealWorld' => $config->application->libraryDir,
+    'Phalcon' => $config->application->vendorDir . 'phalcon/incubator/Library/Phalcon/',
 ]);
 
 $loader->register();
