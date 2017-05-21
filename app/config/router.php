@@ -38,7 +38,15 @@ $apiGroup->add('/articles/feed', 'Feed::index', ['GET', 'OPTIONS']);
 $apiGroup->add('/articles/{article}/favorite', 'Favorite::add', ['POST', 'OPTIONS']);
 $apiGroup->add('/articles/{article}/favorite', 'Favorite::remove', ['DELETE', 'OPTIONS']);
 
-$apiGroup->add('/articles', 'Article::index', ['GET', 'OPTIONS']);
+$apiGroup->add(
+    '/articles/:params',
+    [
+        'controller' => 'Article',
+        'action' => 'index',
+        'params' => 1
+    ],
+    ['GET', 'OPTIONS']
+);
 $apiGroup->add('/articles', 'Article::create', ['POST', 'OPTIONS']);
 $apiGroup->add('/articles/{slug}', 'Article::update', ['PUT', 'PATCH', 'OPTIONS']);
 $apiGroup->add('/articles/{slug}', 'Article::delete', ['DELETE', 'OPTIONS']);

@@ -26,8 +26,9 @@ class ArticleController extends ApiController
      *
      * @param ArticleFilter $filter
      */
-    public function indexAction()
+    public function indexAction($slug = null)
     {
+        var_dump([$slug, $this->request->getQuery()]); exit;
         $filter = new ArticleFilter();
         $articles = Articles::find()->filter($filter);
         var_dump($articles); exit;
