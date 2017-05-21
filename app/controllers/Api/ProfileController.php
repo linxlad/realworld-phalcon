@@ -17,6 +17,19 @@ use RealWorld\Transformers\ProfileTransformer;
 class ProfileController extends ApiController
 {
     /**
+     * @var UserRepository
+     */
+    protected $userRepo;
+
+    /**
+     *
+     */
+    public function initialize()
+    {
+       $this->userRepo = $this->di->getRepository('user');
+    }
+
+    /**
      * Get the profile of the user given by their username
      *
      * @param User $user
@@ -61,7 +74,6 @@ class ProfileController extends ApiController
      */
     private function findByUserName($username)
     {
-        $userRepo = new UserRepository();
-        return $userRepo->firstBy(['username' => trim($username)]);
+        return $this->userRepo->firstBy(['username' => trim($username)]);
     }
 }

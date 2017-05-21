@@ -97,18 +97,6 @@ $di->setShared('modelsMetadata', function () {
 });
 
 /**
- * Register the session flash service with the Twitter Bootstrap classes
- */
-$di->set('flash', function () {
-    return new Flash([
-        'error'   => 'alert alert-danger',
-        'success' => 'alert alert-success',
-        'notice'  => 'alert alert-info',
-        'warning' => 'alert alert-warning'
-    ]);
-});
-
-/**
  * Start the session the first time some component request the session service
  */
 $di->setShared('session', function () {
@@ -168,4 +156,22 @@ $di->setShared('serializer', function () {
    $manager->setSerializer(new DataSerializerPlugin());
 
    return $manager;
+});
+
+$di->setShared('repository', function () {
+    $alias = func_get_args();
+
+    if (isset($alias[0]) && is_array($alias[0])) {
+        $alias = reset($alias[0]);
+    } elseif (is_array($alias)) {
+        $alias = reset($alias);
+    }
+
+    $repositoryClassName = sprintf('\RealWorld\Repository\%sRepository', ucfirst(strtolower($alias)));
+
+    if (!class_exists($repositoryClassName)) {
+        throw new \Phalcon\Di\Exception('Repository class ' . $repositoryClassName . ' does not exist.');
+    }
+
+    return new $repositoryClassName();
 });

@@ -15,31 +15,34 @@ use RealWorld\Transformers\ArticleTransformer;
  */
 class ArticleController extends ApiController
 {
+    /**
+     * @var ArticleRepository
+     */
+    protected $articleRepo;
 
+    /**
+     *
+     */
     public function initialize()
     {
-
+        $this->articleRepo = $this->di->getRepository('article');
     }
 
     /**
      * The start action, it returns the "search"
      *
-     * @param ArticleFilter $filter
+     * @param $slug
+     * @return Response
      */
-    public function indexAction($slug = null)
+    public function indexAction($slug)
     {
-        var_dump([$slug, $this->request->getQuery()]); exit;
-        $filter = new ArticleFilter();
-        $articles = Articles::find()->filter($filter);
-        var_dump($articles); exit;
-        $query = $this->request->getQuery();
-        $articleRepo = new ArticleRepository();
-        $result = $articleRepo->createNamedBuilder('a')
-            ->leftJoin(Tags::class)
-            ->where(Tags::class . '.name = :name:', ['name' => $query['tag']])
-            ->getQuery()
-            ->execute();
-        var_dump($result->toArray()); exit;
+        // If it's a slug just grab the article.
+        if ($slug && ($article = $this->articleRepo->firstBy(['slug' => $slug]))) {
+            return $this->respondWithTransformer($article, new ArticleTransformer);
+        }
+
+        // Ok it's not a slug so let's filter on the query string.
+        //...
     }
 
     /**
@@ -86,9 +89,7 @@ class ArticleController extends ApiController
      */
     public function deleteAction($slug)
     {
-        $articleRepo = new ArticleRepository();
-
-        if (!$article = $articleRepo->firstBy(['slug' => $slug])) {
+        if (!$article = $this->articleRepo->firstBy(['slug' => $slug])) {
             return $this->respondNotFound();
         }
 
