@@ -42,14 +42,7 @@ class Auth extends Component
             $this->createRememberMe($user);
         }
 
-        try {
-            // Re-issue JWT if expired.
-            $key = $this->di->get('config')->application->security->salt;
-            JWT::decode($user->token, $key, ['HS256']);
-        } catch (\Firebase\JWT\ExpiredException $e) {
-            $user->token = $user->generateJWT();
-            $user->update();
-        }
+        $this->issueJwtIfExpired($user);
 
         return $user;
     }
@@ -137,5 +130,24 @@ class Auth extends Component
     {
         $this->cookies->get('RMU')->delete();
         $this->cookies->get('RMT')->delete();
+    }
+
+    /**
+     * Re-issue JWT if expired.
+     *
+     * @param $user
+     * @return mixed
+     */
+    private function issueJwtIfExpired($user)
+    {
+        try {
+            $key = $this->di->get('config')->application->security->salt;
+            JWT::decode($user->token, $key, ['HS256']);
+        } catch (\Firebase\JWT\ExpiredException $e) {
+            $user->token = $user->generateJWT();
+            $user->update();
+        }
+
+        return $user;
     }
 }
