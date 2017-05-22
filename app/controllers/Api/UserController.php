@@ -51,6 +51,7 @@ class UserController extends ApiController
             if (!$input = $this->request->getJsonRawBody(true)['user']) {
                 throw new \Exception('No user.');
             }
+
             $user = $this->authenticatedUser;
             $user->applyInputToModel($input);
 
