@@ -117,7 +117,7 @@ class Repository extends AbstractRepository implements RepositoryInterface
      *
      * @param  array $where
      *
-     * @return \Phalcon\Mvc\Model|false
+     * @return \RealWorld\Models\Model|false
      */
     public function firstBy(array $where = [])
     {
@@ -135,7 +135,7 @@ class Repository extends AbstractRepository implements RepositoryInterface
      *
      * @throws ModelNotFoundException
      *
-     * @return \Phalcon\Mvc\Model
+     * @return \RealWorld\Models\Model
      */
     public function firstOrFailBy(array $where = []): Model
     {
@@ -397,7 +397,7 @@ class Repository extends AbstractRepository implements RepositoryInterface
      * @throws \RuntimeException
      * @throws \UnexpectedValueException
      *
-     * @return \Phalcon\Mvc\Model
+     * @return \RealWorld\Models\Model
      */
     public function create(array $inputs = []): Model
     {

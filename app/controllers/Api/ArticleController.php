@@ -1,11 +1,10 @@
 <?php
 
 namespace RealWorld\Controllers\Api;
+
 use Phalcon\Exception;
 use Phalcon\Http\Response;
-use RealWorld\Filters\ArticleFilter;
 use RealWorld\Models\Articles;
-use RealWorld\Models\Tags;
 use RealWorld\Repository\ArticleRepository;
 use RealWorld\Transformers\ArticleTransformer;
 
@@ -51,15 +50,9 @@ class ArticleController extends ApiController
     public function createAction()
     {
         try {
-            if (!$userInput = $this->request->getJsonRawBody(true)['article']) {
-                throw new Exception('No article.');
-            }
-
+            $input = $this->getJsonInput('article');
             $article = new Articles();
-
-            foreach ($userInput as $field => $value) {
-                $article->$field = $value;
-            }
+            $article->applyInputToModel($input);
 
             $article->userId = $this->request->user->id;
 
@@ -74,11 +67,32 @@ class ArticleController extends ApiController
     }
 
     /**
-     * Shows the view to return a "new" article
+     * Update article
+     *
+     * @param $slug
+     * @return Response
      */
-    public function updateAction()
+    public function updateAction($slug)
     {
-        var_dump('Update'); exit;
+        try {
+            if (!$article = $this->articleRepo->firstBy([
+                'slug' => $slug,
+                'userId' => $this->request->user->id
+            ])) {
+                return $this->respondUnauthorized();
+            }
+
+            $input = $this->getJsonInput('article');
+            $article->applyInputToModel($input);
+
+            if (!$result = $article->update()) {
+                return $this->respondError($article->getMessages());
+            }
+        } catch (\Exception $e) {
+            return $this->respondError($e->getMessage());
+        }
+
+        return $this->respondWithTransformer($article, new ArticleTransformer);
     }
 
     /**

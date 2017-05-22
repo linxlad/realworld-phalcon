@@ -191,4 +191,18 @@ class ApiController extends Controller
             throw new \Exception('Not instance of Transformer.');
         }
     }
+
+    /**
+     * @param $alias
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getJsonInput($alias)
+    {
+        if (!$userInput = $this->request->getJsonRawBody(true)[$alias]) {
+            throw new \Exception('No input with alias ' . $alias . '.');
+        }
+
+        return $userInput;
+    }
 }

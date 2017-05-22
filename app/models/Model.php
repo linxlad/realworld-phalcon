@@ -25,4 +25,17 @@ class Model extends BaseModel
 
         return $map;
     }
+
+    /**
+     * @param array $input
+     * @return $this
+     */
+    public function applyInputToModel(array $input)
+    {
+        foreach ($input as $field => $value) {
+            $this->$field = $value;
+        }
+
+        return $this;
+    }
 }
