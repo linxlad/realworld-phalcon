@@ -165,10 +165,10 @@ class User extends Model implements \JsonSerializable
     /**
      * @return string
      */
-    private function generateJWT()
+    public function generateJWT()
     {
         // Encode the token which will expire 60 days from yesterday.
-        $timestamp = time()-86400;
+        $timestamp = time() - 86400;
         $token = [
             'id' => $this->username,
             'exp' => strtotime("+7 day", $timestamp)

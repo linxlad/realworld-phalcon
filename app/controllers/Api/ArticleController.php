@@ -4,6 +4,7 @@ namespace RealWorld\Controllers\Api;
 
 use Phalcon\Http\Response;
 use RealWorld\Models\Articles;
+use RealWorld\Models\User;
 use RealWorld\Repository\ArticleRepository;
 use RealWorld\Transformers\ArticleTransformer;
 
@@ -19,11 +20,22 @@ class ArticleController extends ApiController
     protected $articleRepo;
 
     /**
+     * @var User
+     */
+    protected $authenticatedUser;
+
+    /**
      *
      */
     public function initialize()
     {
+        // Make sure the request does have a user (shouldn't get this far).
+        if (!$this->request->user) {
+            return $this->respondForbidden();
+        }
+
         $this->articleRepo = $this->di->getRepository('article');
+        $this->authenticatedUser = $this->request->user;
     }
 
     /**
@@ -53,7 +65,7 @@ class ArticleController extends ApiController
             $article = new Articles();
             $article->applyInputToModel($input);
 
-            $article->userId = $this->request->user->id;
+            $article->userId = $this->authenticatedUser->id;
 
             if (!$result = $article->create()) {
                 return $this->respondError($article->getMessages());

@@ -47,7 +47,7 @@ class JWTAuthenticationListener extends Injectable
                     $message = 'JWT error: ' . $e->getMessage() . '.';
             }
 
-            return $this->respondError($message);
+            $this->respondError($message)->send(); exit;
         }
 
         return $this->response;
@@ -138,6 +138,6 @@ class JWTAuthenticationListener extends Injectable
 
         $this->response->setStatusCode(401);
 
-        return $this->response->send(); exit;
+        return $this->response;
     }
 }

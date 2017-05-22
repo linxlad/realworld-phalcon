@@ -2,6 +2,7 @@
 
 namespace RealWorld\Auth;
 
+use Firebase\JWT\JWT;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Security\Exception;
 use RealWorld\Models\User;
@@ -39,6 +40,15 @@ class Auth extends Component
 
         if (isset($credentials['remember'])) {
             $this->createRememberMe($user);
+        }
+
+        try {
+            // Re-issue JWT if expired.
+            $key = $this->di->get('config')->application->security->salt;
+            JWT::decode($user->token, $key, ['HS256']);
+        } catch (\Firebase\JWT\ExpiredException $e) {
+            $user->token = $user->generateJWT();
+            $user->update();
         }
 
         return $user;
