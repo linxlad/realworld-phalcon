@@ -30,8 +30,8 @@ class ArticleTag extends Model
     public function initialize()
     {
         $this->setSchema("realworlddb");
-        $this->belongsTo('article_id', '\Articles', 'id', ['alias' => 'Articles']);
-        $this->belongsTo('tag_id', '\Tags', 'id', ['alias' => 'Tags']);
+        $this->belongsTo('articleId', Articles::class, 'id', ['alias' => 'Articles']);
+        $this->belongsTo('tagId', Tags::class, 'id', ['alias' => 'Tags']);
     }
 
     /**
@@ -43,27 +43,4 @@ class ArticleTag extends Model
     {
         return 'article_tag';
     }
-
-    /**
-     * Allows to query a set of records that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return ArticleTag[]|ArticleTag
-     */
-    public static function find($parameters = null)
-    {
-        return parent::find($parameters);
-    }
-
-    /**
-     * Allows to query the first record that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return ArticleTag
-     */
-    public static function findFirst($parameters = null)
-    {
-        return parent::findFirst($parameters);
-    }
-
 }

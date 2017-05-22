@@ -14,7 +14,7 @@ class Follows extends Model
      * @Primary
      * @Column(type="integer", length=20, nullable=false)
      */
-    public $follower_id;
+    public $followerId;
 
     /**
      *
@@ -22,7 +22,7 @@ class Follows extends Model
      * @Primary
      * @Column(type="integer", length=20, nullable=false)
      */
-    public $followed_id;
+    public $followedId;
 
     /**
      *
@@ -44,8 +44,8 @@ class Follows extends Model
     public function initialize()
     {
         $this->setSchema("realworlddb");
-        $this->belongsTo('follower_id', User::class, 'id', ['alias' => 'User']);
-        $this->belongsTo('followed_id', User::class, 'id', ['alias' => 'User']);
+        $this->belongsTo('followerId', User::class, 'id', ['alias' => 'User']);
+        $this->belongsTo('followedId', User::class, 'id', ['alias' => 'User']);
     }
 
     /**

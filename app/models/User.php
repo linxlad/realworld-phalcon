@@ -3,6 +3,7 @@
 namespace RealWorld\Models;
 
 use Firebase\JWT\JWT;
+use function foo\func;
 use Phalcon\Mvc\Model\Behavior\Timestampable;
 use Phalcon\Security;
 use RealWorld\Validators\UpdateUser;
@@ -113,11 +114,11 @@ class User extends Model implements \JsonSerializable
         );
 
         $this->setSchema("realworlddb");
-        $this->hasMany('id', Articles::class, 'user_id', ['alias' => 'Articles']);
-        $this->hasMany('id', Comments::class, 'user_id', ['alias' => 'Comments']);
-        $this->hasMany('id', Favorites::class, 'user_id', ['alias' => 'Favorites']);
-        $this->hasMany('id', Follows::class, 'follower_id', ['alias' => 'Follows']);
-        $this->hasMany('id', Follows::class, 'followed_id', ['alias' => 'Follows']);
+        $this->hasMany('id', Articles::class, 'userId', ['alias' => 'Articles']);
+        $this->hasMany('id', Comments::class, 'userId', ['alias' => 'Comments']);
+        $this->hasMany('id', Favorites::class, 'userId', ['alias' => 'Favorites']);
+        $this->hasMany('id', Follows::class, 'followerId', ['alias' => 'Follows']);
+        $this->hasMany('id', Follows::class, 'followerId', ['alias' => 'Follows']);
     }
 
     /**
@@ -228,6 +229,48 @@ class User extends Model implements \JsonSerializable
             ]
         ])) {
             return $user->delete();
+        }
+    }
+
+    /**
+     * @param Articles $article
+     * @return bool
+     */
+    public function hasFavored(Articles $article)
+    {
+        return  (bool) $this->favorites->filter(function ($favorite) use ($article) {
+            if ($favorite->userId == $this->id && $favorite->articleId == $article->id) {
+                return $favorite;
+            }
+        });
+    }
+
+    /**
+     * @param Articles $article
+     * @return bool
+     */
+    public function favorite(Articles $article)
+    {
+        if (!$this->hasFavored($article)) {
+            $favorite = new Favorites([
+                'userId' => $this->id,
+                'articleId' => $article->id
+            ]);
+
+            return $favorite->save();
+        }
+    }
+
+    public function unFavorite(Articles $article)
+    {
+        if ($article = Favorites::findFirst([
+            "conditions" => "userId = :user: AND articleId = :article:",
+            "bind"       => [
+                "user" => $this->id,
+                "article" => $article->id,
+            ]
+        ])) {
+            return $article->delete();
         }
     }
 }

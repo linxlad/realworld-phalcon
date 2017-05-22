@@ -97,9 +97,9 @@ class Articles extends Model
         );
 
         $this->setSchema("realworlddb");
-        $this->hasMany('id', ArticleTag::class, 'article_id', ['alias' => 'ArticleTag']);
-        $this->hasMany('id', Comments::class, 'article_id', ['alias' => 'Comments']);
-        $this->hasMany('id', Favorites::class, 'article_id', ['alias' => 'Favorites']);
+        $this->hasMany('id', ArticleTag::class, 'articleId', ['alias' => 'ArticleTag']);
+        $this->hasMany('id', Comments::class, 'articleId', ['alias' => 'Comments']);
+        $this->hasMany('id', Favorites::class, 'articleId', ['alias' => 'Favorites']);
         $this->belongsTo('userId', User::class, 'id', ['alias' => 'User']);
     }
 

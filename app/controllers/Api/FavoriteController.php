@@ -2,16 +2,18 @@
 
 namespace RealWorld\Controllers\Api;
 
+use Phalcon\Exception;
 use Phalcon\Http\Response;
 use RealWorld\Models\Articles;
+use RealWorld\Models\User;
 use RealWorld\Repository\ArticleRepository;
 use RealWorld\Transformers\ArticleTransformer;
 
 /**
- * Class ArticleController
+ * Class FavoriteController
  * @package RealWorld\Controllers\Api
  */
-class ArticleController extends ApiController
+class FavoriteController extends ApiController
 {
     /**
      * @var ArticleRepository
@@ -19,48 +21,50 @@ class ArticleController extends ApiController
     protected $articleRepo;
 
     /**
+     * @var User
+     */
+    protected $authenticatedUser;
+
+    /**
      *
      */
     public function initialize()
     {
+        // Make sure the request does have a user (shouldn't get this far).
+        if (!$this->request->user) {
+            return $this->respondForbidden();
+        }
+
         $this->articleRepo = $this->di->getRepository('article');
+        $this->authenticatedUser = $this->request->user;
     }
 
     /**
-     * The start action, it returns the "search"
-     *
      * @param $slug
      * @return Response
      */
-    public function indexAction($slug)
+    public function addAction($slug)
     {
-        // If it's a slug just grab the article.
-        if ($slug && ($article = $this->articleRepo->firstBy(['slug' => $slug]))) {
-            return $this->respondWithTransformer($article, new ArticleTransformer);
+        if (!$article = $this->articleRepo->firstBy(['slug' => $slug])) {
+            return $this->respondNotFound();
         }
 
-        // Ok it's not a slug so let's filter on the query string.
-        //...
+        $this->authenticatedUser->favorite($article);
+
+        return $this->respondWithTransformer($article, new ArticleTransformer);
     }
 
     /**
-     * Creates a article based on the data entered in the "new" action
+     * @param $slug
+     * @return Response
      */
-    public function createAction()
+    public function removeAction($slug)
     {
-        try {
-            $input = $this->getJsonInput('article');
-            $article = new Articles();
-            $article->applyInputToModel($input);
-
-            $article->userId = $this->request->user->id;
-
-            if (!$result = $article->create()) {
-                return $this->respondError($article->getMessages());
-            }
-        } catch (\Exception $e) {
-            return $this->respondError($e->getMessage());
+        if (!$article = $this->articleRepo->firstBy(['slug' => $slug])) {
+            return $this->respondNotFound();
         }
+
+        $this->authenticatedUser->unFavorite($article);
 
         return $this->respondWithTransformer($article, new ArticleTransformer);
     }

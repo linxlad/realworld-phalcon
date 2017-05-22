@@ -14,7 +14,7 @@ class Favorites extends Model
      * @Primary
      * @Column(type="integer", length=20, nullable=false)
      */
-    public $user_id;
+    public $userId;
 
     /**
      *
@@ -22,7 +22,7 @@ class Favorites extends Model
      * @Primary
      * @Column(type="integer", length=20, nullable=false)
      */
-    public $article_id;
+    public $articleId;
 
     /**
      *
@@ -44,8 +44,8 @@ class Favorites extends Model
     public function initialize()
     {
         $this->setSchema("realworlddb");
-        $this->belongsTo('user_id', '\User', 'id', ['alias' => 'User']);
-        $this->belongsTo('article_id', '\Articles', 'id', ['alias' => 'Articles']);
+        $this->belongsTo('userId', User::class, 'id', ['alias' => 'User']);
+        $this->belongsTo('articleId', Articles::class, 'id', ['alias' => 'Articles']);
     }
 
     /**
@@ -57,27 +57,4 @@ class Favorites extends Model
     {
         return 'favorites';
     }
-
-    /**
-     * Allows to query a set of records that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Favorites[]|Favorites
-     */
-    public static function find($parameters = null)
-    {
-        return parent::find($parameters);
-    }
-
-    /**
-     * Allows to query the first record that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Favorites
-     */
-    public static function findFirst($parameters = null)
-    {
-        return parent::findFirst($parameters);
-    }
-
 }
