@@ -30,7 +30,15 @@ class Tags extends Model
     public function initialize()
     {
         $this->setSchema("realworlddb");
-        $this->hasMany('id', 'ArticleTag', 'tag_id', ['alias' => 'ArticleTag']);
+        $this->hasManyToMany(
+            'id',
+            ArticleTag::class,
+            'tagId',
+            'articleId',
+            Articles::class,
+            'id',
+            ['alias' => 'Articles']
+        );
     }
 
     /**
@@ -42,27 +50,4 @@ class Tags extends Model
     {
         return 'tags';
     }
-
-    /**
-     * Allows to query a set of records that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Tags[]|Tags
-     */
-    public static function find($parameters = null)
-    {
-        return parent::find($parameters);
-    }
-
-    /**
-     * Allows to query the first record that match the specified conditions
-     *
-     * @param mixed $parameters
-     * @return Tags
-     */
-    public static function findFirst($parameters = null)
-    {
-        return parent::findFirst($parameters);
-    }
-
 }

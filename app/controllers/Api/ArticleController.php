@@ -4,6 +4,7 @@ namespace RealWorld\Controllers\Api;
 
 use Phalcon\Http\Response;
 use RealWorld\Models\Articles;
+use RealWorld\Models\Tags;
 use RealWorld\Models\User;
 use RealWorld\Repository\ArticleRepository;
 use RealWorld\Transformers\ArticleTransformer;
@@ -64,8 +65,19 @@ class ArticleController extends ApiController
             $input = $this->getJsonInput('article');
             $article = new Articles();
             $article->applyInputToModel($input);
-
             $article->userId = $this->authenticatedUser->id;
+
+            if (isset($input['tagList']) && !empty($input['tagList'])) {
+                $tags = [];
+
+                foreach($input['tagList'] as $nsme) {
+                    $tag = new Tags();
+                    $tag->name = trim($nsme);
+                    $tags[] = $tag;
+                }
+
+                $article->tags = $tags;
+            }
 
             if (!$result = $article->create()) {
                 return $this->respondError($article->getMessages());

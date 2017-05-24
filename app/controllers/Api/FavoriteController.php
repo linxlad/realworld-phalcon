@@ -2,9 +2,7 @@
 
 namespace RealWorld\Controllers\Api;
 
-use Phalcon\Exception;
 use Phalcon\Http\Response;
-use RealWorld\Models\Articles;
 use RealWorld\Models\User;
 use RealWorld\Repository\ArticleRepository;
 use RealWorld\Transformers\ArticleTransformer;
