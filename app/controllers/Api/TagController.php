@@ -4,6 +4,7 @@ namespace RealWorld\Controllers\Api;
 
 use Phalcon\Http\Response;
 use RealWorld\Models\Tags;
+use RealWorld\Transformers\TagTransformer;
 
 /**
  * Class TagController
@@ -16,8 +17,14 @@ class TagController extends ApiController
      *
      * @return Response
      */
-    public function index()
+    public function indexAction()
     {
-        $this->respond(Tags::find()->toArray());
+        $tags = [];
+
+        foreach (Tags::find(['columns' => 'name']) as $tag) {
+            $tags[] = $tag->name;
+        }
+
+        return $this->respondWithTransformer($tags, new TagTransformer);
     }
 }
