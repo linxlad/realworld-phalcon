@@ -2,6 +2,8 @@
 
 namespace RealWorld\Models;
 
+use Phalcon\Mvc\Model\Behavior\Timestampable;
+
 /**
  * Class Comments
  * @package RealWorld\Models
@@ -57,6 +59,28 @@ class Comments extends Model
      */
     public function initialize()
     {
+        $this->addBehavior(
+            new Timestampable(
+                [
+                    "beforeCreate" => [
+                        "field"  => "created",
+                        "format" => 'Y-m-d H:i:s'
+                    ],
+                ]
+            )
+        );
+
+        $this->addBehavior(
+            new Timestampable(
+                [
+                    "beforeCreate" => [
+                        "field"  => "modified",
+                        "format" => 'Y-m-d H:i:s'
+                    ],
+                ]
+            )
+        );
+
         $this->setSchema("realworlddb");
         $this->belongsTo('userId', User::class, 'id', ['alias' => 'User']);
         $this->belongsTo('articleId', Articles::class, 'id', ['alias' => 'Articles']);
