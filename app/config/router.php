@@ -54,6 +54,7 @@ $apiGroup->add('/articles/{article}', 'Article::delete', ['DELETE', 'OPTIONS']);
 // Comment routes.
 $apiGroup->add('/articles/{article}/comments', 'Comment::index', ['GET', 'OPTIONS']);
 $apiGroup->add('/articles/{article}/comments', 'Comment::add', ['POST', 'OPTIONS']);
+$apiGroup->add('/articles/{article}/comments/{id}', 'Comment::delete', ['DELETE', 'OPTIONS']);
 
 // Tag routes.
 $apiGroup->add('/tags', 'Tag::index', ['GET', 'OPTIONS']);

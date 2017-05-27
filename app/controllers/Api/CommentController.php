@@ -3,6 +3,7 @@
 namespace RealWorld\Controllers\Api;
 
 use Phalcon\Http\Response;
+use RealWorld\Models\Articles;
 use RealWorld\Models\Comments;
 use RealWorld\Models\Tags;
 use RealWorld\Models\User;
@@ -16,6 +17,11 @@ use RealWorld\Transformers\TagTransformer;
  */
 class CommentController extends ApiController
 {
+    /**
+     * @var Articles;
+     */
+    protected $article;
+
     /**
      * @var ArticleRepository
      */
@@ -33,6 +39,11 @@ class CommentController extends ApiController
     {
         // Make sure the request does have a user (shouldn't get this far).
         $this->articleRepo = $this->di->getRepository('article');
+        $slug = $this->dispatcher->getParam('article');
+
+        if (($slug && ($article = $this->articleRepo->firstBy(['slug' => $slug])))) {
+            $this->article = $article;
+        }
 
         if (!$this->request->user) {
             return;
@@ -48,7 +59,7 @@ class CommentController extends ApiController
      */
     public function indexAction($slug)
     {
-        if (!($slug && ($article = $this->articleRepo->firstBy(['slug' => $slug])))) {
+        if (!$article = $this->article) {
             return $this->respondNotFound();
         }
 
@@ -63,7 +74,7 @@ class CommentController extends ApiController
      */
     public function addAction($slug)
     {
-        if (!($slug && ($article = $this->articleRepo->firstBy(['slug' => $slug])))) {
+        if (!$article = $this->article) {
             return $this->respondNotFound();
         }
 
@@ -82,5 +93,29 @@ class CommentController extends ApiController
         }
 
         return $this->respondWithTransformer($article->comments, new CommentTransformer);
+    }
+
+    /**
+     * Delete the comment given by its id.
+     *
+     * @param $slug
+     * @param $id
+     * @return Response
+     */
+    public function deleteAction($slug, $id)
+    {
+        if (!$article = $this->article) {
+            return $this->respondNotFound();
+        }
+
+        $article->comments->filter(
+            function ($comment) use ($id, &$deleted) {
+                if ($comment->id === $id) {
+                    $comment->delete();
+                }
+            }
+        );
+
+        return $this->respondSuccess();
     }
 }
