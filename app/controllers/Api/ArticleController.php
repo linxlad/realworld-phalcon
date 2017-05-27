@@ -30,12 +30,13 @@ class ArticleController extends ApiController
      */
     public function initialize()
     {
+        $this->articleRepo = $this->di->getRepository('article');
+
         // Make sure the request does have a user (shouldn't get this far).
         if (!$this->request->user) {
-            return $this->respondForbidden();
+            return ;
         }
 
-        $this->articleRepo = $this->di->getRepository('article');
         $this->authenticatedUser = $this->request->user;
     }
 
@@ -54,6 +55,25 @@ class ArticleController extends ApiController
 
         // Ok it's not a slug so let's filter on the query string.
         //...
+        $query = $this->request->getQuery();
+        $articles = null;
+
+        // ARTICLES BY AUTHOR
+        if (isset($query['author'])) {
+            $user = User::findFirstByUsername($query['author']);
+
+            $userId = $user ? $user->id : null;
+
+            $articles = $this->articleRepo->getBy(['userId' => $userId]);
+        }
+
+        if (isset($query['favorited'])) {
+            $user = User::findFirstByUsername($query['author']);
+
+
+        }
+
+        return $this->respondWithTransformer($articles, new ArticleTransformer);
     }
 
     /**
@@ -70,10 +90,12 @@ class ArticleController extends ApiController
             if (isset($input['tagList']) && !empty($input['tagList'])) {
                 $tags = [];
 
-                foreach($input['tagList'] as $nsme) {
-                    $tag = new Tags();
-                    $tag->name = trim($nsme);
-                    $tags[] = $tag;
+                foreach($input['tagList'] as $name) {
+                    if (!Tags::findFirstByName($name)) {
+                        $tag = new Tags();
+                        $tag->name = trim($name);
+                        $tags[] = $tag;
+                    }
                 }
 
                 $article->tags = $tags;
