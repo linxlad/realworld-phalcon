@@ -32,11 +32,12 @@ class CommentController extends ApiController
     public function initialize()
     {
         // Make sure the request does have a user (shouldn't get this far).
+        $this->articleRepo = $this->di->getRepository('article');
+
         if (!$this->request->user) {
-            return $this->respondForbidden();
+            return;
         }
 
-        $this->articleRepo = $this->di->getRepository('article');
         $this->authenticatedUser = $this->request->user;
     }
 
@@ -47,8 +48,19 @@ class CommentController extends ApiController
      */
     public function indexAction($slug)
     {
+        if (!($slug && ($article = $this->articleRepo->firstBy(['slug' => $slug])))) {
+            return $this->respondNotFound();
+        }
+
+        return $this->respondWithTransformer($article->comments, new CommentTransformer);
     }
 
+    /**
+     * Add a comment to the article given by its slug and return the comment if successful.
+     *
+     * @param $slug
+     * @return Response
+     */
     public function addAction($slug)
     {
         if (!($slug && ($article = $this->articleRepo->firstBy(['slug' => $slug])))) {

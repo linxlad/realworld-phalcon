@@ -2,6 +2,7 @@
 
 namespace RealWorld\Transformers;
 
+use Phalcon\Mvc\Model\Row;
 use RealWorld\Models\Comments;
 
 /**
@@ -16,7 +17,7 @@ class CommentTransformer extends Transformer
     protected $resourceKey = 'comment';
 
     /**
-     * @param Comments $data
+     * @param Comments|Row $data
      * @return array
      */
     public function transform(Comments $data)

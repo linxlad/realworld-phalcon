@@ -59,7 +59,7 @@ class ApiController extends Controller
         $key = $transformer->getResourceKey();
 
         if ($data instanceof Resultset) {
-            $data = new Collection($data, $transformer, $key);
+            $data = new Collection($data, $transformer,  $key . 's');
         } else {
             $data = new Item($data, $transformer, $key);
         }
