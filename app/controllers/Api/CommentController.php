@@ -108,13 +108,15 @@ class CommentController extends ApiController
             return $this->respondNotFound();
         }
 
-        $article->comments->filter(
-            function ($comment) use ($id, &$deleted) {
-                if ($comment->id === $id) {
-                    $comment->delete();
-                }
-            }
-        );
+        if ($comment = Comments::findFirst([
+            "conditions" => "id = :user: AND articleId = :article:",
+            "bind"       => [
+                "user" => $id,
+                "article" => $article->id,
+            ]
+        ])) {
+            $comment->delete();
+        }
 
         return $this->respondSuccess();
     }
