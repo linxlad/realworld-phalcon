@@ -36,11 +36,7 @@ class ArticleTransformer extends Transformer
             $tags
         );
 
-        $data['favorited'] = array_map(function ($user) {
-            if ($user = $this->loggedInUserId) {
-                return true;
-            }
-        }, $article->favorites->toArray());
+        $data['favorited'] = false;
         $data['favoritesCount'] = false;
 
         $author = $article->user->toArray();
