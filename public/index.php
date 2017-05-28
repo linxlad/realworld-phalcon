@@ -1,51 +1,75 @@
 <?php
-use Phalcon\Di\FactoryDefault;
-use Phalcon\Mvc\Application;
 
-error_reporting(E_ALL);
+/**
+ * APP_PATH is what we need pretty much everywhere
+ */
 
-define('BASE_PATH', dirname(__DIR__));
-define('APP_PATH', BASE_PATH . '/app');
+use RealWorld\Bootstrap;
+
+if (!defined('APP_PATH')) {
+    define('APP_PATH', dirname(dirname(__FILE__)));
+}
 
 try {
-    /**
-     * The FactoryDefault Dependency Injector automatically registers
-     * the services that provide a full stack framework.
-     */
-    $di = new FactoryDefault();
+    require_once APP_PATH . '/app/library/Bootstrap.php';
 
     /**
-     * Handle routes
+     * We don't want a global scope variable for this
      */
-    include APP_PATH . '/config/router.php';
+    (new Bootstrap())->run();
 
-    /**
-     * Read services
-     */
-    include APP_PATH . '/config/services.php';
-
-    /**
-     * Get config service for use in inline setup below
-     */
-    $config = $di->getConfig();
-
-    /**
-     * Include Autoloader
-     */
-    include APP_PATH . '/config/loader.php';
-
-    /**
-     * Include composer autoloader
-     */
-    require APP_PATH . "/../vendor/autoload.php";
-
-    /**
-     * Handle the request
-     */
-    $application = new Application($di);
-    $request = $application->handle();
-    $request->send();
 } catch (\Exception $e) {
-    echo $e->getMessage() . '<br>';
-    echo '<pre>' . $e->getTraceAsString() . '</pre>';
+    echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
 }
+
+
+//use Phalcon\Di\FactoryDefault;
+//use Phalcon\Mvc\Application;
+//
+//error_reporting(E_ALL);
+//
+//define('BASE_PATH', dirname(__DIR__));
+//define('APP_PATH', BASE_PATH . '/app');
+//
+//try {
+//    /**
+//     * The FactoryDefault Dependency Injector automatically registers
+//     * the services that provide a full stack framework.
+//     */
+//    $di = new FactoryDefault();
+//
+//    /**
+//     * Handle routes
+//     */
+//    include APP_PATH . '/config/router.php';
+//
+//    /**
+//     * Read services
+//     */
+//    include APP_PATH . '/config/services.php';
+//
+//    /**
+//     * Get config service for use in inline setup below
+//     */
+//    $config = $di->getConfig();
+//
+//    /**
+//     * Include Autoloader
+//     */
+//    include APP_PATH . '/config/loader.php';
+//
+//    /**
+//     * Include composer autoloader
+//     */
+//    require APP_PATH . "/../vendor/autoload.php";
+//
+//    /**
+//     * Handle the request
+//     */
+//    $application = new Application($di);
+//    $request = $application->handle();
+//    $request->send();
+//} catch (\Exception $e) {
+//    echo $e->getMessage() . '<br>';
+//    echo '<pre>' . $e->getTraceAsString() . '</pre>';
+//}
