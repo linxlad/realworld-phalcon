@@ -26,6 +26,7 @@ use RealWorld\Middleware\ResponseMiddleware;
 use RealWorld\Plugins\DataSerializerPlugin as RWSerializerPlugin;
 
 use const APP_PATH;
+use function var_dump;
 
 class Bootstrap
 {
@@ -222,14 +223,14 @@ class Bootstrap
         $loader = new PhLoader();
         $loader->registerNamespaces(
             [
-                'RealWorld'              => APP_PATH . '/app/library',
-                'RealWorld\Controllers'  => APP_PATH . '/app/controllers',
-                'RealWorld\Models'       => APP_PATH . '/app/models',
-                'RealWorld\Filters'      => APP_PATH . '/app/library/Filters',
-                'RealWorld\Middleware'   => APP_PATH . '/app/library/Middleware',
-                'RealWorld\Plugins'      => APP_PATH . '/app/library/plugins',
-                'RealWorld\Transformers' => APP_PATH . '/app/library/Transformers',
-                'RealWorld\Validators'   => APP_PATH . '/app/library/Validators',
+                'RealWorld'              => APP_PATH . '/library',
+                'RealWorld\\Controllers'  => APP_PATH . '/app/controllers',
+                'RealWorld\\Models'       => APP_PATH . '/app/models',
+                'RealWorld\\Filters'      => APP_PATH . '/library/Filters',
+                'RealWorld\\Middleware'   => APP_PATH . '/library/Middleware',
+                'RealWorld\\Plugins'      => APP_PATH . '/library/plugins',
+                'RealWorld\\Transformers' => APP_PATH . '/library/Transformers',
+                'RealWorld\\Validators'   => APP_PATH . '/library/Validators',
                 // 'Phalcon'                => APP_PATH . $config->application->vendorDir . 'phalcon/incubator/Library/Phalcon/',
             ]
         );
@@ -344,7 +345,6 @@ class Bootstrap
                 'class' => ResponseMiddleware::class,
             ],
         ];
-        $jwt = new JWTAuthenticationMiddleware();
 
         foreach ($routes as $route) {
             $collection = new PhMicroCollection();
