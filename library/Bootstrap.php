@@ -97,7 +97,7 @@ class Bootstrap
         $this->diContainer->setShared(
             'config',
             function () {
-                $fileName = APP_PATH . '/app/config/config.php';
+                $fileName = APP_PATH . '/app/Config/config.php';
 
                 if (true !== file_exists($fileName)) {
                     throw new PhException('Configuration file not found');
@@ -224,8 +224,8 @@ class Bootstrap
         $loader->registerNamespaces(
             [
                 'RealWorld'               => APP_PATH . '/library',
-                'RealWorld\\Controllers'  => APP_PATH . '/app/controllers',
-                'RealWorld\\Models'       => APP_PATH . '/app/models',
+                'RealWorld\\Controllers'  => APP_PATH . '/app/Controllers',
+                'RealWorld\\Models'       => APP_PATH . '/app/Models',
                 'RealWorld\\Filters'      => APP_PATH . '/library/Filters',
                 'RealWorld\\Middleware'   => APP_PATH . '/library/Middleware',
                 'RealWorld\\Plugins'      => APP_PATH . '/library/plugins',
