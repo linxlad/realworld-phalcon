@@ -1,38 +1,33 @@
 <?php
 
-namespace RealWorld\Listeners;
+namespace RealWorld\Middleware;
 
 use Firebase\JWT\BeforeValidException;
-use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
-use Firebase\JWT\SignatureInvalidException;
 use Phalcon\Config;
-use Phalcon\Events\Event;
-use Phalcon\Di\Injectable;
-use Phalcon\Http\Response;
-use Phalcon\Mvc\Dispatcher;
-use RealWorld\Auth\Auth;
+use Phalcon\Mvc\Micro;
+use Phalcon\Mvc\Micro\MiddlewareInterface;
+use Phalcon\Mvc\User\Plugin;
+use RealWorld\Auth;
 
 /**
- * Class JWTAuthenticationListener
- * @package RealWorld\Plugin
- * @property Config config
- * @property Auth auth
+ * Class JWTAuthenticationMiddleware
+ *
+ * @package RealWorld\Middleware
+ *
+ * @property Auth   $auth
+ * @property Config $config
  */
-class JWTAuthenticationListener extends Injectable
+class JWTAuthenticationMiddleware extends Plugin implements MiddlewareInterface
 {
-    /**
-     * @param Event $event
-     * @param Dispatcher $dispatcher
-     * @return Response
-     */
-    public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher)
+    public function beforeExecuteRoute()
     {
         try {
             if ($this->hasAuthorizationHeader() && $token = $this->parseToken()) {
-                $key = $this->config->application->security->salt;
+                $key          = $this->config->application->security->salt;
                 $decodedToken = JWT::decode($token, $key, ['HS256']);
-                $user = $this->auth->loginWithJWT($decodedToken);
+                $user         = $this->auth->loginWithJWT($decodedToken);
+
                 $this->request->user = $user;
             }
         } catch (\Exception $e) {
@@ -53,27 +48,38 @@ class JWTAuthenticationListener extends Injectable
         return $this->response;
     }
 
+    public function call(Micro $application)
+    {
+        return true;
+    }
+
+
     /**
      * @return bool|string
      */
     public function hasAuthorizationHeader()
     {
         return $this->request->getHeader('authorization') ?
-            $this->request->getHeader('authorization') :
-            false;
+               $this->request->getHeader('authorization') :
+               false;
     }
 
     /**
      * @param string $header
      * @param string $query
+     *
      * @return string
+     *
      * @throws BeforeValidException
      */
     public function parseToken($header = 'authorization', $query = 'token')
     {
         if (!$token = $this->parseAuthHeader($header, $query)) {
             if (!$token = $this->request->get($query)) {
-                throw new BeforeValidException('The token could not be parsed from the request', 400);
+                throw new BeforeValidException(
+                    'The token could not be parsed from the request',
+                    400
+                );
             }
         }
 
@@ -102,8 +108,9 @@ class JWTAuthenticationListener extends Injectable
     /**
      * Determine if a given string starts with a given substring.
      *
-     * @param  string  $haystack
-     * @param  string|array  $needles
+     * @param  string       $haystack
+     * @param  string|array $needles
+     *
      * @return bool
      */
     public function startsWith($haystack, $needles)
