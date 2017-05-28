@@ -1,16 +1,18 @@
 <?php
 
-namespace RealWorld\Listeners;
+namespace RealWorld\Middleware;
 
 use Phalcon\Events\Event;
 use Phalcon\Di\Injectable;
 use Phalcon\Mvc\Dispatcher;
+use Phalcon\Mvc\Micro;
+use Phalcon\Mvc\Micro\MiddlewareInterface;
 
 /**
- * Class CorsListener
+ * Class CorsMiddleware
  * @package RealWorld\Listeners
  */
-class CorsListener extends Injectable
+class CorsMiddleware extends Injectable implements MiddlewareInterface
 {
     /**
      * @param Event $event
@@ -29,6 +31,11 @@ class CorsListener extends Injectable
         if ($this->isPreflightRequest()) {
             $this->response->setStatusCode(200, 'OK')->send(); exit;
         }
+    }
+
+    public function call(Micro $application)
+    {
+        return true;
     }
 
     /**

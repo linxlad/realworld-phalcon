@@ -8,6 +8,7 @@ use RealWorld\Models\Tags;
 use RealWorld\Models\User;
 use RealWorld\Repository\ArticleRepository;
 use RealWorld\Transformers\ArticleTransformer;
+use function var_dump;
 
 /**
  * Class ArticleController
@@ -70,7 +71,7 @@ class ArticleController extends ApiController
         if (isset($query['favorited'])) {
             $user = User::findFirstByUsername($query['author']);
 
-
+            var_dump($user->favorites->toAarray()); exit;
         }
 
         return $this->respondWithTransformer($articles, new ArticleTransformer);

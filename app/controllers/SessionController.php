@@ -6,7 +6,6 @@ use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller;
 use RealWorld\Auth\Auth;
 use RealWorld\Models\User;
-use RealWorld\Traits\ResponseErrorTrait;
 use RealWorld\Transformers\UserTransformer;
 
 /**
@@ -14,10 +13,8 @@ use RealWorld\Transformers\UserTransformer;
  * @package RealWorld\Controllers\Auth
  * @property Auth auth
  */
-class SessionController extends Controller//extends ApiController
+class SessionController extends Controller //extends ApiController
 {
-    use ResponseErrorTrait;
-
     /**
      * @return Response
      */
@@ -53,12 +50,12 @@ class SessionController extends Controller//extends ApiController
             $user = new User();
 
             if (!$result = $user->create($userInput, array_keys($userInput))) {
-                $this->respondError($user->getMessages());
-            } else {
-                return $this->respondWithTransformer($result, new UserTransformer);
+                return $this->respondError($user->getMessages());
             }
+
+            return $this->respondWithTransformer($result, new UserTransformer);
         } catch (\Exception $e) {
-            $this->respondError($e->getMessage());
+            return $this->respondError($e->getMessage());
         }
     }
 

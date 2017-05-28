@@ -1,6 +1,6 @@
 <?php
 
-namespace RealWorld;
+namespace RealWorld\Auth;
 
 use Firebase\JWT\JWT;
 use Phalcon\Mvc\User\Component;
@@ -22,14 +22,12 @@ class Auth extends Component
     public function check(array $credentials)
     {
         // First check if the user exists.
-        $user = User::findFirst(
-            [
-                "conditions" => "email = ?1",
-                "bind"       => [
-                    1 => $credentials['email'],
-                ],
+        $user = User::findFirst([
+            "conditions" => "email = ?1",
+            "bind"       => [
+                1 => $credentials['email'],
             ]
-        );
+        ]);
 
         if (!$user) {
             throw new \Exception('Wrong email/password combination');
@@ -51,8 +49,7 @@ class Auth extends Component
 
 
     /**
-     * Creates the remember me environment settings the related cookies and
-     * generating tokens.
+     * Creates the remember me environment settings the related cookies and generating tokens.
      *
      * @param User $user
      */

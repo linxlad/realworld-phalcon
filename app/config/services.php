@@ -9,10 +9,9 @@ use Phalcon\Mvc\Url as UrlResolver;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
 use Phalcon\Session\Adapter\Files as SessionAdapter;
-use Phalcon\Flash\Direct as Flash;
 use RealWorld\Auth\Auth;
-use RealWorld\Listeners\CorsListener;
-use RealWorld\Listeners\JWTAuthenticationListener;
+use RealWorld\Middleware\CorsMiddleware;
+use RealWorld\Middleware\JWTAuthenticationMiddleware;
 use RealWorld\Plugins\DataSerializerPlugin;
 
 /**
@@ -136,11 +135,11 @@ $di->set(
 );
 
 $di->setShared('cors', function () {
-    return new CorsListener();
+    return new CorsMiddleware();
 });
 
 $di->setShared('jwt', function () {
-    return new JWTAuthenticationListener();
+    return new JWTAuthenticationMiddleware();
 });
 
 $di->set('crypt', function () {

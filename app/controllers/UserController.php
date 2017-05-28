@@ -12,7 +12,7 @@ use RealWorld\Transformers\UserTransformer;
  * @package RealWorld\Controllers\Api
  * @property User user
  */
-class UserController extends Controller//extends ApiController
+class UserController extends Controller //extends ApiController
 {
 //    /**
 //     * @var User
