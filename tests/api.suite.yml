@@ -3,7 +3,6 @@ modules:
     enabled:
         - Asserts
         - \Helper\Api
-        - \Helper\Unit
         - Phalcon:
             bootstrap: public/index.php
             cleanup: true

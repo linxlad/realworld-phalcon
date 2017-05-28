@@ -19,70 +19,70 @@ class User extends Model implements \JsonSerializable
      * @var integer
      * @Primary
      * @Identity
-     * @Column(type="integer", length=20, nullable=false)
+     * @Column(type='integer', length=20, nullable=false)
      */
     public $id;
 
     /**
      *
      * @var string
-     * @Column(type="string", length=64, nullable=true)
+     * @Column(type='string', length=64, nullable=true)
      */
     public $username;
 
     /**
      *
      * @var string
-     * @Column(type="string", length=48, nullable=false)
+     * @Column(type='string', length=48, nullable=false)
      */
     public $email;
 
     /**
      *
      * @var string
-     * @Column(type="string", length=128, nullable=false)
+     * @Column(type='string', length=128, nullable=false)
      */
     public $password;
 
     /**
      *
      * @var string
-     * @Column(type="string", nullable=true)
+     * @Column(type='string', nullable=true)
      */
     public $bio;
 
     /**
      *
      * @var string
-     * @Column(type="string", nullable=true)
+     * @Column(type='string', nullable=true)
      */
     public $image;
 
     /**
      *
      * @var string
-     * @Column(type="string", nullable=true)
+     * @Column(type='string', nullable=true)
      */
     public $token;
 
     /**
      *
      * @var string
-     * @Column(type="string", nullable=true)
+     * @Column(type='string', nullable=true)
      */
     public $tokenExpires;
 
     /**
      *
      * @var string
-     * @Column(type="datetime", nullable=true)
+     * @Column(type='datetime', nullable=true)
      */
     public $created;
 
     /**
      *
      * @var string
-     * @Column(type="datetime", nullable=true)
+     * @Column(type='datetime', nullable=true)
      */
     public $modified;
 
@@ -94,9 +94,9 @@ class User extends Model implements \JsonSerializable
         $this->addBehavior(
             new Timestampable(
                 [
-                    "beforeCreate" => [
-                        "field"  => "created",
-                        "format" => 'Y-m-d H:i:s'
+                    'beforeCreate' => [
+                        'field'  => 'created',
+                        'format' => 'Y-m-d H:i:s'
                     ],
                 ]
             )
@@ -105,15 +105,15 @@ class User extends Model implements \JsonSerializable
         $this->addBehavior(
             new Timestampable(
                 [
-                    "beforeCreate" => [
-                        "field"  => "modified",
-                        "format" => 'Y-m-d H:i:s'
+                    'beforeCreate' => [
+                        'field'  => 'modified',
+                        'format' => 'Y-m-d H:i:s'
                     ],
                 ]
             )
         );
 
-        $this->setSchema("realworlddb");
+        $this->setSchema('realworlddb');
         $this->hasMany('id', Articles::class, 'userId', ['alias' => 'Articles']);
         $this->hasMany('id', Comments::class, 'userId', ['alias' => 'Comments']);
         $this->hasMany('id', Favorites::class, 'userId', ['alias' => 'Favorites']);
@@ -171,7 +171,7 @@ class User extends Model implements \JsonSerializable
         $timestamp = time() - 86400;
         $token = [
             'id' => $this->username,
-            'exp' => strtotime("+7 day", $timestamp)
+            'exp' => strtotime('+7 day', $timestamp)
         ];
         $key = $this->getDI()->get('config')->application->security->salt;
 
@@ -222,10 +222,10 @@ class User extends Model implements \JsonSerializable
     public function unFollow(User $userToUnFollow)
     {
         if ($user = Follows::findFirst([
-            "conditions" => "followerId = :follower: AND followedId = :followed:",
-            "bind"       => [
-                "follower" => $this->id,
-                "followed" => $userToUnFollow->id,
+            'conditions' => 'followerId = :follower: AND followedId = :followed:',
+            'bind'       => [
+                'follower' => $this->id,
+                'followed' => $userToUnFollow->id,
             ]
         ])) {
             return $user->delete();
@@ -264,10 +264,10 @@ class User extends Model implements \JsonSerializable
     public function unFavorite(Articles $article)
     {
         if ($article = Favorites::findFirst([
-            "conditions" => "userId = :user: AND articleId = :article:",
-            "bind"       => [
-                "user" => $this->id,
-                "article" => $article->id,
+            'conditions' => 'userId = :user: AND articleId = :article:',
+            'bind'       => [
+                'user' => $this->id,
+                'article' => $article->id,
             ]
         ])) {
             return $article->delete();
