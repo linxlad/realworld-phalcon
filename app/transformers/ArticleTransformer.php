@@ -2,6 +2,7 @@
 
 namespace RealWorld\Transformers;
 
+use function array_map;
 use RealWorld\Models\Articles;
 
 /**
@@ -21,15 +22,24 @@ class ArticleTransformer extends Transformer
      */
     public function transform(Articles $data)
     {
-        $author = $data->user->toArray();
+        $article = clone $data;
         $data = $data->toArray();
         unset($data['id'], $data['userId']);
 
-        // TODO: Add tagList, favoritedand  favoritesCount.
-        $data['tagList'] = [];
+        // TODO: Add tagList, favorited and  favoritesCount.
+
+        $tags = $article->tags->toArray();
+        $data['tagList'][] = array_map(
+            function ($tag) {
+                return $tag['name'];
+            },
+            $tags
+        );
+
         $data['favorited'] = false;
         $data['favoritesCount'] = false;
 
+        $author = $article->user->toArray();
         $data['author'] = [
             'username' => $author['username'],
             'bio' => $author['bio'],
