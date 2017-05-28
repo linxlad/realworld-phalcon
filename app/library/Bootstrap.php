@@ -10,7 +10,6 @@ use Phalcon\Di as PhDi;
 use Phalcon\Di\FactoryDefault as PhFactoryDefault;
 use Phalcon\Exception as PhException;
 use Phalcon\Http\Response as PhResponse;
-use Phalcon\Http\Response;
 use Phalcon\Loader as PhLoader;
 use Phalcon\Logger\Adapter\File as PhLoggerFile;
 use Phalcon\Logger\Formatter\Line as PhLoggerFormatter;
@@ -18,11 +17,6 @@ use Phalcon\Mvc\Micro as PhMicro;
 use Phalcon\Mvc\Micro\Collection as PhMicroCollection;
 use Phalcon\Mvc\Model\MetaData\Memory as PhMetadataMemory;
 use Phalcon\Mvc\Model\MetaData\Files as PhMetadataFiles;
-use Phalcon\Security;
-use RealWorld\Controllers\IndexController;
-use RealWorld\Controllers\UserController;
-use RealWorld\Middleware\JWTAuthenticationMiddleware;
-use RealWorld\Middleware\ResponseMiddleware;
 use RealWorld\Plugins\DataSerializerPlugin as RWSerializerPlugin;
 
 use const APP_PATH;
@@ -63,7 +57,6 @@ class Bootstrap
             ->initRoutes()
             ->initCrypt()
             ->initAuth()
-            ->initSecurity()
             ->initSerializer()
         ;
 
@@ -224,8 +217,8 @@ class Bootstrap
                 'RealWorld'              => APP_PATH . '/app/library',
                 'RealWorld\Controllers'  => APP_PATH . '/app/controllers',
                 'RealWorld\Models'       => APP_PATH . '/app/models',
-                'RealWorld\Plugins'      => APP_PATH . '/app/library/plugins',
-                'RealWorld\Transformers' => APP_PATH . '/app/library/transformers',
+//                'RealWorld\Plugins'      => APP_PATH . '/app/library/plugins',
+//                'RealWorld\Transformers' => APP_PATH . '/app/library/transformers',
 //                'Phalcon'                => APP_PATH . '/app/library $config->application->vendorDir . 'phalcon/incubator/Library/Phalcon/',
             ]
         );
@@ -289,6 +282,8 @@ class Bootstrap
      */
     public function initRoutes(): Bootstrap
     {
+        $eventsManager = $this->diContainer->getShared('eventsManager');
+
         /**
          * 404
          */
@@ -302,46 +297,7 @@ class Bootstrap
             }
         );
 
-        /**
-         * @TODO Options
-         */
-        $routes = [
-            [
-                'class'   => IndexController::class,
-                'methods' => [
-                    'get' => [
-                        '/' => 'indexAction',
-                    ],
-                ],
-            ],
-            [
-                'class'   => UserController::class,
-                'methods' => [
-                    'get' => [
-                        '/user' => 'indexAction',
-                    ],
-                    'put' => [
-                        '/user' => 'updateAction',
-                    ],
-                    'patch' => [
-                        '/user' => 'updateAction',
-                    ],
-                ],
-            ],
-        ];
-
-        $middleware = [
-            [
-                'event' => 'before',
-                'class' => JWTAuthenticationMiddleware::class,
-            ],
-            [
-                'event' => 'after',
-                'class' => ResponseMiddleware::class,
-            ],
-        ];
-
-
+        $routes = require_once(APP_PATH . '/app/config/routes.php');
         foreach ($routes as $route) {
             $collection = new PhMicroCollection();
             $collection->setHandler($route['class'], true);
@@ -354,8 +310,8 @@ class Bootstrap
             $this->application->mount($collection);
         }
 
-        $eventsManager = $this->diContainer->getShared('eventsManager');
 
+        $middleware = require_once(APP_PATH . '/app/config/middleware.php');
         foreach ($middleware as $element) {
             $class = $element['class'];
             $event = $element['event'];
@@ -364,23 +320,6 @@ class Bootstrap
         }
 
         $this->application->setEventsManager($eventsManager);
-
-
-
-        return $this;
-    }
-
-    /**
-     * @return Bootstrap
-     */
-    protected function initSecurity(): Bootstrap
-    {
-        $this->diContainer->setShared(
-            'security',
-            function () {
-                return new Security();
-            }
-        );
 
         return $this;
     }
@@ -407,8 +346,8 @@ class Bootstrap
     {
         if ('test' === $this->environment) {
             return $this->application;
-        } else {
-            return $this->application->handle();
         }
+
+        return $this->application->handle();
     }
 }

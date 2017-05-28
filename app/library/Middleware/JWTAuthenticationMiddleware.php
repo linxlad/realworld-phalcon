@@ -9,6 +9,7 @@ use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Micro\MiddlewareInterface;
 use Phalcon\Mvc\User\Plugin;
 use RealWorld\Auth;
+use RealWorld\Traits\ResponseErrorTrait;
 
 /**
  * Class JWTAuthenticationMiddleware
@@ -20,6 +21,8 @@ use RealWorld\Auth;
  */
 class JWTAuthenticationMiddleware extends Plugin implements MiddlewareInterface
 {
+    use ResponseErrorTrait;
+
     public function beforeExecuteRoute()
     {
         try {
@@ -42,10 +45,12 @@ class JWTAuthenticationMiddleware extends Plugin implements MiddlewareInterface
                     $message = 'JWT error: ' . $e->getMessage() . '.';
             }
 
-            $this->respondError($message)->send(); exit;
+            $this->respondError($message);
+
+            return false;
         }
 
-        return $this->response;
+        return true;
     }
 
     public function call(Micro $application)
@@ -122,29 +127,5 @@ class JWTAuthenticationMiddleware extends Plugin implements MiddlewareInterface
         }
 
         return false;
-    }
-
-    /**
-     * Respond with json error message.
-     *
-     * @param $message
-     * @return Response
-     */
-    protected function respondError($message)
-    {
-        $headers = $this->response->getHeaders();
-        $headers->set('Content-Type', 'application/json; charset=utf-8');
-        $this->response->setHeaders($headers);
-
-        $this->response->setJsonContent([
-            'errors' => [
-                'message' => $message,
-                'status_code' => 401
-            ]
-        ]);
-
-        $this->response->setStatusCode(401);
-
-        return $this->response;
     }
 }
