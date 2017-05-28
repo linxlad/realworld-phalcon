@@ -8,9 +8,7 @@ use Phalcon\Di;
 use Phalcon\Logger\Adapter\File;
 use RealWorld\Bootstrap;
 
-if (!defined('APP_PATH')) {
-    define('APP_PATH', dirname(dirname(__FILE__)));
-}
+defined('APP_PATH') || define('APP_PATH', getenv('APP_PATH') ?: dirname(dirname(__FILE__)));
 
 try {
     require_once APP_PATH . '/library/Bootstrap.php';

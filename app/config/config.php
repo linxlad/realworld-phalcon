@@ -4,7 +4,6 @@
  * NOTE: please remove this comment.
  */
 defined('BASE_PATH') || define('BASE_PATH', getenv('BASE_PATH') ?: realpath(dirname(__FILE__) . '/../..'));
-defined('APP_PATH') || define('APP_PATH', BASE_PATH . '/app');
 
 return new \Phalcon\Config([
     'database' => [
@@ -25,7 +24,7 @@ return new \Phalcon\Config([
         'libraryDir'        => APP_PATH . '/library/',
         'transformersDir'   => APP_PATH . '/transformers/',
         'cacheDir'          => BASE_PATH . '/cache/',
-        'vendorDir'          => BASE_PATH . '/vendor/',
+        'vendorDir'         => BASE_PATH . '/vendor/',
 
         // This allows the baseUri to be understand project paths that are not in the root directory
         // of the webpspace.  This will break if the public/index.php entry point is moved or

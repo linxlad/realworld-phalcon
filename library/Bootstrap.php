@@ -223,7 +223,7 @@ class Bootstrap
         $loader = new PhLoader();
         $loader->registerNamespaces(
             [
-                'RealWorld'              => APP_PATH . '/library',
+                'RealWorld'               => APP_PATH . '/library',
                 'RealWorld\\Controllers'  => APP_PATH . '/app/controllers',
                 'RealWorld\\Models'       => APP_PATH . '/app/models',
                 'RealWorld\\Filters'      => APP_PATH . '/library/Filters',
@@ -231,7 +231,7 @@ class Bootstrap
                 'RealWorld\\Plugins'      => APP_PATH . '/library/plugins',
                 'RealWorld\\Transformers' => APP_PATH . '/library/Transformers',
                 'RealWorld\\Validators'   => APP_PATH . '/library/Validators',
-                // 'Phalcon'                => APP_PATH . $config->application->vendorDir . 'phalcon/incubator/Library/Phalcon/',
+                'Phalcon'                 => APP_PATH . '/vendor/phalcon/incubator/Library/Phalcon/',
             ]
         );
 
