@@ -1,0 +1,9 @@
+actor: ApiTester
+modules:
+    enabled:
+        - Asserts
+        - \Helper\Api
+        - Phalcon:
+            bootstrap: public/index.php
+            cleanup: true
+            savepoints: true
