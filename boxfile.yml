@@ -9,6 +9,7 @@ run.config:
       - json
       - mbstring
       - opcache
+      - pdo_mysql
       - phalcon
       - simplexml
       - tokenizer
@@ -17,3 +18,5 @@ run.config:
       - xmlwriter
   extra_steps:
     - echo "alias phalcon=\'phalcon.php\'" >> /data/var/home/gonano/.bashrc
+data.realworld:
+  image: nanobox/mysql:5.7
