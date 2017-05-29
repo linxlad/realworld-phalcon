@@ -28,7 +28,6 @@ class Auth extends Component
                 1 => $credentials['email'],
             ]
         ]);
-
         if (!$user) {
             throw new \Exception('Wrong email/password combination');
         }
@@ -141,11 +140,13 @@ class Auth extends Component
     private function issueJwtIfExpired($user)
     {
         try {
-            $key = $this->di->get('config')->application->security->salt;
+            $key = $this->di->get('config')->security->salt;
             JWT::decode($user->token, $key, ['HS256']);
         } catch (\Firebase\JWT\ExpiredException $e) {
             $user->token = $user->generateJWT();
             $user->update();
+        } catch (\Exception $e) {
+            return $user;
         }
 
         return $user;

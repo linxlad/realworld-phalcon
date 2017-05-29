@@ -9,6 +9,7 @@ use RealWorld\Controllers\Api\ApiController;
 use RealWorld\Models\User;
 use RealWorld\Traits\ResponseErrorTrait;
 use RealWorld\Transformers\UserTransformer;
+use function var_dump;
 
 /**
  * Class SessionController
