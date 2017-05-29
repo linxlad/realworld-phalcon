@@ -48,11 +48,14 @@ class JWTAuthenticationMiddleware extends Plugin implements MiddlewareInterface
         return $this->response;
     }
 
+    /**
+     * @param Micro $application
+     * @return bool
+     */
     public function call(Micro $application)
     {
         return true;
     }
-
 
     /**
      * @return bool|string

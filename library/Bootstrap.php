@@ -17,6 +17,7 @@ use Phalcon\Mvc\Micro as PhMicro;
 use Phalcon\Mvc\Micro\Collection as PhMicroCollection;
 use Phalcon\Mvc\Model\MetaData\Memory as PhMetadataMemory;
 use Phalcon\Mvc\Model\MetaData\Files as PhMetadataFiles;
+use Phalcon\Session\Adapter\Files as session;
 use RealWorld\Plugins\DataSerializerPlugin as RWSerializerPlugin;
 
 use const APP_PATH;
@@ -54,6 +55,7 @@ class Bootstrap
             ->initErrorHandler()
             ->initDatabase()
             ->initModelsMetadata()
+            ->initSession()
             ->initRoutes()
             ->initCrypt()
             ->initAuth()
@@ -274,6 +276,25 @@ class Bootstrap
         );
 
         return $this;
+    }
+
+    /**
+     * @return Bootstrap
+     */
+    public function initSession(): Bootstrap
+    {
+        $this->diContainer->setShared(
+            'session',
+            function () {
+                $session = new session();
+
+                if (session_status() == PHP_SESSION_NONE) {
+                    $session->start();
+                }
+
+                return $session;
+            }
+        );
     }
 
     /**
