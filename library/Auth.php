@@ -37,6 +37,8 @@ class Auth extends Component
             throw new \Exception('Wrong email/password combination');
         }
 
+        $this->registerSession($user);
+
         if (isset($credentials['remember'])) {
             $this->createRememberMe($user);
         }
@@ -120,6 +122,22 @@ class Auth extends Component
         ]);
 
         return $user;
+    }
+
+    /**
+     * @param $user
+     */
+    private function registerSession($user)
+    {
+        $this->session->set('auth', [
+            [
+                'email'     => $user->email,
+                'username'  => $user->username,
+                'bio'       => $user->bio,
+                'image'     => $user->image,
+                'token'     => $user->token,
+            ]
+        ]);
     }
 
     /**

@@ -9,6 +9,7 @@ use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Micro\MiddlewareInterface;
 use Phalcon\Mvc\User\Plugin;
 use RealWorld\Auth;
+use RealWorld\Traits\ResponseErrorTrait;
 use function var_dump;
 
 /**
@@ -21,15 +22,18 @@ use function var_dump;
  */
 class JWTAuthenticationMiddleware extends Plugin implements MiddlewareInterface
 {
+    use ResponseErrorTrait;
+
     public function beforeExecuteRoute()
     {
         try {
             if ($this->hasAuthorizationHeader() && $token = $this->parseToken()) {
                 $key          = $this->config->security->salt;
                 $decodedToken = JWT::decode($token, $key, ['HS256']);
-                $user         = $this->auth->loginWithJWT($decodedToken);
 
-                $this->request->user = $user;
+                if ($this->auth->loginWithJWT($decodedToken)) {
+                    throw new \Exception('That token does now belong to a user.');
+                }
             }
         } catch (\Exception $e) {
             switch (get_class($e)) {
@@ -43,10 +47,13 @@ class JWTAuthenticationMiddleware extends Plugin implements MiddlewareInterface
                     $message = 'JWT error: ' . $e->getMessage() . '.';
             }
 
-            $this->respondError($message)->send(); exit;
+            $this->respondError($message);
+            $this->response->send();
+
+            return false;
         }
 
-        return $this->response;
+        return true;
     }
 
     /**
@@ -126,29 +133,5 @@ class JWTAuthenticationMiddleware extends Plugin implements MiddlewareInterface
         }
 
         return false;
-    }
-
-    /**
-     * Respond with json error message.
-     *
-     * @param $message
-     * @return Response
-     */
-    protected function respondError($message)
-    {
-        $headers = $this->response->getHeaders();
-        $headers->set('Content-Type', 'application/json; charset=utf-8');
-        $this->response->setHeaders($headers);
-
-        $this->response->setJsonContent([
-            'errors' => [
-                'message' => $message,
-                'status_code' => 401
-            ]
-        ]);
-
-        $this->response->setStatusCode(401);
-
-        return $this->response;
     }
 }

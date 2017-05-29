@@ -37,7 +37,6 @@ class UserController extends Controller //extends ApiController
      */
     public function indexAction()
     {
-        echo 'asdasd'; exit;
         $this->response->setJsonContent(
             [
                 'email',

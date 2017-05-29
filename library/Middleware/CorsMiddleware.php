@@ -5,6 +5,7 @@ namespace RealWorld\Middleware;
 use Phalcon\Di\Injectable;
 use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Micro\MiddlewareInterface;
+use const true;
 
 /**
  * Class CorsMiddleware
@@ -27,9 +28,12 @@ class CorsMiddleware extends Injectable implements MiddlewareInterface
 
         if ($this->isPreflightRequest()) {
             $this->response->setStatusCode(200, 'OK');
+            $this->response->send();
 
             return false;
         }
+
+        return true;
     }
 
     /**
