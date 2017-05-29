@@ -173,7 +173,7 @@ class User extends Model implements \JsonSerializable
             'id' => $this->username,
             'exp' => strtotime("+7 day", $timestamp)
         ];
-        $key = $this->getDI()->get('config')->application->security->salt;
+        $key = $this->getDI()->get('config')->security->salt;
 
         return JWT::encode($token, $key);
     }

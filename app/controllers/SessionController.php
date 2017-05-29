@@ -2,14 +2,11 @@
 
 namespace RealWorld\Controllers;
 
-use Phalcon\Http\Response;
-use Phalcon\Mvc\Controller;
-use RealWorld\Auth\Auth;
+use RealWorld\Auth;
 use RealWorld\Controllers\Api\ApiController;
 use RealWorld\Models\User;
+use RealWorld\Traits\AuthenticatedUserTrait;
 use RealWorld\Traits\ResponseErrorTrait;
-use RealWorld\Transformers\UserTransformer;
-use function var_dump;
 
 /**
  * Class SessionController
@@ -18,10 +15,12 @@ use function var_dump;
  */
 class SessionController extends ApiController
 {
-    use ResponseErrorTrait;
+    use AuthenticatedUserTrait, ResponseErrorTrait;
 
     /**
-     * @return Response
+     * Handle a login request to the application.
+     *
+     * @return \Phalcon\Http\Response
      */
     public function loginAction()
     {
@@ -34,16 +33,16 @@ class SessionController extends ApiController
                 throw new \Exception('No credentials');
             }
 
-            $user = $this->auth->check($credentials);
+            $this->auth->check($credentials);
         } catch (\Exception $e) {
             return $this->respondFailedLogin();
         }
 
-        return $this->respondWithTransformer($user, new UserTransformer);
+        return $this->respond($this->getUserFromSession());
     }
 
     /**
-     * @return Response
+     * Handle a registration request for the application.
      */
     public function registerAction()
     {
@@ -57,11 +56,17 @@ class SessionController extends ApiController
             if (!$result = $user->create($userInput, array_keys($userInput))) {
                 $this->respondError($user->getMessages());
             }
-
-            return $this->respondWithTransformer($result, new UserTransformer);
         } catch (\Exception $e) {
-            $this->respondError($e->getMessage());
+            return $this->respondError($e->getMessage());
         }
+
+        return $this->respond([
+            'email'     => $result->email,
+            'username'  => $result->username,
+            'bio'       => $result->bio,
+            'image'     => $result->image,
+            'token'     => $result->token,
+        ]);
     }
 
     /**

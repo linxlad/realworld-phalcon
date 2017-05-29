@@ -31,8 +31,8 @@ class JWTAuthenticationMiddleware extends Plugin implements MiddlewareInterface
                 $key          = $this->config->security->salt;
                 $decodedToken = JWT::decode($token, $key, ['HS256']);
 
-                if ($this->auth->loginWithJWT($decodedToken)) {
-                    throw new \Exception('That token does now belong to a user.');
+                if (!$this->auth->loginWithJWT($decodedToken)) {
+                    throw new \Exception('That token does not belong to a user.');
                 }
             }
         } catch (\Exception $e) {
@@ -44,7 +44,7 @@ class JWTAuthenticationMiddleware extends Plugin implements MiddlewareInterface
                     $message = 'JWT error: Token has expired.';
                     break;
                 default:
-                    $message = 'JWT error: ' . $e->getMessage() . '.';
+                    $message = 'JWT error: ' . $e->getMessage();
             }
 
             $this->respondError($message);

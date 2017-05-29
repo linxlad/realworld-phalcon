@@ -3,9 +3,11 @@
 namespace RealWorld;
 
 use Firebase\JWT\JWT;
+use Phalcon\Mvc\Model;
 use Phalcon\Mvc\User\Component;
 use Phalcon\Security\Exception;
 use RealWorld\Models\User;
+use function var_dump;
 
 /**
  * Class Auth
@@ -16,7 +18,7 @@ class Auth extends Component
 {
     /**
      * @param array $credentials
-     * @return User
+     * @return Model
      * @throws \Exception
      */
     public function check(array $credentials)
@@ -28,6 +30,7 @@ class Auth extends Component
                 1 => $credentials['email'],
             ]
         ]);
+
         if (!$user) {
             throw new \Exception('Wrong email/password combination');
         }
@@ -52,7 +55,7 @@ class Auth extends Component
     /**
      * Creates the remember me environment settings the related cookies and generating tokens.
      *
-     * @param User $user
+     * @param Model $user
      */
     public function createRememberMe($user)
     {
@@ -77,7 +80,7 @@ class Auth extends Component
     /**
      * Logs on using the information in the coookies.
      *
-     * @return User|bool
+     * @return Model|bool
      */
     public function loginWithRememberMe()
     {
@@ -109,7 +112,7 @@ class Auth extends Component
 
     /**
      * @param $token
-     * @return User
+     * @return Model
      * @throws Exception
      */
     public function loginWithJWT($token)
@@ -129,7 +132,7 @@ class Auth extends Component
      */
     private function registerSession($user)
     {
-        $this->session->set('auth', [
+        $this->session->set('auth',
             [
                 'email'     => $user->email,
                 'username'  => $user->username,
@@ -137,7 +140,7 @@ class Auth extends Component
                 'image'     => $user->image,
                 'token'     => $user->token,
             ]
-        ]);
+        );
     }
 
     /**
@@ -152,7 +155,7 @@ class Auth extends Component
     /**
      * Re-issue JWT if expired.
      *
-     * @param $user
+     * @param User $user
      * @return mixed
      */
     private function issueJwtIfExpired($user)
