@@ -4,6 +4,8 @@ modules:
         - Asserts
         - \Helper\Api
         - Phalcon:
-            bootstrap: public/index.php
+            bootstrap: app/config/tests.php
             cleanup: true
             savepoints: true
+        - REST:
+            depends: Phalcon

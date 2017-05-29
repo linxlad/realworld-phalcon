@@ -16,7 +16,7 @@ try {
     /**
      * We don't want a global scope variable for this
      */
-    (new Bootstrap())->run();
+    return (new Bootstrap())->run();
 
 } catch (\Exception $e) {
     /**

@@ -1,10 +1,20 @@
 <?php
 
+
 class IndexCest
 {
-    public function indexDispatchedSendsCorrectMessage(UnitTester $I)
+    public function _before(ApiTester $I)
     {
-        $I->amOnPage('/');
-        $I->see('{"message":"You are now flying with Phalcon."}');
+    }
+
+    public function _after(ApiTester $I)
+    {
+    }
+
+    // tests
+    public function checkRootResponse(ApiTester $I)
+    {
+        $I->sendGET('/');
+
     }
 }
