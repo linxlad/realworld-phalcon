@@ -5,6 +5,10 @@ namespace RealWorld\Middleware;
 use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Micro\MiddlewareInterface;
 
+/**
+ * Class ResponseMiddleware
+ * @package RealWorld\Middleware
+ */
 class ResponseMiddleware implements MiddlewareInterface
 {
     /**
