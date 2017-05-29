@@ -16,14 +16,24 @@
  */
 
 use RealWorld\Controllers\IndexController;
+use RealWorld\Controllers\SessionController;
 use RealWorld\Controllers\UserController;
-
+//$apiGroup->add('/users/login', 'Session::login', ['POST', 'OPTIONS']);
 return [
     [
         'class'   => IndexController::class,
         'methods' => [
             'get' => [
-                '/' => 'indexAction',
+                '/' => 'index',
+            ],
+        ],
+    ],
+    [
+        'class'   => SessionController::class,
+        'methods' => [
+            'post' => [
+                '/api/users/login' => 'login',
+                '/api/users' => 'register',
             ],
         ],
     ],
@@ -31,13 +41,13 @@ return [
         'class'   => UserController::class,
         'methods' => [
             'get' => [
-                '/user' => 'indexAction',
+                '/api/user' => 'index',
             ],
             'put' => [
-                '/user' => 'updateAction',
+                '/api/user' => 'update',
             ],
             'patch' => [
-                '/user' => 'updateAction',
+                '/api/user' => 'update',
             ],
         ],
     ],

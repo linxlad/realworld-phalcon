@@ -3,6 +3,7 @@
 namespace RealWorld\Traits;
 
 use Phalcon\Http\Response;
+use Phalcon\Mvc\Model\Message;
 
 /**
  * Trait ResponseErrorTrait
@@ -14,19 +15,32 @@ trait ResponseErrorTrait
     /**
      * Respond with json error message.
      *
-     * @param $message
+     * @param array|string $messages
+     * @param $statusCode
+     * @return Response;
      */
-    protected function respondError($message)
+    protected function respondError($messages, $statusCode = 401)
     {
+        $errors = null;
+
+        if (is_array($messages)) {
+            foreach ($messages as $field => $message) {
+                if ($message instanceof Message) {
+                    $errors[$message->getField()] = [$message->getMessage()];
+                } else {
+                    $errors[$field] = [$message];
+                }
+            }
+        }
 
         $this->response->setJsonContent(
             [
-            'errors' => [
-                'message'     => $message,
-                'status_code' => 401,
-                ],
-            ]
+                'errors' => $errors ? [ $errors ] : $messages,
+                'status_code' => $statusCode
+            ],
+            $statusCode
         );
-        $this->response->setStatusCode(401);
+
+        $this->response->setStatusCode($statusCode);
     }
 }

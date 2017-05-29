@@ -5,6 +5,7 @@ namespace RealWorld\Controllers;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller;
 use RealWorld\Auth\Auth;
+use RealWorld\Controllers\Api\ApiController;
 use RealWorld\Models\User;
 use RealWorld\Traits\ResponseErrorTrait;
 use RealWorld\Transformers\UserTransformer;
@@ -14,7 +15,7 @@ use RealWorld\Transformers\UserTransformer;
  * @package RealWorld\Controllers\Auth
  * @property Auth auth
  */
-class SessionController extends Controller //extends ApiController
+class SessionController extends ApiController
 {
     use ResponseErrorTrait;
 

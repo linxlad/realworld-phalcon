@@ -2,9 +2,7 @@
 
 namespace RealWorld\Middleware;
 
-use Phalcon\Events\Event;
 use Phalcon\Di\Injectable;
-use Phalcon\Mvc\Dispatcher;
 use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Micro\MiddlewareInterface;
 
@@ -15,10 +13,9 @@ use Phalcon\Mvc\Micro\MiddlewareInterface;
 class CorsMiddleware extends Injectable implements MiddlewareInterface
 {
     /**
-     * @param Event $event
-     * @param Dispatcher $dispatcher
+     * @return bool
      */
-    public function beforeExecuteRoute(Event $event, Dispatcher $dispatcher)
+    public function beforeExecuteRoute()
     {
         if ($this->isCorsRequest()) {
             $this->response
@@ -29,10 +26,16 @@ class CorsMiddleware extends Injectable implements MiddlewareInterface
         }
 
         if ($this->isPreflightRequest()) {
-            $this->response->setStatusCode(200, 'OK')->send(); exit;
+            $this->response->setStatusCode(200, 'OK');
+
+            return false;
         }
     }
 
+    /**
+     * @param Micro $application
+     * @return bool
+     */
     public function call(Micro $application)
     {
         return true;

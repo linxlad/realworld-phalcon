@@ -13,8 +13,13 @@
 
 use RealWorld\Middleware\JWTAuthenticationMiddleware;
 use RealWorld\Middleware\ResponseMiddleware;
+use RealWorld\Middleware\CorsMiddleware;
 
 return [
+    [
+        'event' => 'before',
+        'class' => CorsMiddleware::class,
+    ],
     [
         'event' => 'before',
         'class' => JWTAuthenticationMiddleware::class,

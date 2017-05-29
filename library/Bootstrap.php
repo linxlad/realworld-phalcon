@@ -21,16 +21,27 @@ use Phalcon\Session\Adapter\Files as session;
 use RealWorld\Plugins\DataSerializerPlugin as RWSerializerPlugin;
 
 use const APP_PATH;
+use function var_dump;
 
+/**
+ * Class Bootstrap
+ * @package RealWorld
+ */
 class Bootstrap
 {
-    /** @var PhMicro  */
+    /**
+     * @var PhMicro
+     */
     protected $application;
 
-    /** @var PhDi */
+    /**
+     * @var PhDi
+     */
     protected $diContainer;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $environment = 'dev';
 
     public function run()
@@ -57,11 +68,11 @@ class Bootstrap
             ->initModelsMetadata()
             ->initSession()
             ->initRoutes()
+            ->initMiddleware()
             ->initCrypt()
             ->initAuth()
             ->initSerializer()
         ;
-
 
         return $this->runApplication();
     }
@@ -117,7 +128,7 @@ class Bootstrap
             'crypt',
             function () {
                 $crypt = new PhCrypt();
-                $key   = $this
+                $key = $this
                     ->diContainer
                     ->get('config')
                     ->get('application')
@@ -137,11 +148,12 @@ class Bootstrap
      */
     protected function initDatabase(): Bootstrap
     {
+        $config = $this->diContainer->get('config');
+
         $this->diContainer->setShared(
             'db',
-            function () {
+            function () use ($config) {
                 /** @var PhConfig $config */
-                $config  = $this->diContainer->get('config');
                 $section = $config->get('database');
                 $class   = 'Phalcon\Db\Adapter\Pdo\\' . $section->get('adapter');
                 $params  = [
@@ -259,13 +271,15 @@ class Bootstrap
      */
     public function initModelsMetadata(): Bootstrap
     {
+        $environment = $this->environment;
+
         $this->diContainer->setShared(
             'modelsMetadata',
-            function () {
+            function () use ($environment) {
                 /**
                  * Production will use File, development will use memory
                  */
-                if ('prod' === $this->environment) {
+                if ('prod' === $environment) {
                     $options['metaDataDir'] = APP_PATH . '/storage/metadata/';
 
                     return new PhMetadataFiles($options);
@@ -295,6 +309,8 @@ class Bootstrap
                 return $session;
             }
         );
+
+        return $this;
     }
 
     /**
@@ -315,8 +331,7 @@ class Bootstrap
             }
         );
 
-        $routes     = require_once(APP_PATH . '/app/config/routes.php');
-        $middleware = require_once(APP_PATH . '/app/config/middleware.php');
+        $routes = require_once(APP_PATH . '/app/config/routes.php');
 
         foreach ($routes as $route) {
             $collection = new PhMicroCollection();
@@ -324,6 +339,10 @@ class Bootstrap
 
             foreach ($route['methods'] as $verb => $methods) {
                 foreach ($methods as $endpoint => $action) {
+                    if (substr($action, -6) !== 'Action') {
+                        $action = $action . 'Action';
+                    }
+
                     $collection->$verb($endpoint, $action);
                 }
             }
@@ -331,6 +350,15 @@ class Bootstrap
             $this->application->mount($collection);
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Bootstrap
+     */
+    public function initMiddleware(): Bootstrap
+    {
+        $middleware = require_once(APP_PATH . '/app/config/middleware.php');
         $eventsManager = $this->diContainer->getShared('eventsManager');
 
         foreach ($middleware as $element) {

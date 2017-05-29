@@ -9,6 +9,7 @@ use Phalcon\Mvc\Micro;
 use Phalcon\Mvc\Micro\MiddlewareInterface;
 use Phalcon\Mvc\User\Plugin;
 use RealWorld\Auth;
+use function var_dump;
 
 /**
  * Class JWTAuthenticationMiddleware
@@ -24,7 +25,7 @@ class JWTAuthenticationMiddleware extends Plugin implements MiddlewareInterface
     {
         try {
             if ($this->hasAuthorizationHeader() && $token = $this->parseToken()) {
-                $key          = $this->config->application->security->salt;
+                $key          = $this->config->security->salt;
                 $decodedToken = JWT::decode($token, $key, ['HS256']);
                 $user         = $this->auth->loginWithJWT($decodedToken);
 

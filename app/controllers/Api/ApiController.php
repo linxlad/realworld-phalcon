@@ -9,6 +9,7 @@ use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller;
 use Phalcon\Mvc\Model\Message;
 use Phalcon\Mvc\Model\Resultset;
+use RealWorld\Traits\ResponseErrorTrait;
 use RealWorld\Transformers\Transformer;
 
 /**
@@ -21,13 +22,14 @@ use RealWorld\Transformers\Transformer;
  */
 class ApiController extends Controller
 {
+    use ResponseErrorTrait;
+
     /**
      * Returns a json representation of the data.
      *
      * @param $data
      * @param int $statusCode
      * @param array $headersArray
-     * @return Response
      */
     protected function respond($data, $statusCode = 200, $headersArray = [])
     {
@@ -42,8 +44,6 @@ class ApiController extends Controller
         }
 
         $this->response->setHeaders($headers);
-
-        return $this->response;
     }
 
     /**
@@ -100,36 +100,6 @@ class ApiController extends Controller
     protected function respondNoContent($data)
     {
         return $this->respond($data, 503);
-    }
-
-    /**
-     * Send a no content response.
-     *
-     * @param array|string $messages
-     * @param $statusCode
-     * @return Response;
-     */
-    protected function respondError($messages, $statusCode = 422)
-    {
-        $errors = null;
-
-        if (is_array($messages)) {
-            foreach ($messages as $field => $message) {
-                if ($message instanceof Message) {
-                    $errors[$message->getField()] = [$message->getMessage()];
-                } else {
-                    $errors[$field] = [$message];
-                }
-            }
-        }
-
-        return $this->respond(
-            [
-                'errors' => $errors ? [ $errors ] : $messages,
-                'status_code' => $statusCode
-            ],
-            $statusCode
-        );
     }
 
     /**
