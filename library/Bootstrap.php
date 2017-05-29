@@ -10,7 +10,6 @@ use Phalcon\Di as PhDi;
 use Phalcon\Di\FactoryDefault as PhFactoryDefault;
 use Phalcon\Exception as PhException;
 use Phalcon\Http\Response as PhResponse;
-use Phalcon\Http\Response;
 use Phalcon\Loader as PhLoader;
 use Phalcon\Logger\Adapter\File as PhLoggerFile;
 use Phalcon\Logger\Formatter\Line as PhLoggerFormatter;
@@ -18,15 +17,9 @@ use Phalcon\Mvc\Micro as PhMicro;
 use Phalcon\Mvc\Micro\Collection as PhMicroCollection;
 use Phalcon\Mvc\Model\MetaData\Memory as PhMetadataMemory;
 use Phalcon\Mvc\Model\MetaData\Files as PhMetadataFiles;
-use Phalcon\Security;
-use RealWorld\Controllers\IndexController;
-use RealWorld\Controllers\UserController;
-use RealWorld\Middleware\JWTAuthenticationMiddleware;
-use RealWorld\Middleware\ResponseMiddleware;
 use RealWorld\Plugins\DataSerializerPlugin as RWSerializerPlugin;
 
 use const APP_PATH;
-use function var_dump;
 
 class Bootstrap
 {
@@ -64,7 +57,6 @@ class Bootstrap
             ->initRoutes()
             ->initCrypt()
             ->initAuth()
-            ->initSecurity()
             ->initSerializer()
         ;
 
@@ -97,7 +89,7 @@ class Bootstrap
         $this->diContainer->setShared(
             'config',
             function () {
-                $fileName = APP_PATH . '/app/Config/config.php';
+                $fileName = APP_PATH . '/app/config/config.php';
 
                 if (true !== file_exists($fileName)) {
                     throw new PhException('Configuration file not found');
@@ -223,15 +215,10 @@ class Bootstrap
         $loader = new PhLoader();
         $loader->registerNamespaces(
             [
-                'RealWorld'               => APP_PATH . '/library',
-                'RealWorld\\Controllers'  => APP_PATH . '/app/Controllers',
-                'RealWorld\\Models'       => APP_PATH . '/app/Models',
-                'RealWorld\\Filters'      => APP_PATH . '/library/Filters',
-                'RealWorld\\Middleware'   => APP_PATH . '/library/Middleware',
-                'RealWorld\\Plugins'      => APP_PATH . '/library/plugins',
-                'RealWorld\\Transformers' => APP_PATH . '/library/Transformers',
-                'RealWorld\\Validators'   => APP_PATH . '/library/Validators',
-                'Phalcon'                 => APP_PATH . '/vendor/phalcon/incubator/Library/Phalcon/',
+                'RealWorld'             => APP_PATH . '/library',
+                'RealWorld\Controllers' => APP_PATH . '/app/Controllers',
+                'RealWorld\Models'      => APP_PATH . '/app/Models',
+                'Phalcon'               => APP_PATH . '/vendor/phalcon/incubator/Library/Phalcon/',
             ]
         );
 
@@ -307,44 +294,8 @@ class Bootstrap
             }
         );
 
-        /**
-         * @TODO Options
-         */
-        $routes = [
-            [
-                'class'   => IndexController::class,
-                'methods' => [
-                    'get' => [
-                        '/' => 'indexAction',
-                    ],
-                ],
-            ],
-            [
-                'class'   => UserController::class,
-                'methods' => [
-                    'get' => [
-                        '/user' => 'indexAction',
-                    ],
-                    'put' => [
-                        '/user' => 'updateAction',
-                    ],
-                    'patch' => [
-                        '/user' => 'updateAction',
-                    ],
-                ],
-            ],
-        ];
-
-        $middleware = [
-            [
-                'event' => 'before',
-                'class' => JWTAuthenticationMiddleware::class,
-            ],
-            [
-                'event' => 'after',
-                'class' => ResponseMiddleware::class,
-            ],
-        ];
+        $routes     = require_once(APP_PATH . '/app/config/routes.php');
+        $middleware = require_once(APP_PATH . '/app/config/middleware.php');
 
         foreach ($routes as $route) {
             $collection = new PhMicroCollection();
@@ -376,21 +327,6 @@ class Bootstrap
     /**
      * @return Bootstrap
      */
-    protected function initSecurity(): Bootstrap
-    {
-        $this->diContainer->setShared(
-            'security',
-            function () {
-                return new Security();
-            }
-        );
-
-        return $this;
-    }
-
-    /**
-     * @return Bootstrap
-     */
     protected function initSerializer(): Bootstrap
     {
         $this->diContainer->setShared(
@@ -411,10 +347,6 @@ class Bootstrap
      */
     protected function runApplication()
     {
-        if ('test' === $this->environment) {
-            return $this->application;
-        }
-
         return $this->application->handle();
     }
 }

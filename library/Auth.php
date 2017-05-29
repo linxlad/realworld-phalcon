@@ -1,6 +1,6 @@
 <?php
 
-namespace RealWorld\Auth;
+namespace RealWorld;
 
 use Firebase\JWT\JWT;
 use Phalcon\Mvc\User\Component;
