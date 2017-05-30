@@ -1,0 +1,182 @@
+2017/05/15 11:51:49 [error] 5#5: *1 FastCGI sent in stderr: "PHP message: PHP Warning:  require(/var/www/html/app/../vendor/autoload.php): failed to open stream: No such file or directory in /var/www/html/public/index.php on line 40
+PHP message: PHP Fatal error:  require(): Failed opening required '/var/www/html/app/../vendor/autoload.php' (include_path='.:/usr/share/php') in /var/www/html/public/index.php on line 40" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 11:53:01 [error] 6#6: *1 FastCGI sent in stderr: "PHP message: PHP Warning:  require(/var/www/html/app/../vendor/autoload.php): failed to open stream: No such file or directory in /var/www/html/public/index.php on line 40
+PHP message: PHP Fatal error:  require(): Failed opening required '/var/www/html/app/../vendor/autoload.php' (include_path='.:/usr/share/php') in /var/www/html/public/index.php on line 40" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 11:53:31 [error] 6#6: *4 FastCGI sent in stderr: "PHP message: PHP Warning:  require(/var/www/html/app/../vendor/autoload.php): failed to open stream: No such file or directory in /var/www/html/public/index.php on line 40
+PHP message: PHP Fatal error:  require(): Failed opening required '/var/www/html/app/../vendor/autoload.php' (include_path='.:/usr/share/php') in /var/www/html/public/index.php on line 40" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "GET / HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 12:45:29 [error] 6#6: *13 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected 'var' (T_VAR) in /var/www/html/app/listeners/JWTAuthenticationListener.php on line 89" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 12:55:18 [error] 6#6: *57 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to a member function validation() on boolean in /var/www/html/app/controllers/Api/UserController.php:30
+Stack trace:
+#0 [internal function]: RealWorld\Controllers\Api\UserController->updateAction()
+#1 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\UserController), 'updateAction', Array)
+#2 [internal function]: Phalcon\Dispatcher->_dispatch()
+#3 [internal function]: Phalcon\Dispatcher->dispatch()
+#4 /var/www/html/public/index.php(46): Phalcon\Mvc\Application->handle()
+#5 {main}
+  thrown in /var/www/html/app/controllers/Api/UserController.php on line 30" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 12:55:19 [error] 6#6: *57 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to a member function validation() on boolean in /var/www/html/app/controllers/Api/UserController.php:30
+Stack trace:
+#0 [internal function]: RealWorld\Controllers\Api\UserController->updateAction()
+#1 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\UserController), 'updateAction', Array)
+#2 [internal function]: Phalcon\Dispatcher->_dispatch()
+#3 [internal function]: Phalcon\Dispatcher->dispatch()
+#4 /var/www/html/public/index.php(46): Phalcon\Mvc\Application->handle()
+#5 {main}
+  thrown in /var/www/html/app/controllers/Api/UserController.php on line 30" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 12:57:03 [error] 6#6: *64 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to a member function validation() on boolean in /var/www/html/app/controllers/Api/UserController.php:30
+Stack trace:
+#0 [internal function]: RealWorld\Controllers\Api\UserController->updateAction()
+#1 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\UserController), 'updateAction', Array)
+#2 [internal function]: Phalcon\Dispatcher->_dispatch()
+#3 [internal function]: Phalcon\Dispatcher->dispatch()
+#4 /var/www/html/public/index.php(46): Phalcon\Mvc\Application->handle()
+#5 {main}
+  thrown in /var/www/html/app/controllers/Api/UserController.php on line 30" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 13:36:50 [error] 6#6: *80 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/UserController.php on line 29
+PHP message: PHP Warning:  Creating default object from empty value in /var/www/html/app/controllers/Api/UserController.php on line 32
+PHP message: PHP Fatal error:  Uncaught Error: Call to undefined method stdClass::save() in /var/www/html/app/controllers/Api/UserController.php:35
+Stack trace:
+#0 [internal function]: RealWorld\Controllers\Api\UserController->updateAction()
+#1 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\UserController), 'updateAction', Array)
+#2 [internal function]: Phalcon\Dispatcher->_dispatch()
+#3 [internal function]: Phalcon\Dispatcher->dispatch()
+#4 /var/www/html/public/index.php(46): Phalcon\Mvc\Application->handle()
+#5 {main}
+  thrown in /var/www/html/app/controllers/Api/UserController.php on line 35" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 13:36:56 [error] 6#6: *82 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/UserController.php on line 29
+PHP message: PHP Warning:  Creating default object from empty value in /var/www/html/app/controllers/Api/UserController.php on line 32
+PHP message: PHP Fatal error:  Uncaught Error: Call to undefined method stdClass::save() in /var/www/html/app/controllers/Api/UserController.php:35
+Stack trace:
+#0 [internal function]: RealWorld\Controllers\Api\UserController->updateAction()
+#1 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\UserController), 'updateAction', Array)
+#2 [internal function]: Phalcon\Dispatcher->_dispatch()
+#3 [internal function]: Phalcon\Dispatcher->dispatch()
+#4 /var/www/html/public/index.php(46): Phalcon\Mvc\Application->handle()
+#5 {main}
+  thrown in /var/www/html/app/controllers/Api/UserController.php on line 35" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 13:37:11 [error] 6#6: *84 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/UserController.php on line 29
+PHP message: PHP Warning:  Creating default object from empty value in /var/www/html/app/controllers/Api/UserController.php on line 32
+PHP message: PHP Fatal error:  Uncaught Error: Call to undefined method stdClass::save() in /var/www/html/app/controllers/Api/UserController.php:35
+Stack trace:
+#0 [internal function]: RealWorld\Controllers\Api\UserController->updateAction()
+#1 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\UserController), 'updateAction', Array)
+#2 [internal function]: Phalcon\Dispatcher->_dispatch()
+#3 [internal function]: Phalcon\Dispatcher->dispatch()
+#4 /var/www/html/public/index.php(46): Phalcon\Mvc\Application->handle()
+#5 {main}
+  thrown in /var/www/html/app/controllers/Api/UserController.php on line 35" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 13:37:16 [error] 6#6: *86 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/UserController.php on line 29
+PHP message: PHP Warning:  Creating default object from empty value in /var/www/html/app/controllers/Api/UserController.php on line 32
+PHP message: PHP Fatal error:  Uncaught Error: Call to undefined method stdClass::save() in /var/www/html/app/controllers/Api/UserController.php:35
+Stack trace:
+#0 [internal function]: RealWorld\Controllers\Api\UserController->updateAction()
+#1 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\UserController), 'updateAction', Array)
+#2 [internal function]: Phalcon\Dispatcher->_dispatch()
+#3 [internal function]: Phalcon\Dispatcher->dispatch()
+#4 /var/www/html/public/index.php(46): Phalcon\Mvc\Application->handle()
+#5 {main}
+  thrown in /var/www/html/app/controllers/Api/UserController.php on line 35" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 13:37:20 [error] 6#6: *88 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/UserController.php on line 29
+PHP message: PHP Warning:  Creating default object from empty value in /var/www/html/app/controllers/Api/UserController.php on line 32
+PHP message: PHP Fatal error:  Uncaught Error: Call to undefined method stdClass::save() in /var/www/html/app/controllers/Api/UserController.php:35
+Stack trace:
+#0 [internal function]: RealWorld\Controllers\Api\UserController->updateAction()
+#1 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\UserController), 'updateAction', Array)
+#2 [internal function]: Phalcon\Dispatcher->_dispatch()
+#3 [internal function]: Phalcon\Dispatcher->dispatch()
+#4 /var/www/html/public/index.php(46): Phalcon\Mvc\Application->handle()
+#5 {main}
+  thrown in /var/www/html/app/controllers/Api/UserController.php on line 35" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 14:02:54 [error] 6#6: *146 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Call to a member function toArray() on array in /var/www/html/app/models/User.php:189
+Stack trace:
+#0 [internal function]: RealWorld\Models\User->beforeUpdate()
+#1 [internal function]: Phalcon\Mvc\Model->fireEventCancel('beforeUpdate')
+#2 [internal function]: Phalcon\Mvc\Model->_preSave(Object(Phalcon\Mvc\Model\MetaData\Memory), true, 'id')
+#3 /var/www/html/app/controllers/Api/UserController.php(35): Phalcon\Mvc\Model->save()
+#4 [internal function]: RealWorld\Controllers\Api\UserController->updateAction()
+#5 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\UserController), 'updateAction', Array)
+#6 [internal function]: Phalcon\Dispatcher->_dispatch()
+#7 [internal function]: Phalcon\Dispatcher->dispatch()
+#8 /var/www/html/public/index.php(46): Phalcon\Mvc\Application->handle()
+#9 {main}
+  thrown in /var/www/html/app/models/User.php on line 189" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 14:19:24 [error] 6#6: *150 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught TypeError: Argument 1 passed to Phalcon\Validation::__construct() must be of the type array, object given in /var/www/html/app/models/User.php:186
+Stack trace:
+#0 /var/www/html/app/models/User.php(186): Phalcon\Validation->__construct(Object(RealWorld\Models\User))
+#1 [internal function]: RealWorld\Models\User->beforeUpdate()
+#2 [internal function]: Phalcon\Mvc\Model->fireEventCancel('beforeUpdate')
+#3 [internal function]: Phalcon\Mvc\Model->_preSave(Object(Phalcon\Mvc\Model\MetaData\Memory), true, 'id')
+#4 /var/www/html/app/controllers/Api/UserController.php(35): Phalcon\Mvc\Model->save()
+#5 [internal function]: RealWorld\Controllers\Api\UserController->updateAction()
+#6 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\UserController), 'updateAction', Array)
+#7 [internal function]: Phalcon\Dispatcher->_dispatch()
+#8 [internal function]: Phalcon\Dispatcher->dispatch()
+#9 /var/www/html/public/index.php(46): Phalcon\Mvc\Applic" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 14:21:34 [error] 6#6: *158 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected 'asdasd' (T_STRING) in /var/www/html/app/validators/UpdateUser.php on line 34" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 14:21:41 [error] 6#6: *160 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected 'asdasd' (T_STRING) in /var/www/html/app/validators/UpdateUser.php on line 34" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 14:21:41 [error] 6#6: *160 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected 'asdasd' (T_STRING) in /var/www/html/app/validators/UpdateUser.php on line 34" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "PUT /api/user HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 15:11:26 [error] 5#5: *206 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected '&&' (T_BOOLEAN_AND) in /var/www/html/app/listeners/JWTAuthenticationListener.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/users/login HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 15:11:38 [error] 5#5: *208 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected '&&' (T_BOOLEAN_AND) in /var/www/html/app/listeners/JWTAuthenticationListener.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/users/login HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/15 15:11:52 [error] 5#5: *210 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected '&&' (T_BOOLEAN_AND) in /var/www/html/app/listeners/JWTAuthenticationListener.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/users/login HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:04:29 [error] 5#5: *13 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 56
+PHP message: PHP Notice:  Trying to get property of non-object in /var/www/html/app/controllers/Api/ArticleController.php on line 56
+PHP message: PHP Fatal error:  Uncaught Error: Class 'Phalcon\Utils\Slug' not found in /var/www/html/app/models/Articles.php:133
+Stack trace:
+#0 [internal function]: RealWorld\Models\Articles->beforeValidationOnCreate()
+#1 [internal function]: Phalcon\Mvc\Model->fireEventCancel('beforeValidatio...')
+#2 [internal function]: Phalcon\Mvc\Model->_preSave(Object(Phalcon\Mvc\Model\MetaData\Memory), false, 'id')
+#3 [internal function]: Phalcon\Mvc\Model->save(NULL, NULL)
+#4 /var/www/html/app/controllers/Api/ArticleController.php(58): Phalcon\Mvc\Model->create()
+#5 [internal function]: RealWorld\Controllers\Api\ArticleController->createAction()
+#6 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\ArticleController), 'createAction', Array)
+#7 [internal function]: Phalcon\Dispatcher->_dispatch()
+#8 [internal function]: Phalcon\Dispatcher->dispatch()
+#9 /var/www/html/public/index.php(46): Phalcon\Mvc\Application->handle()
+#10 {main}
+  thrown in /var/www/html/app/models/Articl" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:04:49 [error] 5#5: *15 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Class 'League\Fractal\TransformerAbstract' not found in /var/www/html/app/Transformers/Transformer.php on line 12" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/users/login HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:07:18 [error] 5#5: *19 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 56
+PHP message: PHP Notice:  Trying to get property of non-object in /var/www/html/app/controllers/Api/ArticleController.php on line 56" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:07:23 [error] 5#5: *21 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 56
+PHP message: PHP Notice:  Trying to get property of non-object in /var/www/html/app/controllers/Api/ArticleController.php on line 56" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:07:26 [error] 5#5: *23 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 56
+PHP message: PHP Notice:  Trying to get property of non-object in /var/www/html/app/controllers/Api/ArticleController.php on line 56" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:07:29 [error] 5#5: *25 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 56
+PHP message: PHP Notice:  Trying to get property of non-object in /var/www/html/app/controllers/Api/ArticleController.php on line 56" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:07:37 [error] 5#5: *27 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 56
+PHP message: PHP Notice:  Trying to get property of non-object in /var/www/html/app/controllers/Api/ArticleController.php on line 56" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:09:41 [error] 5#5: *29 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32
+PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 67
+PHP message: PHP Notice:  Trying to get property of non-object in /var/www/html/app/controllers/Api/ArticleController.php on line 67" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:10:07 [error] 5#5: *31 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 33
+PHP message: PHP Notice:  Trying to get property of non-object in /var/www/html/app/controllers/Api/ArticleController.php on line 68" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:10:46 [error] 5#5: *33 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:11:54 [error] 5#5: *35 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:11:56 [error] 5#5: *37 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:12:35 [error] 5#5: *39 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:12:59 [error] 5#5: *43 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:13:57 [error] 5#5: *45 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:13:58 [error] 5#5: *45 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:13:59 [error] 5#5: *45 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:13:59 [error] 5#5: *45 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:14:00 [error] 5#5: *45 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:14:01 [error] 5#5: *45 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:14:01 [error] 5#5: *45 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:14:02 [error] 5#5: *45 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:14:10 [error] 5#5: *54 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:14:10 [error] 5#5: *54 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:14:10 [error] 5#5: *54 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 13:14:11 [error] 5#5: *54 FastCGI sent in stderr: "PHP message: PHP Notice:  Undefined property: Phalcon\Http\Request::$user in /var/www/html/app/controllers/Api/ArticleController.php on line 32" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/articles HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 14:11:59 [error] 5#5: *61 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected exit (T_EXIT) in /var/www/html/app/library/Auth/Auth.php on line 45" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/users/login HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 14:12:01 [error] 5#5: *61 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected exit (T_EXIT) in /var/www/html/app/library/Auth/Auth.php on line 45" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/users/login HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 14:12:01 [error] 5#5: *61 FastCGI sent in stderr: "PHP message: PHP Parse error:  syntax error, unexpected exit (T_EXIT) in /var/www/html/app/library/Auth/Auth.php on line 45" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/users/login HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"
+2017/05/22 14:16:30 [error] 5#5: *71 FastCGI sent in stderr: "PHP message: PHP Fatal error:  Uncaught Error: Class 'RealWorld\Auth\JWT' not found in /var/www/html/app/library/Auth/Auth.php:47
+Stack trace:
+#0 /var/www/html/app/controllers/Api/SessionController.php(31): RealWorld\Auth\Auth->check(Array)
+#1 [internal function]: RealWorld\Controllers\Api\SessionController->loginAction()
+#2 [internal function]: Phalcon\Dispatcher->callActionMethod(Object(RealWorld\Controllers\Api\SessionController), 'loginAction', Array)
+#3 [internal function]: Phalcon\Dispatcher->_dispatch()
+#4 [internal function]: Phalcon\Dispatcher->dispatch()
+#5 /var/www/html/public/index.php(46): Phalcon\Mvc\Application->handle()
+#6 {main}
+  thrown in /var/www/html/app/library/Auth/Auth.php on line 47" while reading response header from upstream, client: 172.17.0.1, server: localhost, request: "POST /api/users/login HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "localhost:8080"

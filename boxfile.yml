@@ -16,6 +16,7 @@ run.config:
       - xdebug
       - xml
       - xmlwriter
+      - zip
   extra_steps:
     - echo "alias phalcon=\'phalcon.php\'" >> /data/var/home/gonano/.bashrc
 data.realworld:

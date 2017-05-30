@@ -21,7 +21,6 @@ use Phalcon\Session\Adapter\Files as session;
 use RealWorld\Plugins\DataSerializerPlugin as RWSerializerPlugin;
 
 use const APP_PATH;
-use function var_dump;
 
 /**
  * Class Bootstrap

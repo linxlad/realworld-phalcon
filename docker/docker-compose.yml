@@ -16,8 +16,6 @@ app:
   tty: true
   ports:
    - "6900:6900"
-  dns:
-    - 8.8.8.8
   volumes:
    - ./logs/php-fpm:/var/log/php-fpm
    - ..:/var/www/html
