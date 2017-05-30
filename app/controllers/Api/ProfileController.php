@@ -20,34 +20,6 @@ class ProfileController extends ApiController
     use AuthenticatedUserTrait;
 
     /**
-     * @var UserRepository
-     */
-    protected $userRepo;
-
-    /**
-     *
-     */
-    public function initialize()
-    {
-       $this->userRepo = $this->di->getRepository('user');
-    }
-
-    /**
-     * Get the profile of the user given by their username
-     *
-     * @param User $user
-     * @return Response
-     */
-    public function showAction($user)
-    {
-        if (!$user = User::findFirstByUsername($user)) {
-            return $this->respondNotFound();
-        }
-
-        return $this->respondWithTransformer($user, new ProfileTransformer);
-    }
-
-    /**
      * @param $user
      * @return Response
      */
