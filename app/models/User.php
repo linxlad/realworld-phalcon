@@ -118,7 +118,6 @@ class User extends Model implements \JsonSerializable
         $this->hasMany('id', Comments::class, 'userId', ['alias' => 'Comments']);
         $this->hasMany('id', Favorites::class, 'userId', ['alias' => 'Favorites']);
         $this->hasMany('id', Follows::class, 'followerId', ['alias' => 'Follows']);
-        $this->hasMany('id', Follows::class, 'followerId', ['alias' => 'Follows']);
     }
 
     /**

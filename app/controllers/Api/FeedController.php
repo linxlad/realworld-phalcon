@@ -2,8 +2,11 @@
 
 namespace RealWorld\Controllers\Api;
 
+use function array_push;
+use function foo\func;
 use Phalcon\Http\Response;
 use RealWorld\Models\Articles;
+use RealWorld\Models\Follows;
 use RealWorld\Traits\AuthenticatedUserTrait;
 use RealWorld\Transformers\ArticleTransformer;
 use function var_dump;
@@ -23,11 +26,23 @@ class FeedController extends ApiController
      */
     public function indexAction()
     {
-        echo 'FeedController::indexAction'; exit;
-        //$followingIds = $this->getAuthenticatedUser()->following->id;
-        var_dump($this->getAuthenticatedUser()); exit;
-        if (!$article = Articles::findByUserId($this->getAuthenticatedUser()->id)) {
-            return $this->respondUnauthorized();
+        $followedIds = [];
+
+        $this->getAuthenticatedUser()->follows->filter(
+            function ($f) use (&$followedIds) {
+                $followedIds[] = $f->followedId;
+            }
+        );
+
+        if (!$article = Articles::find(
+            [
+                'userId IN ({followed:array})',
+                'bind' => [
+                    'followed' => $followedIds
+                ]
+            ]
+        )) {
+            return $this->respondNotFound();
         }
 
         return $this->respondWithTransformer($article, new ArticleTransformer);

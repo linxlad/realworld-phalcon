@@ -89,15 +89,6 @@ return [
 //        ],
 //        ['GET', 'OPTIONS']
 //    );
-
-    [
-        'class'   => FeedController::class,
-        'methods' => [
-            'get' => [
-                '/api/articles/feed' => 'index',
-            ],
-        ],
-    ],
     [
         'class'   => FavoriteController::class,
         'methods' => [
@@ -113,7 +104,7 @@ return [
         'class'   => ArticleController::class,
         'methods' => [
             'get' => [
-                '/api/articles/{article}' => 'index',
+                '/api/articles/{params:[a-zA-Z0-9-_]+$}' => 'index',
             ],
             'post' => [
                 '/api/articles' => 'create',
@@ -126,6 +117,14 @@ return [
             ],
             'delete' => [
                 '/api/articles/{article}' => 'delete',
+            ],
+        ],
+    ],
+    [
+        'class'   => FeedController::class,
+        'methods' => [
+            'get' => [
+                '/api/articles/feed' => 'index',
             ],
         ],
     ],
