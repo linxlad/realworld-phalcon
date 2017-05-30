@@ -344,6 +344,7 @@ class Bootstrap
                         $action = $action . 'Action';
                     }
 
+                    $collection->options($endpoint, $action);
                     $collection->$verb($endpoint, $action);
                 }
             }
