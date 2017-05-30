@@ -10,7 +10,6 @@ use Phalcon\Mvc\Micro\MiddlewareInterface;
 use Phalcon\Mvc\User\Plugin;
 use RealWorld\Auth;
 use RealWorld\Traits\ResponseErrorTrait;
-use function var_dump;
 
 /**
  * Class JWTAuthenticationMiddleware

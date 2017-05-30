@@ -71,6 +71,7 @@ class Bootstrap
             ->initMiddleware()
             ->initCrypt()
             ->initAuth()
+            ->initRepository()
             ->initSerializer()
         ;
 
@@ -385,6 +386,35 @@ class Bootstrap
                 $manager->setSerializer(new RWSerializerPlugin());
 
                 return $manager;
+            }
+        );
+
+        return $this;
+    }
+
+    /**
+     * @return Bootstrap
+     */
+    protected function initRepository(): Bootstrap
+    {
+        $this->diContainer->setShared(
+            'repository',
+            function () {
+                $alias = func_get_args();
+
+                if (isset($alias[0]) && is_array($alias[0])) {
+                    $alias = reset($alias[0]);
+                } elseif (is_array($alias)) {
+                    $alias = reset($alias);
+                }
+
+                $repositoryClassName = sprintf('\RealWorld\Repository\%sRepository', ucfirst(strtolower($alias)));
+
+                if (!class_exists($repositoryClassName)) {
+                    throw new \Phalcon\Di\Exception('Repository class ' . $repositoryClassName . ' does not exist.');
+                }
+
+                return new $repositoryClassName();
             }
         );
 

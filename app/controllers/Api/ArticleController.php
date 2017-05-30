@@ -6,7 +6,7 @@ use Phalcon\Http\Response;
 use RealWorld\Models\Articles;
 use RealWorld\Models\Tags;
 use RealWorld\Models\User;
-use RealWorld\Repository\ArticleRepository;
+use RealWorld\Traits\AuthenticatedUserTrait;
 use RealWorld\Transformers\ArticleTransformer;
 use function var_dump;
 
@@ -16,30 +16,7 @@ use function var_dump;
  */
 class ArticleController extends ApiController
 {
-    /**
-     * @var ArticleRepository
-     */
-    protected $articleRepo;
-
-    /**
-     * @var User
-     */
-    protected $authenticatedUser;
-
-    /**
-     *
-     */
-    public function initialize()
-    {
-        $this->articleRepo = $this->di->getRepository('article');
-
-        // Make sure the request does have a user (shouldn't get this far).
-        if (!$this->request->user) {
-            return ;
-        }
-
-        $this->authenticatedUser = $this->request->user;
-    }
+    use AuthenticatedUserTrait;
 
     /**
      * The start action, it returns the "search"
@@ -50,10 +27,11 @@ class ArticleController extends ApiController
     public function indexAction($slug)
     {
         // If it's a slug just grab the article.
-        if ($slug && ($article = $this->articleRepo->firstBy(['slug' => $slug]))) {
+        if ($slug && ($article = Articles::findFirstBySlug($slug))) {
             return $this->respondWithTransformer($article, new ArticleTransformer);
         }
 
+        exit;
         // Ok it's not a slug so let's filter on the query string.
         //...
         $query = $this->request->getQuery();
@@ -86,7 +64,7 @@ class ArticleController extends ApiController
             $input = $this->getJsonInput('article');
             $article = new Articles();
             $article->applyInputToModel($input);
-            $article->userId = $this->authenticatedUser->id;
+            $article->userId = $this->getAuthenticatedUser()->id;
 
             if (isset($input['tagList']) && !empty($input['tagList'])) {
                 $tags = [];
@@ -121,9 +99,12 @@ class ArticleController extends ApiController
     public function updateAction($slug)
     {
         try {
-            if (!$article = $this->articleRepo->firstBy([
-                'slug' => $slug,
-                'userId' => $this->request->user->id
+            if (!$article = Articles::findFirst([
+                "conditions" => "slug = :slug: AND userId = :userId:",
+                "bind"       => [
+                    "slug" => $slug,
+                    "userId" => $this->getAuthenticatedUser()->id,
+                ]
             ])) {
                 return $this->respondUnauthorized();
             }
@@ -149,7 +130,7 @@ class ArticleController extends ApiController
      */
     public function deleteAction($slug)
     {
-        if (!$article = $this->articleRepo->firstBy(['slug' => $slug])) {
+        if (!$article = Articles::findFirstBySlug($slug)) {
             return $this->respondNotFound();
         }
 

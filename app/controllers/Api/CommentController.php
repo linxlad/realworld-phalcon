@@ -2,14 +2,12 @@
 
 namespace RealWorld\Controllers\Api;
 
+use Phalcon\Filter;
 use Phalcon\Http\Response;
 use RealWorld\Models\Articles;
 use RealWorld\Models\Comments;
-use RealWorld\Models\Tags;
-use RealWorld\Models\User;
-use RealWorld\Repository\ArticleRepository;
+use RealWorld\Traits\AuthenticatedUserTrait;
 use RealWorld\Transformers\CommentTransformer;
-use RealWorld\Transformers\TagTransformer;
 
 /**
  * Class CommentController
@@ -17,40 +15,7 @@ use RealWorld\Transformers\TagTransformer;
  */
 class CommentController extends ApiController
 {
-    /**
-     * @var Articles;
-     */
-    protected $article;
-
-    /**
-     * @var ArticleRepository
-     */
-    protected $articleRepo;
-
-    /**
-     * @var User
-     */
-    protected $authenticatedUser;
-
-    /**
-     *
-     */
-    public function initialize()
-    {
-        // Make sure the request does have a user (shouldn't get this far).
-        $this->articleRepo = $this->di->getRepository('article');
-        $slug = $this->dispatcher->getParam('article');
-
-        if (($slug && ($article = $this->articleRepo->firstBy(['slug' => $slug])))) {
-            $this->article = $article;
-        }
-
-        if (!$this->request->user) {
-            return;
-        }
-
-        $this->authenticatedUser = $this->request->user;
-    }
+    use AuthenticatedUserTrait;
 
     /**
      * Get all the comments of the article given by its slug.
@@ -59,7 +24,7 @@ class CommentController extends ApiController
      */
     public function indexAction($slug)
     {
-        if (!$article = $this->article) {
+        if (!$article = Articles::findFirstBySlug($slug)) {
             return $this->respondNotFound();
         }
 
@@ -74,14 +39,14 @@ class CommentController extends ApiController
      */
     public function addAction($slug)
     {
-        if (!$article = $this->article) {
+        if (!$article = Articles::findFirstBySlug($slug)) {
             return $this->respondNotFound();
         }
 
         $input = $this->getJsonInput('comment');
         $comment = new Comments();
-        $comment->body = trim($input['body']);
-        $comment->userId = $this->authenticatedUser->id;
+        $comment->body = (new Filter())->sanitize($input['body'], 'string');
+        $comment->userId = $this->getAuthenticatedUser()->id;
         $article->comments = $comment;
 
         try {
@@ -104,7 +69,7 @@ class CommentController extends ApiController
      */
     public function deleteAction($slug, $id)
     {
-        if (!$article = $this->article) {
+        if (!$article = Articles::findFirstBySlug($slug)) {
             return $this->respondNotFound();
         }
 

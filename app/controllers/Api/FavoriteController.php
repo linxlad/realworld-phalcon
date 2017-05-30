@@ -3,8 +3,8 @@
 namespace RealWorld\Controllers\Api;
 
 use Phalcon\Http\Response;
-use RealWorld\Models\User;
-use RealWorld\Repository\ArticleRepository;
+use RealWorld\Models\Articles;
+use RealWorld\Traits\AuthenticatedUserTrait;
 use RealWorld\Transformers\ArticleTransformer;
 
 /**
@@ -13,29 +13,7 @@ use RealWorld\Transformers\ArticleTransformer;
  */
 class FavoriteController extends ApiController
 {
-    /**
-     * @var ArticleRepository
-     */
-    protected $articleRepo;
-
-    /**
-     * @var User
-     */
-    protected $authenticatedUser;
-
-    /**
-     *
-     */
-    public function initialize()
-    {
-        // Make sure the request does have a user (shouldn't get this far).
-        if (!$this->request->user) {
-            return $this->respondForbidden();
-        }
-
-        $this->articleRepo = $this->di->getRepository('article');
-        $this->authenticatedUser = $this->request->user;
-    }
+    use AuthenticatedUserTrait;
 
     /**
      * @param $slug
@@ -43,11 +21,11 @@ class FavoriteController extends ApiController
      */
     public function addAction($slug)
     {
-        if (!$article = $this->articleRepo->firstBy(['slug' => $slug])) {
+        if (!$article = Articles::findFirstBySlug($slug)) {
             return $this->respondNotFound();
         }
 
-        $this->authenticatedUser->favorite($article);
+        $this->getAuthenticatedUser()->favorite($article);
 
         return $this->respondWithTransformer($article, new ArticleTransformer);
     }
@@ -58,11 +36,11 @@ class FavoriteController extends ApiController
      */
     public function removeAction($slug)
     {
-        if (!$article = $this->articleRepo->firstBy(['slug' => $slug])) {
+        if (!$article = Articles::findFirstBySlug($slug)) {
             return $this->respondNotFound();
         }
 
-        $this->authenticatedUser->unFavorite($article);
+        $this->getAuthenticatedUser()->unFavorite($article);
 
         return $this->respondWithTransformer($article, new ArticleTransformer);
     }

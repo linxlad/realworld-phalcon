@@ -18,7 +18,13 @@
 use RealWorld\Controllers\IndexController;
 use RealWorld\Controllers\SessionController;
 use RealWorld\Controllers\UserController;
-//$apiGroup->add('/users/login', 'Session::login', ['POST', 'OPTIONS']);
+use RealWorld\Controllers\Api\ArticleController;
+use RealWorld\Controllers\Api\FavoriteController;
+use RealWorld\Controllers\Api\FeedController;
+use RealWorld\Controllers\Api\CommentController;
+use RealWorld\Controllers\Api\ProfileController;
+use RealWorld\Controllers\Api\TagController;
+
 return [
     [
         'class'   => IndexController::class,
@@ -28,6 +34,8 @@ return [
             ],
         ],
     ],
+
+    // Authentication routes.
     [
         'class'   => SessionController::class,
         'methods' => [
@@ -37,6 +45,8 @@ return [
             ],
         ],
     ],
+
+    // User routes.
     [
         'class'   => UserController::class,
         'methods' => [
@@ -48,6 +58,100 @@ return [
             ],
             'patch' => [
                 '/api/user' => 'update',
+            ],
+        ],
+    ],
+
+    // Profile routes.
+    [
+        'class'   => ProfileController::class,
+        'methods' => [
+            'get' => [
+                '/api/profiles/{user}' => 'show',
+            ],
+            'post' => [
+                '/api/profiles/{user}/follow' => 'follow',
+            ],
+            'delete' => [
+                '/api/profiles/{user}/follow' => 'unFollow',
+            ],
+        ],
+    ],
+
+    // Article routes.
+
+//    $apiGroup->add(
+//        '/articles/:params',
+//        [
+//            'controller' => 'Article',
+//            'action' => 'index',
+//            'params' => 1
+//        ],
+//        ['GET', 'OPTIONS']
+//    );
+
+    [
+        'class'   => FeedController::class,
+        'methods' => [
+            'get' => [
+                '/api/articles/feed' => 'index',
+            ],
+        ],
+    ],
+    [
+        'class'   => FavoriteController::class,
+        'methods' => [
+            'post' => [
+                '/api/articles/{article}/favorite' => 'add',
+            ],
+            'delete' => [
+                '/api/articles/{article}/favorite' => 'remove',
+            ],
+        ],
+    ],
+    [
+        'class'   => ArticleController::class,
+        'methods' => [
+            'get' => [
+                '/api/articles/{article}' => 'index',
+            ],
+            'post' => [
+                '/api/articles' => 'create',
+            ],
+            'put' => [
+                '/api/articles/{article}' => 'update',
+            ],
+            'patch' => [
+                '/api/articles/{article}' => 'update',
+            ],
+            'delete' => [
+                '/api/articles/{article}' => 'delete',
+            ],
+        ],
+    ],
+
+    // Comment routes.
+    [
+        'class'   => CommentController::class,
+        'methods' => [
+            'get' => [
+                '/api/articles/{article}/comments' => 'index',
+            ],
+            'post' => [
+                '/api/articles/{article}/comments' => 'add',
+            ],
+            'delete' => [
+                '/api/articles/{article}/comments/{id}' => 'delete',
+            ],
+        ],
+    ],
+
+    // Tag routes.
+    [
+        'class'   => TagController::class,
+        'methods' => [
+            'get' => [
+                '/api/tags' => 'index',
             ],
         ],
     ],

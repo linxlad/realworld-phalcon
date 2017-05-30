@@ -148,7 +148,7 @@ class ApiController extends Controller
      */
     protected function respondNotFound($message = 'Not Found')
     {
-        return $this->respondError($message, 404);
+        $this->respondError($message, 404);
     }
 
     /**

@@ -6,6 +6,7 @@ use Phalcon\Http\Response;
 use Phalcon\Mvc\Model;
 use RealWorld\Models\User;
 use RealWorld\Repository\UserRepository;
+use RealWorld\Traits\AuthenticatedUserTrait;
 use RealWorld\Transformers\ProfileTransformer;
 
 /**
@@ -16,6 +17,8 @@ use RealWorld\Transformers\ProfileTransformer;
  */
 class ProfileController extends ApiController
 {
+    use AuthenticatedUserTrait;
+
     /**
      * @var UserRepository
      */
@@ -37,7 +40,9 @@ class ProfileController extends ApiController
      */
     public function showAction($user)
     {
-        $user = $this->findByUserName($user);
+        if (!$user = User::findFirstByUsername($user)) {
+            return $this->respondNotFound();
+        }
 
         return $this->respondWithTransformer($user, new ProfileTransformer);
     }
@@ -48,8 +53,12 @@ class ProfileController extends ApiController
      */
     public function followAction($user)
     {
-        $authenticatedUser = $this->request->user;
-        $user = $this->findByUserName($user);
+        $authenticatedUser = $this->getAuthenticatedUser();
+
+        if (!$user = User::findFirstByUsername($user)) {
+            return $this->respondNotFound();
+        }
+
         $authenticatedUser->follow($user);
 
         return $this->respondWithTransformer($user, new ProfileTransformer);
@@ -61,19 +70,10 @@ class ProfileController extends ApiController
      */
     public function unFollowAction($user)
     {
-        $authenticatedUser = $this->request->user;
-        $user = $this->findByUserName($user);
+        $authenticatedUser = $this->getAuthenticatedUser();
+        $user = $this->userOrNotFound($user);
         $authenticatedUser->unFollow($user);
 
         return $this->respondWithTransformer($user, new ProfileTransformer);
-    }
-
-    /**
-     * @param $username
-     * @return Model
-     */
-    private function findByUserName($username)
-    {
-        return $this->userRepo->firstBy(['username' => trim($username)]);
     }
 }
