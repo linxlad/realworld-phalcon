@@ -199,7 +199,7 @@ class Bootstrap
 
         set_error_handler(
             function ($errorNumber, $errorString, $errorFile, $errorLine) {
-                if (0 === $errorNumber & 0 === error_reporting()) {
+                if ((0 === $errorNumber) & (0 === error_reporting())) {
                     return;
                 }
 
@@ -281,6 +281,7 @@ class Bootstrap
                  * Production will use File, development will use memory
                  */
                 if ('prod' === $environment) {
+                    $options                = [];
                     $options['metaDataDir'] = APP_PATH . '/storage/metadata/';
 
                     return new PhMetadataFiles($options);

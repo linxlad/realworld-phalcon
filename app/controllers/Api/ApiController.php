@@ -28,10 +28,10 @@ class ApiController extends Controller
      * Returns a json representation of the data.
      *
      * @param $data
-     * @param int $statusCode
+     * @param int   $statusCode
      * @param array $headersArray
      */
-    protected function respond($data, $statusCode = 200, $headersArray = [])
+    protected function respond($data, int $statusCode = 200, array $headersArray = [])
     {
         $this->response->setJsonContent($data);
         $this->response->setStatusCode($statusCode);
@@ -48,18 +48,23 @@ class ApiController extends Controller
 
     /**
      * @param $data
-     * @param $transformer
-     * @param int $statusCode
-     * @param array $headerArray
+     * @param Transformer $transformer
+     * @param int         $statusCode
+     * @param array       $headerArray
+     *
      * @return Response
      */
-    public function respondWithTransformer($data, $transformer, $statusCode = 200, $headerArray = [])
-    {
+    public function respondWithTransformer(
+        $data,
+        Transformer $transformer,
+        int $statusCode = 200,
+        array $headerArray = []
+    ): Response {
         $this->validateTransformer($transformer);
         $key = $transformer->getResourceKey();
 
         if ($data instanceof Resultset) {
-            $data = new Collection($data, $transformer,  $key . 's');
+            $data = new Collection($data, $transformer, $key . 's');
         } else {
             $data = new Item($data, $transformer, $key);
         }
@@ -75,7 +80,7 @@ class ApiController extends Controller
      *
      * @return Response
      */
-    protected function respondSuccess()
+    protected function respondSuccess(): Response
     {
         return $this->respond(null);
     }
@@ -84,9 +89,10 @@ class ApiController extends Controller
      * Send a created response.
      *
      * @param $data
-     * @return Response;
+     * 
+     * @return Response
      */
-    protected function respondCreated($data)
+    protected function respondCreated($data): Response
     {
         return $this->respond($data, 201);
     }
@@ -95,9 +101,10 @@ class ApiController extends Controller
      * Send a no content response.
      *
      * @param $data
-     * @return Response;
+     *
+     * @return Response
      */
-    protected function respondNoContent($data)
+    protected function respondNoContent($data): Response
     {
         return $this->respond($data, 503);
     }
@@ -107,7 +114,7 @@ class ApiController extends Controller
      *
      * @return Response
      */
-    protected function respondFailedLogin()
+    protected function respondFailedLogin(): Response
     {
         return $this->respond([
             'errors' => [
@@ -124,7 +131,7 @@ class ApiController extends Controller
      * @param string $message
      * @return Response
      */
-    protected function respondUnauthorized($message = 'Unauthorized')
+    protected function respondUnauthorized($message = 'Unauthorized'): Response
     {
         return $this->respondError($message, 401);
     }
@@ -135,7 +142,7 @@ class ApiController extends Controller
      * @param string $message
      * @return Response
      */
-    protected function respondForbidden($message = 'Forbidden')
+    protected function respondForbidden($message = 'Forbidden'): Response
     {
         return $this->respondError($message, 403);
     }
@@ -146,7 +153,7 @@ class ApiController extends Controller
      * @param string $message
      * @return Response
      */
-    protected function respondNotFound($message = 'Not Found')
+    protected function respondNotFound($message = 'Not Found'): Response
     {
         $this->respondError($message, 404);
     }

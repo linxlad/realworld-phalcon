@@ -22,6 +22,7 @@ class ArticleController extends ApiController
      * The start action, it returns the "search"
      *
      * @param $slug
+     *
      * @return Response
      */
     public function indexAction($slug)
@@ -69,7 +70,7 @@ class ArticleController extends ApiController
             if (isset($input['tagList']) && !empty($input['tagList'])) {
                 $tags = [];
 
-                foreach($input['tagList'] as $name) {
+                foreach ($input['tagList'] as $name) {
                     if (!Tags::findFirstByName($name)) {
                         $tag = new Tags();
                         $tag->name = trim($name);
