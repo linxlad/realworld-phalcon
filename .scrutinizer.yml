@@ -27,7 +27,7 @@ build:
   tests:
     override:
       -
-        command: 'cd /home/scrutinizer/build; ./run_tests'
+        command: 'cd /home/scrutinizer/build; ./run_tests.sh'
         coverage:
           file: 'tests/_output/coverage.xml'
           format: 'clover'
