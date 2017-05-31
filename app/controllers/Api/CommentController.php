@@ -20,6 +20,8 @@ class CommentController extends ApiController
     /**
      * Get all the comments of the article given by its slug.
      *
+     * @param $slug
+     *
      * @return Response
      */
     public function indexAction($slug)
@@ -35,6 +37,7 @@ class CommentController extends ApiController
      * Add a comment to the article given by its slug and return the comment if successful.
      *
      * @param $slug
+     *
      * @return Response
      */
     public function addAction($slug)
@@ -65,6 +68,7 @@ class CommentController extends ApiController
      *
      * @param $slug
      * @param $id
+     *
      * @return Response
      */
     public function deleteAction($slug, $id)

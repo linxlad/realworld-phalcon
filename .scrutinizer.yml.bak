@@ -16,13 +16,21 @@ build:
           - ~/cphalcon
 
   dependencies:
-      override:
-         - composer install --prefer-source --no-interaction
-      after:
-          - vendor/bin/install-phalcon.sh 3.0.x
+      before:
 
   project_setup:
     before:
+      - cd /home/scrutinizer/build
+      - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b master
+      - cd cphalcon/ext
+      - export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall"
+      - phpize
+      - ./configure --enable-phalcon
+      - make -j4
+      - sudo make install && sed -i '$ a \\n[Phalcon]\nextension=phalcon.so\n' /home/scrutinizer/.phpenv/versions/7.1.0/etc/php.ini
+      - php -m | grep -i Phalcon
+      - ./composer install --prefer-source --no-interaction
+      - cd /home/scrutinizer/build
 
   tests:
     override:
@@ -44,16 +52,16 @@ tools:
     config:
       standard: PSR2
     filter:
-      paths: ['src']
+      paths: ['app', 'library', 'public']
   php_loc:
     enabled: true
-    excluded_dirs: [vendor, tests]
+    excluded_dirs: ['vendor', 'tests', 'app/migrations']
   php_loc:
     enabled: true
-    excluded_dirs: [vendor, tests]
+    excluded_dirs: ['vendor', 'tests', 'app/migrations']
   php_cpd:
     enabled: true
-    excluded_dirs: [vendor, tests]
+    excluded_dirs: ['vendor', 'tests', 'app/migrations']
 checks:
   php:
     return_doc_comments: true
