@@ -38,7 +38,7 @@ build:
         command: 'cd /home/scrutinizer/build/realworld-phalcon; ./run_tests'
         coverage:
           file: 'realworld-phalcon/tests/_output/coverage.xml'
-          format: 'php-clover'
+          format: 'clover'
 
 filter:
   excluded_paths:

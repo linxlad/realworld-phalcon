@@ -21,3 +21,11 @@ For more information on how to this works with other frontends/backends, head ov
 
 > npm install, npm start, etc.
 
+### Continuous Integration
+[![Build Status](https://scrutinizer-ci.com/g/linxlad/realworld-phalcon/badges/build.png?b=master)](https://scrutinizer-ci.com/g/linxlad/realworld-phalcon/build-status/master)
+
+## Test Coverage
+[![Code Coverage](https://scrutinizer-ci.com/g/linxlad/realworld-phalcon/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/linxlad/realworld-phalcon/?branch=master)
+
+## Code Quality
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/linxlad/realworld-phalcon/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/linxlad/realworld-phalcon/?branch=master)

@@ -32,25 +32,17 @@ class ArticleController extends ApiController
             return $this->respondWithTransformer($article, new ArticleTransformer);
         }
 
-        exit;
         // Ok it's not a slug so let's filter on the query string.
         //...
+
         $query = $this->request->getQuery();
         $articles = null;
 
         // ARTICLES BY AUTHOR
         if (isset($query['author'])) {
             $user = User::findFirstByUsername($query['author']);
-
             $userId = $user ? $user->id : null;
-
-            $articles = $this->articleRepo->getBy(['userId' => $userId]);
-        }
-
-        if (isset($query['favorited'])) {
-            $user = User::findFirstByUsername($query['author']);
-
-            var_dump($user->favorites->toAarray()); exit;
+            $articles = Articles::findFirstByUserId($userId);
         }
 
         return $this->respondWithTransformer($articles, new ArticleTransformer);
