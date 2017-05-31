@@ -9,15 +9,15 @@ build:
     php:
       version: 7.1.0
       ini:
-        'date.timezone': 'America/New_York'
+        'date.timezone': 'Europe/London'
 
   cache:
       directories:
           - ~/cphalcon
 
   dependencies:
-      override:
-          - composer install --prefer-source --no-interaction
+      #override: -- The child node "command" at path "override.1" must be configured.
+      #  - composer install --prefer-source --no-interaction
       after:
           - vendor/bin/install-phalcon.sh 3.0.x
 
@@ -25,11 +25,11 @@ build:
     before:
 
   tests:
-    override:
-        command: cd /home/scrutinizer/build/realworld-phalcon; ./run_tests
-        coverage:
-          file: realworld-phalcon/tests/_output/coverage.xml
-          format: 'php-clover'
+    #override: -- The child node "command" at path "override.1" must be configured.
+        #command: cd /home/scrutinizer/build/realworld-phalcon; ./run_tests
+        #coverage:
+          #file: realworld-phalcon/tests/_output/coverage.xml
+          #format: 'php-clover'
 
 filter:
   excluded_paths:
