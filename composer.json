@@ -14,7 +14,6 @@
         "firebase/php-jwt": "^4.0",
         "league/fractal": "^0.16.0",
         "phalcon/incubator": "^3.1",
-        "techpivot/phalcon-ci-installer": "^1.0",
         "vlucas/phpdotenv": "^2.4"
     },
     "require-dev": {
