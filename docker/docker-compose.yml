@@ -15,7 +15,7 @@ app:
   container_name: dev_app
   tty: true
   ports:
-   - "6900:6900"
+   - "9000:9000"
   volumes:
    - ./logs/php-fpm:/var/log/php-fpm
    - ..:/var/www/html

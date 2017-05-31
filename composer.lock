@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dd255c3815101f099bb57c387503c6d5",
-    "content-hash": "38d09d2335c49f841fa64404423811f8",
+    "hash": "8a2f8bdb43bd72d4b7131f45d54313b7",
+    "content-hash": "4887245988366f45f7f46c3e5af5b186",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -181,6 +181,72 @@
             "time": "2017-05-26 20:47:25"
         },
         {
+            "name": "phalcon/zephir",
+            "version": "0.9.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phalcon/zephir.git",
+                "reference": "63a35e13c5150e19b3d6abe00fdd65e2471a84f4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phalcon/zephir/zipball/63a35e13c5150e19b3d6abe00fdd65e2471a84f4",
+                "reference": "63a35e13c5150e19b3d6abe00fdd65e2471a84f4",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "ext-hash": "*",
+                "ext-json": "*",
+                "ext-xml": "*",
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "ext-gmp": "*",
+                "ext-pdo": "*",
+                "ext-pdo_sqlite": "*",
+                "phpunit/phpunit": "^4.8",
+                "squizlabs/php_codesniffer": "^2.8"
+            },
+            "bin": [
+                "bin/zephir"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zephir\\": "Library"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/phalcon/zephir/graphs/contributors"
+                },
+                {
+                    "name": "Zephir Team",
+                    "email": "team@phalconphp.com",
+                    "homepage": "https://zephir-lang.com/"
+                }
+            ],
+            "description": "Zephir is a compiled high level language aimed to the creation of C-extensions for PHP",
+            "homepage": "https://zephir-lang.com/",
+            "keywords": [
+                "extension",
+                "phalcon",
+                "zephir"
+            ],
+            "time": "2017-05-21 13:35:49"
+        },
+        {
             "name": "swiftmailer/swiftmailer",
             "version": "v5.4.8",
             "source": {
@@ -233,6 +299,49 @@
                 "mailer"
             ],
             "time": "2017-05-01 15:54:03"
+        },
+        {
+            "name": "techpivot/phalcon-ci-installer",
+            "version": "1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/techpivot/phalcon-ci-installer.git",
+                "reference": "b5a827e97fffe7259b92eae73161125ab5acbf4c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/techpivot/phalcon-ci-installer/zipball/b5a827e97fffe7259b92eae73161125ab5acbf4c",
+                "reference": "b5a827e97fffe7259b92eae73161125ab5acbf4c",
+                "shasum": ""
+            },
+            "require": {
+                "phalcon/zephir": "^0.9.6",
+                "php": "^5.4|^5.5|^5.6|^7.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7"
+            },
+            "bin": [
+                "bin/install-phalcon.sh"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Composer integration for PHP applications to install the Phalcon framework as an extension in the PHP runtime for various hosted CI services including TravisCI, CircleCI, Scrutinizer, Shippable and Codeship.",
+            "keywords": [
+                "CircleCI",
+                "Codeship",
+                "ScrutinizerCI",
+                "TechPivot",
+                "continuous integration",
+                "phalcon",
+                "php",
+                "shippable",
+                "travisci"
+            ],
+            "time": "2017-04-07 13:52:17"
         },
         {
             "name": "vlucas/phpdotenv",
