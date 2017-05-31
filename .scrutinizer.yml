@@ -9,17 +9,17 @@ build:
     php:
       version: 7.1.0
       ini:
-        'date.timezone': 'Europe/London'
+        'date.timezone': 'America/New_York'
 
-    cache:
-        directories:
-            - ~/cphalcon
+  cache:
+      directories:
+          - ~/cphalcon
 
-    dependencies:
-        override:
-            - composer install --prefer-source --no-interaction
-        after:
-            - vendor/bin/install-phalcon.sh 3.0.x
+  dependencies:
+      override:
+          - composer install --prefer-source --no-interaction
+      after:
+          - vendor/bin/install-phalcon.sh 3.0.x
 
   project_setup:
     before:
