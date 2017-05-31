@@ -41,11 +41,7 @@ class ArticleController extends ApiController
         if (isset($query['author'])) {
             $user = User::findFirstByUsername($query['author']);
             $userId = $user ? $user->id : null;
-            $articles = $this->articleRepo->getBy(['userId' => $userId]);
-        }
-
-        if (isset($query['favorited'])) {
-            $user = User::findFirstByUsername($query['author']);
+            $articles = Articles::findFirstByUserId($userId);
         }
 
         return $this->respondWithTransformer($articles, new ArticleTransformer);
