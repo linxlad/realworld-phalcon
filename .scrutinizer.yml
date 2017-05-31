@@ -7,7 +7,7 @@ build:
     postgresql: false
     redis: false
     php:
-      version: 7.1.0
+      version: 7.1.1
       ini:
         'date.timezone': 'Europe/London'
 
@@ -17,27 +17,19 @@ build:
 
   dependencies:
       before:
-
-  project_setup:
-    before:
-      - cd /home/scrutinizer/build
-      - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b master
-      - cd cphalcon/ext
-      - export CFLAGS="-g3 -O1 -fno-delete-null-pointer-checks -Wall"
-      - phpize
-      - ./configure --enable-phalcon
-      - make -j4
-      - sudo make install && sed -i '$ a \\n[Phalcon]\nextension=phalcon.so\n' /home/scrutinizer/.phpenv/versions/7.1.0/etc/php.ini
-      - php -m | grep -i Phalcon
-      - ./composer install --prefer-source --no-interaction
-      - cd /home/scrutinizer/build
+        - cd /home/scrutinizer/build
+        - git clone -q --depth=1 https://github.com/phalcon/cphalcon.git -b master
+        - cd cphalcon/build
+        - ./install
+        - sed -i '$ a \\n[Phalcon]\nextension=phalcon.so\n' /home/scrutinizer/.phpenv/versions/7.1.1/etc/php.ini
+        - php -m | grep -i Phalcon
 
   tests:
     override:
       -
-        command: 'cd /home/scrutinizer/build/realworld-phalcon; ./run_tests'
+        command: 'cd /home/scrutinizer/build; ./run_tests.sh'
         coverage:
-          file: 'realworld-phalcon/tests/_output/coverage.xml'
+          file: 'tests/_output/coverage.xml'
           format: 'clover'
 
 filter:
