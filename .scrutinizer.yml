@@ -25,15 +25,16 @@ build:
     before:
 
   tests:
-    #override: -- The child node "command" at path "override.1" must be configured.
-        #command: cd /home/scrutinizer/build/realworld-phalcon; ./run_tests
-        #coverage:
-          #file: realworld-phalcon/tests/_output/coverage.xml
-          #format: 'php-clover'
+    -
+      command: 'cd /home/scrutinizer/build/realworld-phalcon; ./run_tests'
+      coverage:
+          file: 'realworld-phalcon/tests/_output/coverage.xml'
+          format: 'php-clover'
 
 filter:
   excluded_paths:
     - 'vendor/*'
+    - 'app/migrations/*'
 tools:
 #  external_code_coverage: true
   php_analyzer: true
