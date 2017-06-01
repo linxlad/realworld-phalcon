@@ -1,9 +1,4 @@
 <?php
-/*
- * Modified: prepend directory path of current file, because of this file own different ENV under between Apache and command line.
- * NOTE: please remove this comment.
- */
-
 /**
  * Returning an array that will be injected in the relevant Config object
  * in the Bootstrap file
@@ -19,12 +14,12 @@ return [
     ],
     'application' => [
         'env' => getenv('RW_ENV'),
-        'appDir'         => APP_PATH . '/',
-        'commandsDir'    => APP_PATH . '/console/commands',
-        'consoleDir'     => APP_PATH . '/console/',
-        'databaseDir'    => APP_PATH . '/database/',
-        'migrationsDir'  => APP_PATH . '/database/migrations/',
-        'modelsDir'      => APP_PATH . '/models/',
+        'appDir'         => APP_PATH . '/app',
+        'commandsDir'    => APP_PATH . '/app/console/commands',
+        'consoleDir'     => APP_PATH . '/app/console/',
+        'databaseDir'    => APP_PATH . '/app/database/',
+        'migrationsDir'  => APP_PATH . '/app/database/migrations/',
+        'modelsDir'      => APP_PATH . '/app/models/',
     ],
     'security'    => [
         'salt'     => '21932302859125c16db30f4.76012023',

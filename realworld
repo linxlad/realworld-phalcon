@@ -30,8 +30,6 @@ try {
 
     $di = \Phalcon\Di::getDefault();
 
-    $config = $di->getConfig();
-
     /*
     |--------------------------------------------------------------------------
     | Handle The Incoming Commands
@@ -44,9 +42,8 @@ try {
     $kernel = $di->getYarak();
 
     $kernel->handle();
-
-
 } catch (\Exception $e) {
+    var_dump($e); exit;
     echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
     exit;
 }
