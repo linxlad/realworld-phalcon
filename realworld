@@ -1,0 +1,52 @@
+#!/usr/bin/env php
+<?php
+
+use Phalcon\Di\FactoryDefault;
+
+error_reporting(E_ALL);
+
+define('APP_PATH', __DIR__);
+
+
+/*
+|--------------------------------------------------------------------------
+| Register The App Services
+|--------------------------------------------------------------------------
+|
+| We need to register the app services in order to spin up Yarak. Be sure you
+| have registered Yarak in the services file.
+|
+*/
+try {
+    putenv('RW_ENV=test');
+
+    require_once APP_PATH . '/library/Bootstrap.php';
+    require_once APP_PATH . '/library/BootstrapTests.php';
+
+    /**
+     * We don't want a global scope variable for this
+     */
+    (new \RealWorld\BootstrapTests())->run();
+
+    $di = \Phalcon\Di::getDefault();
+
+    $config = $di->getConfig();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Handle The Incoming Commands
+    |--------------------------------------------------------------------------
+    |
+    | We'll get the Yarak kernel from the dependency injector and defer to it for
+    | command handling.
+    |
+    */
+    $kernel = $di->getYarak();
+
+    $kernel->handle();
+
+
+} catch (\Exception $e) {
+    echo $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+    exit;
+}

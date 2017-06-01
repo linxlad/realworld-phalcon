@@ -19,6 +19,7 @@ use Phalcon\Mvc\Model\MetaData\Memory as PhMetadataMemory;
 use Phalcon\Mvc\Model\MetaData\Files as PhMetadataFiles;
 use Phalcon\Session\Adapter\Files as session;
 use RealWorld\Plugins\DataSerializerPlugin as RWSerializerPlugin;
+use Yarak\Kernel;
 
 use const APP_PATH;
 use function session_status;
@@ -73,6 +74,7 @@ class Bootstrap
             ->initAuth()
             ->initRepository()
             ->initSerializer()
+            ->initYarak()
         ;
 
         return $this->runApplication();
@@ -417,6 +419,22 @@ class Bootstrap
                 }
 
                 return new $repositoryClassName();
+            }
+        );
+
+        return $this;
+    }
+
+    protected function initYarak()
+    {
+        $this->diContainer->setShared(
+            'yarak',
+            function () {
+                return new Kernel([
+                    'namespaces' => [
+                        'root' => 'Realworld',
+                    ],
+                ]);
             }
         );
 

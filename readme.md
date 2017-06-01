@@ -15,11 +15,45 @@ For more information on how to this works with other frontends/backends, head ov
 
 # How it works
 
-> Describe the general architecture of your app here
+> TODO
 
 # Getting started
 
-> npm install, npm start, etc.
+## Installation
+
+Please check the official Phalcon installation guide for requirements. [Official Documentation](https://docs.phalconphp.com/en/latest/reference/install.html)
+
+Clone the repository
+
+    git clone git@github.com:linxlad/realworld-phalcon.git
+
+Switch to the repo folder
+
+    cd realworld-phalcon
+
+Install all the dependencies using composer
+
+    composer install
+
+Copy the example env file and make the required configuration changes in the .env file
+
+    cp .env.example .env
+
+#### Local development with Docker
+
+> There is a docker development environment included in this project in ./docker with Phalcon loaded and ready to go.
+
+    cd ./docker
+    
+Edit the docker-compose.yml and change mysql environment variables if need to. 
+
+    docker-compose up -d
+    
+You can now access the server at http://localhost:8080
+    
+#### Local development with Nanobox
+    
+> TODO    
 
 ### Continuous Integration
 [![Build Status](https://scrutinizer-ci.com/g/linxlad/realworld-phalcon/badges/build.png?b=master)](https://scrutinizer-ci.com/g/linxlad/realworld-phalcon/build-status/master)

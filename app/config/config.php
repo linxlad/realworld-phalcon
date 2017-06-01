@@ -9,9 +9,6 @@
  * in the Bootstrap file
  */
 return [
-    'application' => [
-        'env' => getenv('RW_ENV'),
-    ],
     'database'    => [
         'adapter'  => 'Mysql',
         'host'     => getenv('RW_MYSQL_HOST'),
@@ -20,7 +17,16 @@ return [
         'dbname'   => getenv('RW_MYSQL_NAME'),
         'charset'  => 'utf8',
     ],
+    'application' => [
+        'env' => getenv('RW_ENV'),
+        'appDir'         => APP_PATH . '/',
+        'commandsDir'    => APP_PATH . '/console/commands',
+        'consoleDir'     => APP_PATH . '/console/',
+        'databaseDir'    => APP_PATH . '/database/',
+        'migrationsDir'  => APP_PATH . '/database/migrations/',
+        'modelsDir'      => APP_PATH . '/models/',
+    ],
     'security'    => [
         'salt'     => '21932302859125c16db30f4.76012023',
-    ]
+    ],
 ];
