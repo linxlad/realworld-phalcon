@@ -31,6 +31,7 @@ return [
         'methods' => [
             'get' => [
                 '/' => 'index',
+                '/db/seed' => 'seed',
             ],
         ],
     ],
