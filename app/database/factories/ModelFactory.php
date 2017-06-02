@@ -1,6 +1,7 @@
 <?php
 
 use RealWorld\Models\Articles;
+use RealWorld\Models\ArticleTag;
 use RealWorld\Models\Comments;
 use RealWorld\Models\Tags;
 use RealWorld\Models\User;
@@ -37,12 +38,16 @@ $factory->define(Articles::class, function (\Faker\Generator $faker) {
 });
 
 $factory->define(Comments::class, function (\Faker\Generator $faker) {
-    $users = User::find();
-    $users = array_rand($users);
-
     return [
-        'body' => $faker->paragraph($faker->numberBetween(1, 5)),
-        'user_id' => $users->getFirst()->id,
+        'body' => '',
+        'userId' => null,
+    ];
+});
+
+$factory->define(ArticleTag::class, function (\Faker\Generator $faker) {
+    return [
+        'articleId' => null,
+        'tagId' => null,
     ];
 });
 

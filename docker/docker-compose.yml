@@ -13,7 +13,8 @@ services:
       MYSQL_PASSWORD: secret
       MYSQL_ROOT_PASSWORD: secret
   app:
-    image: linxlad/php7-fpm
+    #image: linxlad/php7-fpm
+    image: linxlad/php7-fpm:with-xdebug
     container_name: dev_app
     tty: true
     ports:
@@ -21,6 +22,8 @@ services:
     volumes:
      - ./logs/php-fpm:/var/log/php-fpm
      - ..:/var/www/html
+    environment:
+      XDEBUG_HOST: 192.168.56.1 #${XDEBUG_HOST}
     links:
      - db
   web:

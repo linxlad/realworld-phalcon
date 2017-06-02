@@ -425,7 +425,7 @@ class Bootstrap
         return $this;
     }
 
-    protected function initYarak()
+    public function initYarak()
     {
         $this->diContainer->setShared(
             'yarak',

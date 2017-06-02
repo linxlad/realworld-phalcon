@@ -3,7 +3,9 @@
 use Yarak\DB\Seeders\Seeder;
 
 use RealWorld\Models\Articles;
+use RealWorld\Models\ArticleTag;
 use RealWorld\Models\Comments;
+use RealWorld\Models\Model;
 use RealWorld\Models\Tags;
 use RealWorld\Models\User;
 
@@ -75,50 +77,66 @@ class DummyDataSeeder extends Seeder
      */
     public function run()
     {
-        $faker = new \Faker\Generator();
-        $users = factory(User::class)->times($this->totalUsers)->create();
-        $tags = factory(Tags::class)->times($this->totalTags)->create();
+        try {
+            $faker = Faker\Factory::create();
+            $users = factory(User::class)->times($this->totalUsers)->create();
+            $userWithArticles = Model::random($users, (int)$this->totalUsers * $this->userWithArticleRatio);
 
-//        $users->random((int) $this->totalUsers * $this->userWithArticleRatio)
-//            ->each(function ($user) use ($faker, $tags) {
-//                $user->articles()
-//                    ->saveMany(
-//                        factory(Articles::class)
-//                        ->times($faker->numberBetween(1, $this->maxArticlesByUser))
-//                        ->make()
-//                    )
-//                    ->each(function ($article) use ($faker, $tags) {
-//                        $article->tags()->attach(
-//                            $tags->random($faker->numberBetween(1, min($this->maxArticleTags, $this->totalTags)))
-//                        );
-//                    })
-//                    ->each(function ($article) use ($faker) {
-//                        $article->comments()
-//                            ->saveMany(
-//                                factory(Comments::class)
-//                                ->times($faker->numberBetween(1, $this->maxCommentsInArticle))
-//                                ->make()
-//                            );
-//                    });
-//            });
-//
-//        $articles = Articles::find();
-//
-//        $users->random((int) $users->count() * $this->usersWithFavoritesRatio)
-//            ->each(function ($user) use($faker, $articles) {
-//                $articles->random($faker->numberBetween(1, (int) $articles->count() * 0.5))
-//                    ->each(function ($article) use ($user) {
-//                        $user->favorite($article);
-//                    });
-//            });
-//
-//        $users->random((int) $users->count() * $this->usersWithFollowingRatio)
-//            ->each(function ($user) use($faker, $users) {
-//                $users->except($user->id)
-//                    ->random($faker->numberBetween(1, (int) ($users->count() - 1) * 0.2))
-//                    ->each(function ($userToFollow) use ($user) {
-//                        $user->follow($userToFollow);
-//                    });
-//            });
+            foreach ($userWithArticles as $user) {
+                $articlesPerUser = range(0, $faker->numberBetween(1, $this->maxArticlesByUser));
+
+                foreach ($articlesPerUser as $n) {
+                    $user = Model::random($userWithArticles, 1);
+                    $article = factory(Articles::class)->create([
+                        'userId' => reset($user)->id
+                    ]);
+
+                    $tagsPerArticle = range(0, $faker->numberBetween(1, min($this->maxArticleTags, $this->totalTags)));
+
+                    foreach ($tagsPerArticle as $n) {
+                        $tag = factory(Tags::class)->create();
+                        factory(ArticleTag::class)->create([
+                            'articleId' => $article->id,
+                            'tagId' => $tag->id,
+                        ]);
+                    }
+
+                    $commentsPerArticle = range(0, $faker->numberBetween(1, $this->maxCommentsInArticle));
+
+                    foreach ($commentsPerArticle as $n) {
+                        $randomUser = Model::random($users, 1);
+                        factory(Comments::class)->create([
+                            'body' => $faker->paragraph($faker->numberBetween(1, 5)),
+                            'userId' => reset($randomUser)->id,
+                            'articleId' => $articles->id,
+                        ]);
+                    }
+                }
+            }
+
+            $articles = Articles::find()->filter(function ($child) {
+                return $child;
+            });
+            $usersWithFavorites = Model::random($userWithArticles, (int)count($userWithArticles) * $this->usersWithFavoritesRatio);
+
+            foreach ($usersWithFavorites as $user) {
+                $randomArticles = Model::random($articles, (int)count($users) * $this->usersWithFavoritesRatio);
+                foreach ($randomArticles as $article) {
+                    $user->favorite($article);
+                }
+            }
+
+            $usersWithFollowing = Model::random($users, (int)count($users) * $this->usersWithFollowingRatio);
+
+            foreach ($usersWithFollowing as $follower) {
+                $userToFollow = Model::random($users, $faker->numberBetween(1, (int)(count($users) - 1) * 0.2));
+
+                foreach ($userToFollow as $user) {
+                    $follower->follow($user);
+                }
+            }
+        } catch (\Exception $e) {
+            var_dump($e);
+        }
     }
 }
