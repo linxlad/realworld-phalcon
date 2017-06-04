@@ -15,7 +15,7 @@ trait ResponseErrorTrait
     /**
      * Respond with json error message.
      *
-     * @param array|string $messages
+     * @param array|string|null $messages
      * @param $statusCode
      * @return Response;
      */

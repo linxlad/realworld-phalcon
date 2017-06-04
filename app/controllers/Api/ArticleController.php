@@ -43,6 +43,8 @@ class ArticleController extends ApiController
 
     /**
      * Creates a article based on the data entered in the "new" action
+     *
+     * @return Response
      */
     public function createAction()
     {

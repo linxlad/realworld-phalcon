@@ -2,6 +2,7 @@
 
 namespace RealWorld\Controllers;
 
+use Phalcon\Http\Response;
 use RealWorld\Auth;
 use RealWorld\Controllers\Api\ApiController;
 use RealWorld\Models\User;
@@ -20,7 +21,7 @@ class SessionController extends ApiController
     /**
      * Handle a login request to the application.
      *
-     * @return \Phalcon\Http\Response
+     * @return Response
      */
     public function loginAction()
     {
@@ -43,6 +44,8 @@ class SessionController extends ApiController
 
     /**
      * Handle a registration request for the application.
+     *
+     * @return Response
      */
     public function registerAction()
     {
