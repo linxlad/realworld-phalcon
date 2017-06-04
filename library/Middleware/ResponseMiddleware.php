@@ -24,7 +24,7 @@ class ResponseMiddleware implements MiddlewareInterface
         $response = $application->getDI()->getShared('response');
         $response->setContentType('application/json; charset=utf-8');
 
-        $response->send();
+        //$response->send();
 
         return true;
     }

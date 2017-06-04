@@ -17,10 +17,10 @@ class ArticleTransformer extends Transformer
     protected $resourceKey = 'article';
 
     /**
-     * @param Articles $data
+     * @param Model $data
      * @return array
      */
-    public function transform(Articles $data)
+    public function transform($data)
     {
         $article = clone $data;
         $data = $data->toArray();

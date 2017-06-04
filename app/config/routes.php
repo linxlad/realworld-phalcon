@@ -80,16 +80,6 @@ return [
     ],
 
     // Article routes.
-
-//    $apiGroup->add(
-//        '/articles/:params',
-//        [
-//            'controller' => 'Article',
-//            'action' => 'index',
-//            'params' => 1
-//        ],
-//        ['GET', 'OPTIONS']
-//    );
     [
         'class'   => FavoriteController::class,
         'methods' => [
@@ -105,7 +95,7 @@ return [
         'class'   => ArticleController::class,
         'methods' => [
             'get' => [
-                '/api/articles/{params:[a-zA-Z0-9-_]+$}' => 'index',
+                '/api/articles(/.*)*' => 'index',
             ],
             'post' => [
                 '/api/articles' => 'create',

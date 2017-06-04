@@ -2,13 +2,14 @@
 
 namespace RealWorld\Controllers\Api;
 
+use function is_array;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use Phalcon\Http\Response;
 use Phalcon\Mvc\Controller;
-use Phalcon\Mvc\Model\Message;
 use Phalcon\Mvc\Model\Resultset;
+use Phalcon\Paginator\Adapter\Model as PaginatorModel;
 use RealWorld\Traits\ResponseErrorTrait;
 use RealWorld\Transformers\Transformer;
 
@@ -25,11 +26,28 @@ class ApiController extends Controller
     use ResponseErrorTrait;
 
     /**
+     * @var bool
+     */
+    protected $modelPaginated = false;
+
+    /**
+     * @param $bool
+     * @return $this
+     */
+    public function setModelPaginated($bool)
+    {
+        $this->modelPaginated = $bool;
+
+        return $this;
+    }
+
+    /**
      * Returns a json representation of the data.
      *
      * @param $data
      * @param int   $statusCode
      * @param array $headersArray
+     * @return Response
      */
     protected function respond($data, int $statusCode = 200, array $headersArray = [])
     {
@@ -43,7 +61,7 @@ class ApiController extends Controller
             $headers->set($name, $value);
         }
 
-        $this->response->setHeaders($headers);
+        return $this->response->setHeaders($headers);
     }
 
     /**
@@ -52,18 +70,18 @@ class ApiController extends Controller
      * @param int         $statusCode
      * @param array       $headerArray
      *
-     * @return Response
+     * @return Response|array
      */
     public function respondWithTransformer(
         $data,
         Transformer $transformer,
         int $statusCode = 200,
         array $headerArray = []
-    ): Response {
+    ) {
         $this->validateTransformer($transformer);
         $key = $transformer->getResourceKey();
 
-        if ($data instanceof Resultset) {
+        if ($data instanceof Resultset || is_array($data)) {
             $data = new Collection($data, $transformer, $key . 's');
         } else {
             $data = new Item($data, $transformer, $key);
@@ -72,7 +90,28 @@ class ApiController extends Controller
         $serializer = $this->getDI()->get('serializer');
         $out = $serializer->createData($data)->toArray();
 
-        return $this->respond($out, $statusCode, $headerArray);
+        return $this->modelPaginated ? $out : $this->respond($out, $statusCode, $headerArray);
+    }
+
+    /**
+     * @param $data
+     * @param $limit
+     * @param $page
+     * @return mixed
+     */
+    public function paginate($data, $limit, $page)
+    {
+        $paginator = new PaginatorModel(
+            array(
+                "data" => $data,
+                "limit" => $limit,
+                "page" => $page
+            )
+        );
+
+        $this->modelPaginated = true;
+
+        return $paginator->getPaginate()->items;
     }
 
     /**
@@ -155,7 +194,7 @@ class ApiController extends Controller
      */
     protected function respondNotFound($message = 'Not Found'): Response
     {
-        $this->respondError($message, 404);
+        return $this->respondError($message, 404);
     }
 
     /**

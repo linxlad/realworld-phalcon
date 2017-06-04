@@ -5,10 +5,10 @@ namespace RealWorld\Controllers\Api;
 use Phalcon\Http\Response;
 use RealWorld\Models\Articles;
 use RealWorld\Models\Tags;
-use RealWorld\Models\User;
+use RealWorld\Traits\ArticleFilterTrait;
 use RealWorld\Traits\AuthenticatedUserTrait;
 use RealWorld\Transformers\ArticleTransformer;
-use function var_dump;
+use Phalcon\Mvc\Model\Resultset;
 
 /**
  * Class ArticleController
@@ -16,36 +16,29 @@ use function var_dump;
  */
 class ArticleController extends ApiController
 {
-    use AuthenticatedUserTrait;
+    use ArticleFilterTrait, AuthenticatedUserTrait;
 
     /**
      * The start action, it returns the "search"
      *
-     * @param $slug
-     *
      * @return Response
      */
-    public function indexAction($slug)
+    public function indexAction()
     {
-        // If it's a slug just grab the article.
-        if ($slug && ($article = Articles::findFirstBySlug($slug))) {
-            return $this->respondWithTransformer($article, new ArticleTransformer);
+        $articles = $this->filterArticles();
+        $this->setModelPaginated(true);
+
+        if ($articles instanceof Resultset) {
+            $articles = [
+                'articles' => $this->respondWithTransformer(
+                    $articles,
+                    new ArticleTransformer
+                )['articles'],
+                'articlesCount' => $articles->count()
+            ];
         }
 
-        // Ok it's not a slug so let's filter on the query string.
-        //...
-
-        $query = $this->request->getQuery();
-        $articles = null;
-
-        // ARTICLES BY AUTHOR
-        if (isset($query['author'])) {
-            $user = User::findFirstByUsername($query['author']);
-            $userId = $user ? $user->id : null;
-            $articles = Articles::findFirstByUserId($userId);
-        }
-
-        return $this->respondWithTransformer($articles, new ArticleTransformer);
+        return $this->respond($articles);
     }
 
     /**

@@ -41,6 +41,6 @@ trait ResponseErrorTrait
             $statusCode
         );
 
-        $this->response->setStatusCode($statusCode);
+        return $this->response->setStatusCode($statusCode);
     }
 }
